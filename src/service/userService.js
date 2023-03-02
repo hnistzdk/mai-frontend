@@ -154,9 +154,9 @@ export default {
         });
     },
     // 用户判重
-    isValidUser(params) {
+    verifyUsername(params) {
         return new Promise((resolve, reject) => {
-            axios.get("/user/isValidUser", {params})
+            axios.get("/user/verify", {params})
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

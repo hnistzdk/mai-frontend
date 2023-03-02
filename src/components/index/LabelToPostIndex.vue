@@ -56,7 +56,7 @@ export default {
     //加载更多（滚动加载）
     loadMore() {
       this.params.currentPage++;
-      // this.getPostList(this.params, true);
+      this.getPostList(this.params, true);
     },
 
     // 获取文章列表信息
@@ -97,13 +97,13 @@ export default {
     // 刷新列表
     refresh() {
       this.params = {currentPage: 1, pageSize: 10};
-      // this.getPostList(this.params);
+      this.getPostList(this.params);
     },
   },
 
   mounted() {
     // this.getLabelList();
-    // this.getPostList(this.params);
+    this.getPostList(this.params);
     // 监听滚动，做滚动加载
     this.$utils.scroll.call(this, document.querySelector('#app'));
   },

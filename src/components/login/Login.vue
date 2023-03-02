@@ -65,8 +65,9 @@
                   // 刷新当前页面
                   window.sessionStorage.setItem("access_token",res.data.accessToken)
                   window.sessionStorage.setItem("expire",res.data.expiresIn)
-                  // store.state.token = res.data.accessToken;
-                  // store.state.expire = res.data.expiresIn;
+                  store.state.token = res.data.accessToken;
+                  store.state.expire = res.data.expiresIn;
+                  store.state.isLogin = true;
                   this.$router.go(0);
                 })
                 .catch(err => {

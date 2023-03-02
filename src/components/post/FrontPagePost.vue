@@ -2,7 +2,7 @@
   <div id="main-post-content">
     <a-list item-layout="vertical" size="large" :data-source="tempData">
       <a-list-item slot="renderItem" key="item.title" slot-scope="item, index" style="cursor: pointer;"
-                   @click="routerPostDetail(item.id)">
+                   @click="routerPostDetail(item.postId)">
         <!-- 浏览量/点赞/评论 -->
         <template v-for="{ type, text } in actions" slot="actions">
           <span class="collectLikeComment" :key="type">
@@ -10,52 +10,56 @@
                   <a-icon :type="type" style="margin-right: 6px;"/>
                   <span v-text="item.pv"></span>
               </span>
-              <span v-if="type==='like-o'" @click.stop="pageViewsLikeComment(type, item.id, index)">
-                  <span v-if="item.postCountDTO.isLike" :style="{color: $store.state.themeColor}">
+              <span v-if="type==='like-o'" @click.stop="pageViewsLikeComment(type, item.postId, index)">
+<!--                  <span v-if="item.postCountDTO.isLike" :style="{color: $store.state.themeColor}">
                       <a-icon :type="type" style="margin-right: 6px"/>
                       <span v-text="item.postCountDTO.likeCount"></span>
                   </span>
                   <span v-if="!item.postCountDTO.isLike">
                       <a-icon :type="type" style="margin-right: 8px"/>
                       <span v-text="item.postCountDTO.likeCount"></span>
+                  </span>-->
+                <span :style="{color: $store.state.themeColor}">
+                      <a-icon :type="type" style="margin-right: 6px"/>
+                      <span v-text="110"></span>
                   </span>
               </span>
-              <span v-if="type==='message'" @click.stop="routerPostDetailToComment(item.id)">
-                  <a-icon :type="type" style="margin-right: 6px;"/>
-                  <span v-text="item.postCountDTO.commentCount"></span>
-              </span>
+<!--              <span v-if="type==='message'" @click.stop="routerPostDetailToComment(item.postId)">-->
+<!--                  <a-icon :type="type" style="margin-right: 6px;"/>-->
+<!--                  <span v-text="item.postCountDTO.commentCount"></span>-->
+<!--              </span>-->
               <span v-if="(($store.state.isManage && isAdminAudit) || $store.state.userId === item.createUser) && type==='ellipsis'"
                     @click.stop>
                 <a-dropdown :placement="'bottomCenter'" :trigger="['click']">
                   <a-menu slot="overlay">
                     <!-- 审核通过 -->
                     <a-menu-item key="postPass" v-if="($store.state.isManage && isAdminAudit) && (item.state === -1 || item.state !== 1)"
-                                 @click="updateState(item.id, item.state, 1)">
+                                 @click="updateState(item.postId, item.state, 1)">
                       {{ ' ' + $t("common.pass") }}
                     </a-menu-item>
                     <!-- 审核拒绝 -->
                     <a-menu-item key="postReject" v-if="($store.state.isManage && isAdminAudit) && (item.state === -1 || item.state !== 0)"
-                                 @click="updateState(item.id, item.state, 0)">
+                                 @click="updateState(item.postId, item.state, 0)">
                       <span style="color: red">{{ ' ' + $t("common.reject") }}</span>
                     </a-menu-item>
                     <!-- 文章置顶 -->
                     <a-menu-item key="postNotTop" v-if="$store.state.isManage && isAdminAudit && !item.top"
-                                 @click="postTop(item.id)">
+                                 @click="postTop(item.postId)">
                       <span style="color: #1869ff">{{ ' ' + $t("common.isTop") }}</span>
                     </a-menu-item>
                     <!-- 文章取消置顶 -->
                     <a-menu-item key="postTop" v-if="$store.state.isManage && isAdminAudit && item.top"
-                                 @click="postNotTop(item.id)">
+                                 @click="postNotTop(item.postId)">
                       <span style="color: #eb2f96">{{ ' ' + $t("common.isNotTop") }}</span>
                     </a-menu-item>
                     <!-- 文章编辑 -->
                     <a-menu-item key="postEdit" v-if="$store.state.userId === item.createUser"
-                                 @click="routerPostEdit(item.id)">
+                                 @click="routerPostEdit(item.postId)">
                       <span style="color: #722ed1">{{ ' ' + $t("common.edit") }}</span>
                     </a-menu-item>
                     <!-- 文章删除 -->
                     <a-menu-item key="postDel" v-if="$store.state.userId === item.createUser"
-                                 @click="postDelete(item.id, index)">
+                                 @click="postDelete(item.postId, index)">
                       <span style="color: red">{{ ' ' + $t("common.delete") }}</span>
                     </a-menu-item>
                   </a-menu>
@@ -87,7 +91,7 @@
           <a slot="title" class="username" @click.stop="routerUserCenter(item.createUser)">
             <div class="left">
               <span slot="title" style="padding-right: 2px;"> {{ item.createUserName }} </span>
-              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>
+<!--              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>-->
               <small style="color: #b5b9b9; padding-left: 10px" v-text="$utils.showtime(item.createTime)"></small>
               <!-- 用户中心 -->
               <div v-if="isUserCenter && ($store.state.userId === userId || $store.state.isManage)">
@@ -130,7 +134,7 @@
 
   export default {
     props: {
-      data: {type: Array, default: []},
+      data: {},
       pageSize: {type: Number, default: 0},
       current: {type: Number, default: 1},
       finish: {type: Boolean, default: false},
@@ -162,15 +166,15 @@
         if (type === 'like-o') {
           userService.updateLikeState({postId: postId})
               .then(() => {
-                // this.$emit("refresh");
-                let isLike = this.tempData[index].postCountDTO.isLike;
+                this.$emit("refresh");
+                // let isLike = this.tempData[index].postCountDTO.isLike;
                 // 取消点赞操作
-                if (isLike) {
-                  this.tempData[index].postCountDTO.likeCount--;
-                } else {
-                  this.tempData[index].postCountDTO.likeCount++;
-                }
-                this.tempData[index].postCountDTO.isLike = !isLike;
+                // if (isLike) {
+                //   this.tempData[index].postCountDTO.likeCount--;
+                // } else {
+                //   this.tempData[index].postCountDTO.likeCount++;
+                // }
+                // this.tempData[index].postCountDTO.isLike = !isLike;
               })
               .catch(err => {
                 this.$message.error(err.desc);

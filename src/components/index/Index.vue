@@ -19,7 +19,7 @@
               <a-tabs default-active-key="approved" @change="changeTab" style="background: #fff;" v-if="$store.state.isManage">
                 <a-tab-pane key="approved">
                   <span slot="tab">
-                    {{ $t("common.approved") + "(" + total + ")"}}
+                    {{ $t("common.approved") + "(" + totalCount + ")" }}
                   </span>
                   <!-- 文章列表 -->
                   <FrontPagePost v-if="!spinning && isApprovedTab"
@@ -149,7 +149,8 @@
         listData: [],
         pendingReviewData: [],
         reviewRejectedData: [],
-        total: 0,
+        totalCount: 0,
+        totalPage: 0,
         pendingReviewTotal: 0,
         reviewRejectedTotal: 0,
         hasNext: true,
@@ -164,7 +165,7 @@
       loadMore() {
         this.params.currentPage++;
         if (this.isApprovedTab) {
-          // this.getPostList(this.params, true);
+          this.getPostList(this.params, true);
         }
         if (this.isPendingReviewTab) {
           this.getPendingReviewPosts(this.params, true);
@@ -188,7 +189,8 @@
               } else {
                 this.listData = res.data.list;
               }
-              this.total = res.data.total;
+              this.totalCount = res.data.totalCount;
+              this.totalPage = res.data.totalPage;
               this.spinning = false;
               this.finish = true;
             })
@@ -249,7 +251,7 @@
       // 刷新列表
       refresh() {
         this.params = {currentPage: 1, pageSize: 10};
-        // this.getPostList(this.params);
+        this.getPostList(this.params);
       },
 
       // tab切换回调
@@ -259,7 +261,7 @@
           this.isPendingReviewTab = false;
           this.isReviewRejectedTab = false;
           this.hasNext = true;
-          // this.getPostList(this.params);
+          this.getPostList(this.params);
           // 监听滚动，做滚动加载
           this.$utils.scroll.call(this, document.querySelector('#app'));
         }
@@ -285,7 +287,7 @@
 
       // 通过
       updateTotal(count) {
-        this.total += count;
+        this.totalCount += count;
       },
       // 同步data变化
       updateData(tempData) {
@@ -311,7 +313,7 @@
       let query = this.$route.query.query;
       this.searchContent = query;
       this.params.title = query;
-      // this.getPostList(this.params);
+      this.getPostList(this.params);
       if (this.$store.state.isManage) {
         this.getPendingReviewPosts(this.params);
         this.getDisabledPosts(this.params);
@@ -327,7 +329,7 @@
         let query = this.$route.query.query;
         this.searchContent = query;
         this.params.title = query;
-        // this.getPostList(this.params);
+        this.getPostList(this.params);
       }
     }
   };

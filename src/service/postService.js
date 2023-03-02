@@ -4,7 +4,7 @@ export default {
     // 获取贴子
     getPostList(params) {
         return new Promise((resolve, reject) => {
-            axios.get("/post/getList", {params})
+            axios.get("/post/list", {params})
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });
@@ -84,7 +84,8 @@ export default {
     // 获取贴子详情
     getPostById(params) {
         return new Promise((resolve, reject) => {
-            axios.get("/post/getById", {params})
+            // axios.get("/post/getById", {params})
+            axios.get("/post/detail/"+params.id)
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

@@ -17,8 +17,8 @@
             <div class="author-name">
               <a target="_blank" class="username" @click="routerUserCenter(data.createUser)">
                 <span class="name" style="font-size: 17px;">{{ data.createUserName }} </span>
-                <img :src="require('@/assets/img/level/' + data.postCountDTO.level + '.svg')" alt=""
-                     @click.stop="routerBook"/>
+<!--                <img :src="require('@/assets/img/level/' + data.postCountDTO.level + '.svg')" alt=""-->
+<!--                     @click.stop="routerBook"/>-->
               </a>
             </div>
             <div class="meta-box" style="color: #8a919f">
@@ -33,27 +33,27 @@
         </div>
         <div class="follow-box">
           <div class="edit" v-if="$store.state.userId === data.createUser">
-            <a-button class="follow-btn" v-if="!data.postCountDTO.isFollow" @click="routerPostEdit(data.id)"
-                      :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
-              {{ $t("common.edit") }}
-            </a-button>
+<!--            <a-button class="follow-btn" v-if="!data.postCountDTO.isFollow" @click="routerPostEdit(data.id)"-->
+<!--                      :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">-->
+<!--              {{ $t("common.edit") }}-->
+<!--            </a-button>-->
           </div>
           <div class="follow" v-else>
-            <a-button class="follow-btn" v-if="!data.postCountDTO.isFollow"
-                      @click="updateFollowState(data.createUser)"
-                      :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
-              {{ $t("common.follow") }}
-            </a-button>
-            <a-button class="follow-btn-close" v-if="data.postCountDTO.isFollow"
-                      @click="updateFollowState(data.createUser)">
-              {{ $t("common.haveFollowed") }}
-            </a-button>
+<!--            <a-button class="follow-btn" v-if="!data.postCountDTO.isFollow"-->
+<!--                      @click="updateFollowState(data.createUser)"-->
+<!--                      :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">-->
+<!--              {{ $t("common.follow") }}-->
+<!--            </a-button>-->
+<!--            <a-button class="follow-btn-close" v-if="data.postCountDTO.isFollow"-->
+<!--                      @click="updateFollowState(data.createUser)">-->
+<!--              {{ $t("common.haveFollowed") }}-->
+<!--            </a-button>-->
           </div>
         </div>
       </div>
-      <div class="post-titleMap" v-if="data.titleMap">
-        <img :src="data.titleMap" style="width: 100%;"/>
-      </div>
+<!--      <div class="post-titleMap" v-if="data.titleMap">-->
+<!--        <img :src="data.titleMap" style="width: 100%;"/>-->
+<!--      </div>-->
       <div class="post-content" style="width: 100%" v-if="data.markdown">
         <mavon-editor
             :value="data.markdown"
@@ -91,15 +91,18 @@
         this.finish = false;
         postService.getPostById({id: this.$route.params.id, isPv: true})
             .then(res => {
+              console.log('res',res);
               this.data = res.data;
               this.finish = true;
-              // 提取标签id
+              console.log('时间',this.data.createTime);
+              /*// 提取标签id
               let labelIds = [];
               res.data.labelDTOS.forEach(label => {
                 labelIds.push(label.id);
               });
+              //初始化标签
               this.$emit("initLabelIds", labelIds, this.finish, res.data.createUser, this.$utils.toToc(res.data.html));
-
+            */
               if (res.data.html) {
                 setTimeout(() => {
                   // 设置标题目录追踪滚动高亮当前标题

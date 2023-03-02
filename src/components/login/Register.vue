@@ -27,7 +27,8 @@
           </a-input>
         </a-form-model-item>
         <a-form-model-item style="padding-top: 5px;">
-          <a-button type="primary" html-type="submit" class="login-form-button" size="large" @click="submitForm('ruleForm')">
+          <a-button type="primary" html-type="submit" class="login-form-button" size="large"
+                    @click="submitForm('ruleForm')">
             {{ $t("common.register") }}
           </a-button>
           Or
@@ -42,138 +43,141 @@
 </template>
 
 <script>
-  import loginService from "@/service/loginService";
-  import userService from "@/service/userService";
+import loginService from "@/service/loginService";
+import userService from "@/service/userService";
+import store from "@/store";
 
-  export default {
-    data() {
-      // 验证用户名
-      let validateUsername = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error(this.$t('common.pleaseInputYourUsername')));
-        } else {
-          this.isValidUser(value)
-              .then(() => {
-                callback();
-              })
-              .catch(err => {
-                callback(err.desc);
-              });
-        }
-      };
-      // 验证密码
-      let validatePassword = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error(this.$t('common.pleaseInputYourPassword')));
-        } else {
-          callback();
-        }
-      };
-      // 验证确认密码
-      let validateConfirmPassword = (rule, value, callback) => {
-        if (value !== this.ruleForm.password) {
-          callback(new Error(this.$t('common.passwordNotMatch')));
-        } else if (value === '') {
-          callback(new Error(this.$t('common.pleaseInputYourPassword')));
-        } else {
-          callback();
-        }
-      };
+export default {
+  data() {
+    // 验证用户名
+    let validateUsername = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('common.pleaseInputYourUsername')));
+      } else {
+        this.isValidUser(value)
+            .then(() => {
+              callback();
+            })
+            .catch(err => {
+              callback(err.msg);
+            });
+      }
+    };
+    // 验证密码
+    let validatePassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('common.pleaseInputYourPassword')));
+      } else {
+        callback();
+      }
+    };
+    // 验证确认密码
+    let validateConfirmPassword = (rule, value, callback) => {
+      if (value !== this.ruleForm.password) {
+        callback(new Error(this.$t('common.passwordNotMatch')));
+      } else if (value === '') {
+        callback(new Error(this.$t('common.pleaseInputYourPassword')));
+      } else {
+        callback();
+      }
+    };
 
-      return {
-        userNameNum: 0,
-        ruleForm: {
-          username: '',
-          password: '',
-          confirmPassword: '',
-        },
-        rules: {
-          username: [{validator: validateUsername, trigger: 'change'}],
-          password: [{validator: validatePassword, trigger: 'change'}],
-          confirmPassword: [{validator: validateConfirmPassword, trigger: 'change'}],
-        },
-        layout: {
-          labelCol: {span: 0},
-          wrapperCol: {span: 24},
-        },
-      };
+    return {
+      userNameNum: 0,
+      ruleForm: {
+        username: '',
+        password: '',
+        confirmPassword: '',
+      },
+      rules: {
+        username: [{validator: validateUsername, trigger: 'change'}],
+        password: [{validator: validatePassword, trigger: 'change'}],
+        confirmPassword: [{validator: validateConfirmPassword, trigger: 'change'}],
+      },
+      layout: {
+        labelCol: {span: 0},
+        wrapperCol: {span: 24},
+      },
+    };
+  },
+
+  methods: {
+    usernameChange(value) {
+      this.userNameNum = value.target.value.length;
     },
 
-    methods: {
-      usernameChange(value) {
-        this.userNameNum = value.target.value.length;
-      },
+    // 隐藏登录框
+    handleOk() {
+      this.$store.state.registerVisible = false;
+    },
 
-      // 隐藏登录框
-      handleOk() {
-        this.$store.state.registerVisible = false;
-      },
-
-      submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            loginService.register({name:this.ruleForm.username, password: this.ruleForm.password})
-                .then(res => {
-                  // 刷新当前页面
-                  this.$router.go(0);
-                })
-                .catch(err => {
-                  this.$message.error(err.desc);
-                });
-          } else {
-            return false;
-          }
-        });
-      },
-
-      // 直接登录
-      login() {
-        this.$store.state.registerVisible = false;
-        this.$store.state.loginVisible = true;
-      },
-
-      // 用户判重
-      isValidUser(username) {
-        return new Promise((resolve, reject) => {
-          userService.isValidUser({username: username})
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          loginService.register({username: this.ruleForm.username, password: this.ruleForm.password})
               .then(res => {
-                if (res.code === 0) {
-                  resolve(res);
-                } else {
-                  throw res;
-                }
+                window.sessionStorage.setItem("access_token",res.data.accessToken);
+                window.sessionStorage.setItem("expire",res.data.expiresIn);
+                store.state.isLogin = true;
+                // 刷新当前页面
+                this.$router.go(0);
               })
               .catch(err => {
-                reject(err);
+                this.$message.error(err.msg);
               });
-        });
-      },
-
+        } else {
+          return false;
+        }
+      });
     },
 
-  }
+    // 直接登录
+    login() {
+      this.$store.state.registerVisible = false;
+      this.$store.state.loginVisible = true;
+    },
+
+    // 用户判重
+    isValidUser(username) {
+      return new Promise((resolve, reject) => {
+        userService.verifyUsername({username: username})
+            .then(res => {
+              if (res.code === 0) {
+                resolve(res);
+              } else {
+                throw res;
+              }
+            }).catch(err => {
+          reject(err);
+        });
+      });
+    },
+
+  },
+
+}
 </script>
 
 <style>
-  #register-form-content .title {
-    font-size: 20px;
-    font-weight: bold;
-    padding-bottom: 15px;
-  }
+#register-form-content .title {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 15px;
+}
 
-  #register-form-content .ant-input-affix-wrapper .ant-input {
-    font-size: 14px;
-  }
+#register-form-content .ant-input-affix-wrapper .ant-input {
+  font-size: 14px;
+}
 
-  #register-form-content .login-form-forgot {
-    float: right;
-  }
+#register-form-content .login-form-forgot {
+  float: right;
+}
 
-  #register-form-content .login-form-button {
-    width: 100%;
-  }
+#register-form-content .login-form-button {
+  width: 100%;
+}
 
-  #register-form-content .ant-form-item {
-    margin-bottom: 10px;
-  }
+#register-form-content .ant-form-item {
+  margin-bottom: 10px;
+}
 </style>

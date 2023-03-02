@@ -240,7 +240,7 @@
       // 用户判重
       isValidUser(username) {
         return new Promise((resolve, reject) => {
-          userService.isValidUser({username: username})
+          userService.verifyUsername({username: username})
               .then(res => {
                 if (res.code === 0) {
                   resolve(res);

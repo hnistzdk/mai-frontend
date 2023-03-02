@@ -15,7 +15,7 @@ export default (() => {
         if (token){
             config.headers.authorization = token;
         }
-        console.log('token',config.headers.authorization)
+        // console.log('token',config.headers.authorization)
         return config
     }, error => {
         return Promise.reject(error);
@@ -34,11 +34,11 @@ export default (() => {
             if (response.headers["x-task-notify-count"]) {
                 store.state.taskNotifyCount = response.headers["x-task-notify-count"];
             }
-            console.log('axios响应',response)
+            // console.log('axios响应',response)
             // 和后台约定好响应码为200且响应体的code字段为0的时候才算成功
             if (response.status === 200) {
                 if (response.data) {
-                    if (response.data.code === 200) {
+                    if (response.data.code === 0) {
                         return Promise.resolve(response.data);
 
                         // 如果code是302，代表需要跳转到切页面

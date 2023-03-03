@@ -39,9 +39,9 @@
     components: {ChildComment, CreateComment},
 
     props: {
-      // 当前文章的作者
+      // 当前贴子的作者id
       postUserId: {type: Number, default: 0},
-      // 文章总的评论数
+      // 贴子总的评论数
       postCommentCount: {type: Number, default: 0},
     },
 

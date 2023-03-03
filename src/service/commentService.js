@@ -4,7 +4,7 @@ export default {
   // 获取文章的评论信息
   getCommentByPostId(params) {
     return new Promise((resolve, reject) => {
-      axios.get("/comment/getCommentByPostId", {params})
+      axios.get("/comment/list", {params})
           .then((res) => resolve(res))
           .catch((err) => reject(err));
     });

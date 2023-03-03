@@ -116,7 +116,7 @@
 
       refresh() {
         // 获取文章一些统计数据
-        this.$refs.child.getPostCountById()
+        this.$refs.child.getStatisticalData()
       },
 
       postCommentCountFn(commentCount) {

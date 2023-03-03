@@ -1,26 +1,26 @@
 <template>
   <div id="child-comment">
-    <a-comment :id="'reply-' + data.id">
-      <a class="username" slot="author" @click="routerUserCenter(data.commentUser)">
-        {{ data.commentUserName }}
-        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>
-        <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.createTime)"></small>
+    <a-comment :id="'reply-' + data.commentId">
+      <a class="username" slot="author" @click="routerUserCenter(data.createBy)">
+        {{ data.createUsername }}
+<!--        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>-->
+        <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>
       </a>
       <a-avatar slot="avatar" :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"
-                @click="routerUserCenter(data.commentUser)"/>
+                @click="routerUserCenter(data.createBy)"/>
       <p class="comment-content" slot="content">
         <span v-html="data.content" style="width: 100%">{{ data.content }}</span>
-<!--        <span class="del" v-if="data.commentUser === $store.state.userId"-->
-<!--              @click="deleteComment(data.id)">{{ $t("common.delete") }}</span>-->
+        <span class="del" v-if="data.createBy === $store.state.userId"
+              @click="deleteComment(data.commentId)">{{ $t("common.delete") }}</span>
       </p>
       <span slot="content">
         <a class="operate comment-like">
-          <i class="iconfont icon-like" @click="likeCommentAction(data.id)"
+          <i class="iconfont icon-like" @click="likeCommentAction(data.commentId)"
              :style="data.isLike ? 'color:' + $store.state.themeColor : 'color: #8a919f;'">
             <small> {{ data.likeCount === 0 ? '' : data.likeCount }}</small>
           </i>
         </a>
-        <a class="operate comment-comment" v-if="data.depth < 2" @click="isShowFn(data.id)">
+        <a class="operate comment-comment" v-if="data.depth < 2" @click="isShowFn(data.commentId)">
           <i class="iconfont icon-comment" style="color: #8a919f;">
             <small v-if="isShow"> {{ $t("common.cancelReply") }}</small>
             <small v-else> {{ $t("common.reply") }}</small>
@@ -28,10 +28,10 @@
           </i>
         </a>
         <!-- 自己的评论 or 自己的文章  都可以删除对应评论信息 -->
-        <b v-if="data.commentUser === $store.state.userId || articleUserId === $store.state.userId">
+        <b v-if="data.createBy === $store.state.userId || postUserId === $store.state.userId">
           <a-dropdown :placement="'bottomCenter'" :trigger="['click']">
             <a-menu slot="overlay">
-              <a-menu-item key="delete" @click="deleteComment(data.id)">
+              <a-menu-item key="delete" @click="deleteComment(data.commentId)">
                 <span style="color: red">{{ ' ' + $t("common.delete") }}</span>
               </a-menu-item>
             </a-menu>
@@ -42,14 +42,14 @@
         </b>
       </span>
       <CreateComment v-show="isShow"
-                     :preId="preId"
-                     @refresh="getCommentByArticleId"/>
+                     :parentId="parentId"
+                     @refresh="getCommentByPostId"/>
       <ChildComment v-if="data.depth < 2"
                     v-for="(item, index) of data.child"
                     :data="item"
                     :key="index"
-                    :articleUserId="articleUserId"
-                    @getCommentByArticleId="getCommentByArticleId"/>
+                    :postUserId="postUserId"
+                    @getCommentByPostId="getCommentByPostId"/>
     </a-comment>
   </div>
 </template>
@@ -68,13 +68,13 @@ export default {
   props: {
     data: {type: Object, default: () => ({})},
     // 当前文章的作者
-    articleUserId: {type: Number, default: 0},
+    postUserId: {type: Number, default: 0},
   },
 
   data() {
     return {
       isShow: false,
-      preId: 0,
+      parentId: 0,
     }
   },
 
@@ -83,7 +83,7 @@ export default {
     likeCommentAction(commentId) {
       userService.updateLikeCommentState({commentId: commentId})
           .then(() => {
-            this.$emit("getCommentByArticleId");
+            this.$emit("getCommentByPostId");
           })
           .catch(err => {
             this.$message.error(err.desc);
@@ -91,15 +91,15 @@ export default {
     },
 
     // 刷新评论数据
-    getCommentByArticleId() {
-      this.$emit("getCommentByArticleId");
+    getCommentByPostId() {
+      this.$emit("getCommentByPostId");
     },
 
     // 评论回复 的显示与否
     isShowFn(id) {
       if (this.$store.state.isLogin) {
         this.isShow = !this.isShow;
-        this.preId = id;
+        this.parentId = id;
       } else {
         store.state.loginVisible = true;
       }
@@ -114,7 +114,7 @@ export default {
         onOk: () => {
           commentService.deleteComment(commentId)
               .then(() => {
-                this.$emit("getCommentByArticleId");
+                this.$emit("getCommentByPostId");
               })
               .catch((err) => {
                 this.$message.error(err.desc);

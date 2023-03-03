@@ -9,6 +9,33 @@ export default {
                 .catch((err) => reject(err));
         });
     },
+    // 获取贴子详情
+    getPostById(params) {
+        return new Promise((resolve, reject) => {
+            // axios.get("/post/getById", {params})
+            axios.get("/post/detail/"+params.id)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+    // 发布贴子
+    postCreate(data) {
+        return new Promise((resolve, reject) => {
+            axios.post("/post/create", data)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+    // 获取贴子一些统计数据
+    getStatisticalData(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/post/statistical", {params})
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+
     // 获取个人发布的贴子（所有）
     getPersonalPosts(params) {
         return new Promise((resolve, reject) => {
@@ -65,35 +92,11 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 发布贴子
-    postCreate(data) {
-        return new Promise((resolve, reject) => {
-            axios.post("/post/create", data)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
+
     // 更新贴子
     postUpdate(data) {
         return new Promise((resolve, reject) => {
             axios.post("/post/update", data)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 获取贴子详情
-    getPostById(params) {
-        return new Promise((resolve, reject) => {
-            // axios.get("/post/getById", {params})
-            axios.get("/post/detail/"+params.id)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 获取贴子一些统计数据
-    getPostCountById(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/post/getCountById", {params})
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

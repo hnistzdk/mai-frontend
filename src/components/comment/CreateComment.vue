@@ -55,7 +55,6 @@ export default {
     // 发表评论
     handleSubmit(e) {
       e.preventDefault();
-      console.log('是否登录',this.$store.state.isLogin);
       if (this.$store.state.isLogin) {
         this.form.validateFields((err, values) => {
           if (!err) {

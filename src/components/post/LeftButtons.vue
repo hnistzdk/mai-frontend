@@ -48,8 +48,8 @@ export default {
 
   methods: {
     // 获取文章一些统计数据
-    getPostCountById() {
-      postService.getPostCountById({id: this.$route.params.id})
+    getStatisticalData() {
+      postService.getStatisticalData({postId: this.$route.params.id})
           .then((res) => {
             this.data = res.data;
             this.$emit("postCommentCountFn", res.data.commentCount);
@@ -63,7 +63,7 @@ export default {
     likeAction() {
       userService.updateLikeState({postId: this.$route.params.id})
           .then(() => {
-            this.getPostCountById();
+            this.getStatisticalData();
           })
           .catch(err => {
             this.$message.error(err.desc);
@@ -72,7 +72,7 @@ export default {
   },
 
   mounted() {
-    this.getPostCountById();
+    this.getStatisticalData();
   }
 };
 </script>

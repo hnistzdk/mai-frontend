@@ -38,9 +38,9 @@
     </div>
 
     <!-- 登录Model -->
-    <Login />
+<!--    <Login />-->
     <!-- 注册Model -->
-    <Register />
+<!--    <Register />-->
   </div>
 </template>
 

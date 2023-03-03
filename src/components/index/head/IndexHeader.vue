@@ -42,7 +42,7 @@
         </div>
 
         <!-- 写文章 -->
-        <div v-if="!$store.state.collapsed" class="header-item" @click="routerWrite">
+        <div v-if="!$store.state.collapsed && $store.state.isLogin" class="header-item" @click="routerWrite">
           <div class="options">
             <span>{{ $t("common.writePost") }}</span>
           </div>
@@ -243,11 +243,23 @@ export default {
     showLoginModal() {
       this.$store.state.loginVisible = true;
     },
+    //设置退出登录状态
+    setLogout(){
+      this.$store.state.isLogin = false;
+    },
 
     // 退出登录
     logout() {
       loginService.logout()
           .then(res => {
+            //清除localstorage
+            window.localStorage.removeItem("access_token")
+            window.localStorage.removeItem("expire")
+            window.localStorage.removeItem("userId")
+            window.localStorage.removeItem("username")
+            window.localStorage.removeItem("state")
+            //设置登录状态为false
+            this.setLogout();
             // 刷新当前页面
             this.$router.go(0);
           })
@@ -285,6 +297,7 @@ export default {
 
     // 路由到写文章页面
     routerWrite() {
+
       this.$router.push("/write");
     },
 

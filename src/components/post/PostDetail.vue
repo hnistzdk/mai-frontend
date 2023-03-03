@@ -91,10 +91,8 @@
         this.finish = false;
         postService.getPostById({id: this.$route.params.id, isPv: true})
             .then(res => {
-              console.log('res',res);
               this.data = res.data;
               this.finish = true;
-              console.log('时间',this.data.createTime);
               /*// 提取标签id
               let labelIds = [];
               res.data.labelDTOS.forEach(label => {

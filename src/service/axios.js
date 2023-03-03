@@ -3,19 +3,16 @@ import store from '../store/index'
 // 设置xhr请求超时时间和baseURL（毫秒）
 axios.defaults.timeout = 15000;
 if (process.env.NODE_ENV === "production") {
-    // axios.defaults.baseURL = "http://bbs.nanshengbbs.top";
     axios.defaults.baseURL = "http://localhost:9527";
 }
 export default (() => {
 
     // 每次请求前处理
     axios.interceptors.request.use(config => {
-        // config.headers.authorization = window.sessionStorage.getItem('access_token')
-        let token = window.sessionStorage.getItem('access_token');
+        let token = window.localStorage.getItem('access_token');
         if (token){
             config.headers.authorization = token;
         }
-        // console.log('token',config.headers.authorization)
         return config
     }, error => {
         return Promise.reject(error);

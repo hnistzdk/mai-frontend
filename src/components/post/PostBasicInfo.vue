@@ -122,7 +122,7 @@ export default {
           });
     },
 
-    // 写文章
+    // 发帖
     postCreate(data) {
       postService.postCreate(data)
           .then(res => {

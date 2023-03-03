@@ -24,7 +24,7 @@ export default {
   name: "CreateComment",
 
   props: {
-    preId: {type: Number, default: 0},
+    parentId: {type: Number, default: 0},
   },
 
   data() {
@@ -55,15 +55,16 @@ export default {
     // 发表评论
     handleSubmit(e) {
       e.preventDefault();
+      console.log('是否登录',this.$store.state.isLogin);
       if (this.$store.state.isLogin) {
         this.form.validateFields((err, values) => {
           if (!err) {
-            if (this.preId) {
-              this.data.preId = this.preId;
+            if (this.parentId) {
+              this.data.parentId = this.parentId;
             } else {
-              this.data.preId = 0;
+              this.data.parentId = 0;
             }
-            this.data.articleId = this.$route.params.id;
+            this.data.postId = this.$route.params.id;
             this.data.content = values.content;
             this.createComment();
           }
@@ -75,6 +76,7 @@ export default {
 
     // 添加评论
     createComment() {
+      console.log('评论请求参数',this.data)
       commentService.createComment(this.data)
           .then((res) => {
             // 清空表单

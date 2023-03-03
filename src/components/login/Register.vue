@@ -48,6 +48,12 @@ import userService from "@/service/userService";
 import store from "@/store";
 
 export default {
+  beforeMount() {
+    let state = window.localStorage.getItem("state");
+    if (state){
+      this.$store.replaceState(JSON.parse(state));
+    }
+  },
   data() {
     // 验证用户名
     let validateUsername = (rule, value, callback) => {
@@ -110,15 +116,27 @@ export default {
     handleOk() {
       this.$store.state.registerVisible = false;
     },
+    setLoginState() {
+      this.$store.state.isLogin = true;
+    },
+    setUserInfo(userId,username) {
+      this.$store.state.userId = userId;
+      this.$store.state.username = username;
+    },
 
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           loginService.register({username: this.ruleForm.username, password: this.ruleForm.password})
               .then(res => {
-                window.sessionStorage.setItem("access_token",res.data.accessToken);
-                window.sessionStorage.setItem("expire",res.data.expiresIn);
-                store.state.isLogin = true;
+                window.localStorage.setItem("access_token",res.data.accessToken)
+                window.localStorage.setItem("expire",res.data.expiresIn)
+                window.localStorage.setItem("userId",res.data.userId)
+                window.localStorage.setItem("username",res.data.username)
+                this.handleOk();
+                this.setUserInfo(res.data.userId,res.data.username)
+                //将state存入localStorage供刷新页面后恢复状态
+                window.localStorage.setItem("state",JSON.stringify(store.state));
                 // 刷新当前页面
                 this.$router.go(0);
               })

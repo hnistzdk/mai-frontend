@@ -20,7 +20,7 @@ export default {
     // 退出登录
     logout(data) {
         return new Promise((resolve, reject) => {
-            axios.get("/auth/logout", data)
+            axios.post("/auth/logout", data)
                 .then(res => resolve(res))
                 .catch(err => reject(err))
         })

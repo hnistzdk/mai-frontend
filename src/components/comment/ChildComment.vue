@@ -43,12 +43,14 @@
       </span>
       <CreateComment v-show="isShow"
                      :parentId="parentId"
+                     :post-info="postInfo"
                      @refresh="getCommentByPostId"/>
       <ChildComment v-if="data.depth < 2"
                     v-for="(item, index) of data.child"
                     :data="item"
                     :key="index"
                     :postUserId="postUserId"
+                    :post-info="postInfo"
                     @getCommentByPostId="getCommentByPostId"/>
     </a-comment>
   </div>
@@ -69,6 +71,8 @@ export default {
     data: {type: Object, default: () => ({})},
     // 当前文章的作者
     postUserId: {type: Number, default: 0},
+    //贴子信息
+    postInfo: {},
   },
 
   data() {

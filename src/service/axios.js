@@ -44,17 +44,32 @@ export default (() => {
                         store.state.isLogin = false;
                         store.state.loginVisible = true;
                         return Promise.reject(response.data);
-                    } else {
+                    }
+                    //token过期或验证失败  清除token信息
+                    else if (response.data.code === 401){
+                        console.log('进入401')
+                        //清除localstorage
+                        window.localStorage.removeItem("access_token")
+                        window.localStorage.removeItem("expire")
+                        window.localStorage.removeItem("userId")
+                        window.localStorage.removeItem("username")
+                        window.localStorage.removeItem("state")
+                        this.$store.state.isLogin = false;
+                        this.$store.state.loginVisible = true;
+                        this.$router.go(0);
+                    }else {
                         throw response.data;
                     }
                 } else {
                     throw response;
                 }
-            } else {
+            }
+            else {
                 // 响应码不是200则返回一个失败的Promise
                 return Promise.reject(response);
             }
         }, error => {
+            console.log('error',error)
             return Promise.reject(error);
         }
     );

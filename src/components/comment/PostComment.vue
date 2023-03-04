@@ -3,6 +3,7 @@
        :style="$store.state.collapsed ? 'padding: 10px' : 'padding: 20px;'">
     <p class="title">{{ $t('common.comment') }}</p>
     <CreateComment
+        :post-info="postInfo"
         @refresh="refresh"/>
 
     <div class="commentText">
@@ -26,6 +27,7 @@
                   :data="item"
                   :key="index"
                   :postUserId="postUserId"
+                  :postInfo="postInfo"
                   @getCommentByPostId="getCommentByPostId"/>
   </div>
 </template>
@@ -43,6 +45,8 @@
       postUserId: {type: Number, default: 0},
       // 贴子总的评论数
       postCommentCount: {type: Number, default: 0},
+      //贴子信息
+      postInfo: {},
     },
 
     data() {
@@ -59,7 +63,7 @@
         this.refresh();
       },
 
-      // 获取文章的评论信息
+      // 获取贴子的评论信息
       getCommentByPostId() {
         commentService.getCommentByPostId({postId: this.$route.params.id, sortRule: this.sortRule})
             .then((res) => {

@@ -130,7 +130,6 @@ export default {
           loginService.register({username: this.ruleForm.username, password: this.ruleForm.password})
               .then(res => {
                 window.localStorage.setItem("access_token",res.data.accessToken)
-                window.localStorage.setItem("expire",res.data.expiresIn)
                 window.localStorage.setItem("userId",res.data.userId)
                 window.localStorage.setItem("username",res.data.username)
                 this.handleOk();

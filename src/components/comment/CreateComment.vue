@@ -25,6 +25,8 @@ export default {
 
   props: {
     parentId: {type: Number, default: 0},
+    //贴子信息
+    postInfo: {},
   },
 
   data() {
@@ -58,6 +60,7 @@ export default {
       if (this.$store.state.isLogin) {
         this.form.validateFields((err, values) => {
           if (!err) {
+            console.log('CreateComment中的postInfo',this.postInfo)
             if (this.parentId) {
               this.data.parentId = this.parentId;
             } else {

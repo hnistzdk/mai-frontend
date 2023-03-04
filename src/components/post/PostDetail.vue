@@ -91,6 +91,7 @@
         this.finish = false;
         postService.getPostById({id: this.$route.params.id, isPv: true})
             .then(res => {
+              this.$emit("initPostInfo",res.data);
               this.data = res.data;
               this.finish = true;
               /*// 提取标签id
@@ -114,6 +115,7 @@
               this.$message.error(err.desc);
             });
       },
+
 
       // 设置标题目录追踪滚动高亮当前标题
       monitorScrollForTopicHighlight() {

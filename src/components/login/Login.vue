@@ -70,6 +70,13 @@
         this.$store.state.userId = userId;
         this.$store.state.username = username;
       },
+      //获取token过期的时间以便比较
+      getExpireDate(expiresIn){
+        let date=new Date();     //1. js获取当前时间
+        let min=date.getMinutes();  //2. 获取当前分钟
+        date.setMinutes(min+expiresIn);
+        return date;
+      },
 
       handleSubmit(e) {
         e.preventDefault();
@@ -78,7 +85,6 @@
             loginService.login(values)
                 .then(res => {
                   window.localStorage.setItem("access_token",res.data.accessToken)
-                  window.localStorage.setItem("expire",res.data.expiresIn)
                   window.localStorage.setItem("userId",res.data.userId)
                   window.localStorage.setItem("username",res.data.username)
                   //设置登录状态

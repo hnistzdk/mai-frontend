@@ -16,6 +16,7 @@
             <!-- 文章详情 -->
             <PostDetail
                 @initLabelIds="initLabelIds"
+                @initPostInfo="initPostInfo"
                 style="background: #fff;"/>
             <br/>
             <!-- 文章评论 -->
@@ -23,6 +24,7 @@
                 @refresh="refresh"
                 :postUserId="userId"
                 :postCommentCount="postCommentCount"
+                :post-info="postInfo"
                 style="background: #fff"/>
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
@@ -102,6 +104,7 @@
         userId: 0,
         // 文章总的评论数
         postCommentCount: 0,
+        postInfo: {},
       };
     },
 
@@ -112,6 +115,13 @@
         this.finishPostDetail = finishPostDetail;
         this.userId = userId;
         this.postHtml = postHtml;
+      },
+      //把贴子信息传回来
+      initPostInfo(postInfo){
+        this.postInfo = postInfo;
+        postInfo.html = null;
+        postInfo.markdown = null;
+        console.log('传回的信息',this.postInfo)
       },
 
       refresh() {

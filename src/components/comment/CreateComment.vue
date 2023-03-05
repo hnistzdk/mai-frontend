@@ -27,6 +27,8 @@ export default {
     parentId: {type: Number, default: 0},
     //贴子信息
     postInfo: {},
+    //评论信息
+    commentInfo: {}
   },
 
   data() {
@@ -61,6 +63,7 @@ export default {
         this.form.validateFields((err, values) => {
           if (!err) {
             console.log('CreateComment中的postInfo',this.postInfo)
+            console.log('commentInfo',this.commentInfo)
             if (this.parentId) {
               this.data.parentId = this.parentId;
             } else {
@@ -68,6 +71,7 @@ export default {
             }
             this.data.postId = this.$route.params.id;
             this.data.content = values.content;
+            this.data.rootId = this.commentInfo.rootId;
             this.createComment();
           }
         });

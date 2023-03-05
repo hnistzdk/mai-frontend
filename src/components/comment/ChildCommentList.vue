@@ -1,13 +1,17 @@
 <template>
-  <div id="child-comment">
+  <div class="child-comment-list">
     <a-comment :id="'reply-' + data.commentId">
       <a class="username" slot="author" @click="routerUserCenter(data.createBy)">
-        {{ data.createUsername }}
-<!--        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>-->
+        {{ data.createUsername +'     回复'}}
+        <!--        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>-->
         <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>
+      </a>
+      <a class="username" slot="author" v-if="data.createBy !== data.parentUserId" @click="routerUserCenter(data.parentUsername)">
+        {{ data.parentUsername }}
       </a>
       <a-avatar slot="avatar" :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"
                 @click="routerUserCenter(data.createBy)"/>
+
       <p class="comment-content" slot="content">
         <span v-html="data.content" style="width: 100%">{{ data.content }}</span>
         <span class="del" v-if="data.createBy === $store.state.userId"
@@ -20,7 +24,7 @@
             <small> {{ data.likeCount === 0 ? '' : data.likeCount }}</small>
           </i>
         </a>
-        <a class="operate comment-comment" v-if="data.depth < 2" @click="isShowFn(data.commentId)">
+        <a class="operate comment-comment" @click="isShowFn(data.commentId)">
           <i class="iconfont icon-comment" style="color: #8a919f;">
             <small v-if="isShow"> {{ $t("common.cancelReply") }}</small>
             <small v-else> {{ $t("common.reply") }}</small>
@@ -46,15 +50,6 @@
                      :post-info="postInfo"
                      :comment-info="commentInfo"
                      @refresh="getCommentByPostId"/>
-      <!-- 根据rootId循环 -->
-      <ChildCommentList v-if="data.depth < 2"
-                    v-for="(item, index) of data.toComment"
-                    :data="item"
-                    :key="index"
-                    :postUserId="postUserId"
-                    :post-info="postInfo"
-                    :comment-info="item"
-                    @getCommentByPostId="getCommentByPostId"/>
     </a-comment>
   </div>
 </template>
@@ -62,14 +57,13 @@
 <script>
 import userService from "@/service/userService";
 import CreateComment from "@/components/comment/CreateComment";
-import ChildCommentList from "@/components/comment/ChildCommentList";
 import store from "@/store";
 import commentService from "@/service/commentService";
 
 export default {
-  name: 'ChildComment',
+  name: 'ChildComment1',
 
-  components: {CreateComment,ChildCommentList},
+  components: {CreateComment},
 
   props: {
     data: {type: Object, default: () => ({})},
@@ -77,7 +71,7 @@ export default {
     postUserId: {type: Number, default: 0},
     //贴子信息
     postInfo: {},
-    //评论信息
+    //当前评论信息
     commentInfo:{},
   },
 
@@ -150,8 +144,9 @@ export default {
 }
 </script>
 
-<style lang="less" >
-#child-comment {
+<style lang="less" scoped>
+.child-comment-list {
+  background: #f8f8f8;
   /* 背景色逐渐消失-start */
   @keyframes myAnimation {
     from {
@@ -168,7 +163,7 @@ export default {
   /* 背景色逐渐消失-end */
 }
 
-#child-comment .ant-comment-content-author-name {
+.child-comment-list .ant-comment-content-author-name {
   width: 100%;
 
   .username {
@@ -182,11 +177,11 @@ export default {
 
 }
 
-#child-comment .operate .iconfont:hover {
+.child-comment-list .operate .iconfont:hover {
   color: #8a919fb3 !important;
 }
 
-#child-comment .comment-content {
+.child-comment-list .comment-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -209,15 +204,15 @@ export default {
   }
 }
 
-#child-comment .comment-comment, .comment-operate {
+.child-comment-list .comment-comment, .comment-operate {
   margin-left: 16px;
 }
 
-#child-comment .ant-comment-nested {
+.child-comment-list .ant-comment-nested {
   margin-left: 20px;
 }
 
-#child-comment .ant-comment-inner {
+.child-comment-list .ant-comment-inner {
   padding: 5px 0;
 }
 

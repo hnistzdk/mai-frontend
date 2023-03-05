@@ -1,7 +1,15 @@
 import axios from "axios";
 
 export default {
-  // 获取文章的评论信息
+  // 根据评论rootId获取子评论信息
+  getCommentByRootId(params) {
+    return new Promise((resolve, reject) => {
+      axios.get("/comment/list/root", {params})
+          .then((res) => resolve(res))
+          .catch((err) => reject(err));
+    });
+  },
+  // 获取贴子的评论信息
   getCommentByPostId(params) {
     return new Promise((resolve, reject) => {
       axios.get("/comment/list", {params})

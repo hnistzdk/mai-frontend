@@ -20,14 +20,15 @@
         </a-radio-group>
       </span>
     </div>
-
     <a-empty :description="false" v-if="comments.length === 0"/>
+    <!--  下方的评论组件  -->
     <ChildComment v-else
                   v-for="(item, index) of comments"
                   :data="item"
                   :key="index"
                   :postUserId="postUserId"
                   :postInfo="postInfo"
+                  :comment-info="item"
                   @getCommentByPostId="getCommentByPostId"/>
   </div>
 </template>

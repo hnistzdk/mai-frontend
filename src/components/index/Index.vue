@@ -123,6 +123,7 @@
   import CustomEmpty from "@/components/utils/CustomEmpty";
   import LatestComment from "@/components/right/LatestComment";
   import FriendDonate from "@/components/right/FriendDonate";
+  import userService from "@/service/userService";
 
   export default {
     components: {
@@ -136,6 +137,15 @@
       CustomEmpty,
       LatestComment,
       FriendDonate
+    },
+    beforeUpdate() {
+      if (this.$store.state.isLogin){
+        userService.validateExpire()
+            .then(res=>{
+            }).catch(error=>{
+          throw error;
+        });
+      }
     },
     data() {
       return {
@@ -165,6 +175,7 @@
       loadMore() {
         this.params.currentPage++;
         if (this.isApprovedTab) {
+          console.log('isApprovedTab')
           this.getPostList(this.params, true);
         }
         if (this.isPendingReviewTab) {
@@ -195,8 +206,10 @@
               this.finish = true;
             })
             .catch(err => {
+              console.log('err',err)
               this.finish = true;
-              this.$message.error(err.desc);
+              this.hasNext = false;
+              this.$message.error(err.msg);
             });
       },
 
@@ -220,7 +233,7 @@
             })
             .catch(err => {
               this.finish = true;
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -244,7 +257,7 @@
             })
             .catch(err => {
               this.finish = true;
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 

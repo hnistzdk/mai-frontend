@@ -29,7 +29,7 @@ export default new Vuex.Store({
         // 过期时间
         expire: 0,
         // 用户头像
-        picture: "",
+        avatar: "",
         // 判断用户是否是管理员
         isManage: false,
         // 用户名称长度限制
@@ -129,7 +129,7 @@ export default new Vuex.Store({
                 // 过期时间
                 expire: 0,
                 // 用户头像
-                picture: "",
+                avatar: "",
                 // 判断用户是否是管理员
                 isManage: false,
                 // 用户名称长度限制

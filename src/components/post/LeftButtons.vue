@@ -55,7 +55,7 @@ export default {
             this.$emit("postCommentCountFn", res.data.commentCount);
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -66,7 +66,7 @@ export default {
             this.getStatisticalData();
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
   },

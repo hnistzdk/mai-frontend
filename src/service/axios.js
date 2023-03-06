@@ -22,7 +22,7 @@ export default (() => {
     axios.interceptors.response.use(response => {
             // 后台会在响应头带上用户头像链接，每次和存在store中的比较，不同就替换，实现头像更新
             if (response.headers["x-user-picture"]) {
-                store.state.picture = response.headers["x-user-picture"];
+                store.state.avatar = response.headers["x-user-picture"];
             }
             // 后台会在响应头带上用户任务提醒和消息通知的数量，存在store里面，
             if (response.headers["x-system-notify-count"]) {
@@ -31,7 +31,7 @@ export default (() => {
             if (response.headers["x-task-notify-count"]) {
                 store.state.taskNotifyCount = response.headers["x-task-notify-count"];
             }
-            // console.log('axios响应',response)
+            console.log('axios响应',response)
             // 和后台约定好响应码为200且响应体的code字段为0的时候才算成功
             if (response.status === 200) {
                 if (response.data) {
@@ -46,17 +46,16 @@ export default (() => {
                         return Promise.reject(response.data);
                     }
                     //token过期或验证失败  清除token信息
-                    else if (response.data.code === 401){
-                        console.log('进入401')
+                    else if (response.data.code === 40001 || response.data.code === 401){
                         //清除localstorage
                         window.localStorage.removeItem("access_token")
                         window.localStorage.removeItem("expire")
                         window.localStorage.removeItem("userId")
                         window.localStorage.removeItem("username")
                         window.localStorage.removeItem("state")
-                        this.$store.state.isLogin = false;
-                        this.$store.state.loginVisible = true;
-                        this.$router.go(0);
+                        store.state.isLogin = false;
+                        // store.state.loginVisible = true;
+                        // this.$router.go(0);
                     }else {
                         throw response.data;
                     }
@@ -69,8 +68,24 @@ export default (() => {
                 return Promise.reject(response);
             }
         }, error => {
-            console.log('error',error)
-            return Promise.reject(error);
+            console.log('error',error.response)
+            let resp = error.response;
+            if (resp.status === 401){
+                console.log('ddd')
+                //清除localstorage
+                window.localStorage.removeItem("access_token")
+                window.localStorage.removeItem("expire")
+                window.localStorage.removeItem("userId")
+                window.localStorage.removeItem("username")
+                window.localStorage.removeItem("state")
+                console.log('isLogin',store.state.isLogin)
+                store.state.isLogin = false;
+                console.log('isLogin',store.state.isLogin)
+                store.state.loginVisible = true;
+                // this.$router.push('/');
+            }else {
+                return Promise.reject(error);
+            }
         }
     );
 })();

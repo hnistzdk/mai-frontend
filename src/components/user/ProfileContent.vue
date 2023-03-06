@@ -6,49 +6,91 @@
           <p>{{ $t('common.personalInformation') }}</p>
           <a-divider/>
           <!-- 用户名 -->
-          <a-form-model-item has-feedback prop="username" :label="$t('common.username2')">
-            <a-input v-model="ruleForm.username"
-                     :maxLength="$store.state.userMaxLength"
-                     :suffix="ruleForm.userNameNum + '/' + $store.state.userMaxLength"
-                     @change="usernameChange"
-                     autocomplete="off"
-                     :placeholder="$t('common.fillInYourUsername')"/>
-          </a-form-model-item>
+<!--          <a-form-model-item has-feedback prop="username" :label="$t('common.username2')">-->
+<!--            <a-input v-model="ruleForm.username"-->
+<!--                     :maxLength="$store.state.userMaxLength"-->
+<!--                     :suffix="ruleForm.userNameNum + '/' + $store.state.userMaxLength"-->
+<!--                     @change="usernameChange"-->
+<!--                     autocomplete="off"-->
+<!--                     disabled="true"-->
+<!--                     :placeholder="$t('common.fillInYourUsername')"/>-->
+<!--          </a-form-model-item>-->
           <!-- 职位 -->
-          <a-form-model-item has-feedback prop="position" :label="$t('common.position')">
-            <a-input v-model="ruleForm.position"
-                     :suffix="ruleForm.positionNum + '/50'"
-                     @change="commonChange"
-                     :maxLength="50"
-                     :placeholder="$t('common.fillInYourPosition')"/>
-          </a-form-model-item>
+<!--          <a-form-model-item has-feedback prop="position" :label="$t('common.position')">-->
+<!--            <a-input v-model="ruleForm.position"-->
+<!--                     :suffix="ruleForm.positionNum + '/50'"-->
+<!--                     @change="commonChange"-->
+<!--                     :maxLength="50"-->
+<!--                     :placeholder="$t('common.fillInYourPosition')"/>-->
+<!--          </a-form-model-item>-->
           <!-- 公司 -->
-          <a-form-model-item has-feedback prop="company" :label="$t('common.company')">
-            <a-input v-model="ruleForm.company"
-                     :suffix="ruleForm.companyNum + '/50'"
-                     @change="commonChange"
-                     :maxLength="50"
-                     :placeholder="$t('common.fillInYourCompany')"/>
-          </a-form-model-item>
+<!--          <a-form-model-item has-feedback prop="company" :label="$t('common.company')">-->
+<!--            <a-input v-model="ruleForm.company"-->
+<!--                     :suffix="ruleForm.companyNum + '/50'"-->
+<!--                     @change="commonChange"-->
+<!--                     :maxLength="50"-->
+<!--                     :placeholder="$t('common.fillInYourCompany')"/>-->
+<!--          </a-form-model-item>-->
           <!-- 个人主页 -->
-          <a-form-model-item has-feedback prop="homePage" :label="$t('common.homePage')">
-            <a-input v-model="ruleForm.homePage"
-                     :suffix="ruleForm.homePageNum + '/100'"
-                     @change="commonChange"
-                     :maxLength="100"
-                     :placeholder="$t('common.fillInYourHomePage')"
-                     class="homePage"/>
-          </a-form-model-item>
+<!--          <a-form-model-item has-feedback prop="homePage" :label="$t('common.homePage')">-->
+<!--            <a-input v-model="ruleForm.homePage"-->
+<!--                     :suffix="ruleForm.homePageNum + '/100'"-->
+<!--                     @change="commonChange"-->
+<!--                     :maxLength="100"-->
+<!--                     :placeholder="$t('common.fillInYourHomePage')"-->
+<!--                     class="homePage"/>-->
+<!--          </a-form-model-item>-->
           <!-- 个人介绍 -->
-          <a-form-model-item has-feedback prop="intro" :label="$t('common.selfIntro')">
-            <a-textarea v-model="ruleForm.intro"
+          <a-form-model-item has-feedback prop="selfIntroduction" :label="$t('common.selfIntro')">
+            <a-textarea v-model="ruleForm.selfIntroduction"
                         :suffix="ruleForm.introNum + '/150'"
                         @change="commonChange"
                         :maxLength="150"
                         :placeholder="$t('common.fillInYour7788')"
                         :auto-size="{ minRows: 5, maxRows: 8 }"
-                        class="intro"/>
+                        class="selfIntroduction"/>
           </a-form-model-item>
+          <!-- 毕业年份 -->
+          <a-form-item :label="$t('common.graduationYear')">
+            <a-select v-model="ruleForm.graduationYear"
+                      @change="commonChange"
+                      :placeholder="$t('common.fillInYourGraduationYear')"
+                      :options="graduationYearOptions"
+                      class="graduationYear">
+              </a-select>
+          </a-form-item>
+
+          <!-- 学历 -->
+          <a-form-item :label="$t('common.educationalBackground')">
+            <a-select v-model="ruleForm.educationalBackground"
+                      @change="commonChange"
+                      :placeholder="$t('common.fillInYourEducationalBackground')"
+                      :options="educationalBackgroundOptions"
+                      class="educationalBackground">
+            </a-select>
+          </a-form-item>
+
+          <!-- 毕业院校 -->
+          <a-form-item :label="$t('common.graduatedFrom')">
+            <a-input v-model="ruleForm.graduatedFrom"
+                     @change="commonChange"
+                     autocomplete="off"
+                     class="graduatedFrom"
+                     :placeholder="$t('common.fillInYourGraduatedFrom')"/>
+          </a-form-item>
+
+
+          <!-- 专业 -->
+          <a-form-item :label="$t('common.specializedSubject')">
+            <a-input v-model="ruleForm.specializedSubject"
+                      @change="commonChange"
+                      :placeholder="$t('common.fillInYourSpecializedSubject')"
+                      class="specializedSubject">
+            </a-input>
+          </a-form-item>
+
+
+
           <!-- 按钮 -->
           <a-form-model-item>
             <a-divider style="margin: 10px 0;"></a-divider>
@@ -69,7 +111,7 @@
               <a-avatar
                   v-if="true"
                   style="cursor: pointer" :size="120" icon="user"
-                  :src="$store.state.picture ? $store.state.picture : require('@/assets/img/default_avatar.png')"/>
+                  :src="$store.state.avatar ? $store.state.avatar : require('@/assets/img/default_avatar.png')"/>
               <img
                   v-else
                   src="@/assets/img/default_avatar.png"
@@ -118,7 +160,7 @@
                 callback();
               })
               .catch(err => {
-                callback(err.desc);
+                callback(err.msg);
               });
         }
       };
@@ -137,7 +179,17 @@
         // 加载中...
         spinning: true,
         visible: false,
-
+        educationalBackgroundOptions:[
+          {value:"博士后",label:"博士后"},
+          {value:"博士",label:"博士"},
+          {value:"硕士",label:"硕士"},
+          {value:"本科",label:"本科"},
+          {value:"专科",label:"专科"},
+          {value:"高中",label:"高中"},
+          {value:"初中",label:"初中"},
+          {value:"小学",label:"小学"},
+        ],
+        graduationYearOptions: this.getGraduationYearsOptions(),
         ruleForm: {
           userId: this.$store.state.userId,
           username: '',
@@ -152,10 +204,21 @@
           homePage: '',
           homePageNum: 0,
           // 个人介绍
-          intro: '',
+          selfIntroduction: '',
           introNum: 0,
           // 组织架构id
           orgId: Number,
+
+
+          //毕业年份
+          graduationYear: new Date().getFullYear().valueOf(),
+          //学历  小学~博士
+          educationalBackground: '',
+          //毕业院校
+          graduatedFrom:'',
+          //专业
+          specializedSubject:'',
+
         },
         rules: {
           username: [{validator: validateUsername, trigger: 'change'}],
@@ -169,30 +232,44 @@
     },
 
     methods: {
+      getGraduationYearsOptions(){
+          let nowYear = new Date().getFullYear().valueOf();
+          let options = [];
+          for (let i = nowYear+4 ; i >= 1981; i--) {
+              options.push({value:i,label:i});
+          }
+          return options;
+      },
       // 获取用户信息
       getUserInfo() {
         userService.getUserInfo({userId: this.ruleForm.userId})
             .then(res => {
+              console.log('用户信息',res.data);
               this.spinning = false;
-              this.ruleForm.username = res.data.name,
-              this.ruleForm.userNameNum = res.data.name.length;
+              this.ruleForm.username = res.data.username;
+              this.ruleForm.userNameNum = res.data.username.length;
 
-              this.ruleForm.position = res.data.position ? res.data.position : '';
-              this.ruleForm.positionNum = res.data.position ? res.data.position.length : 0;
+              // this.ruleForm.position = res.data.position ? res.data.position : '';
+              // this.ruleForm.positionNum = res.data.position ? res.data.position.length : 0;
+              //
+              // this.ruleForm.company = res.data.company ? res.data.company : '';
+              // this.ruleForm.companyNum = res.data.company ? res.data.company.length : 0;
+              //
+              // this.ruleForm.homePage = res.data.homePage ? res.data.homePage : '';
+              // this.ruleForm.homePageNum = res.data.homePage ? res.data.homePage.length : 0;
 
-              this.ruleForm.company = res.data.company ? res.data.company : '';
-              this.ruleForm.companyNum = res.data.company ? res.data.company.length : 0;
+              //学历信息
+              this.ruleForm.selfIntroduction = res.data.selfIntroduction;
+              this.ruleForm.educationalBackground = res.data.educationalBackground;
+              this.ruleForm.graduatedFrom = res.data.graduatedFrom;
+              this.ruleForm.specializedSubject = res.data.specializedSubject;
 
-              this.ruleForm.homePage = res.data.homePage ? res.data.homePage : '';
-              this.ruleForm.homePageNum = res.data.homePage ? res.data.homePage.length : 0;
+              this.ruleForm.introNum = res.data.selfIntroduction ? res.data.selfIntroduction.length : 0;
 
-              this.ruleForm.intro = res.data.intro;
-              this.ruleForm.introNum = res.data.intro ? res.data.intro.length : 0;
-
-              this.ruleForm.orgId = res.data.orgId;
+              // this.ruleForm.orgId = res.data.orgId;
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -204,7 +281,7 @@
               this.getUserInfo();
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -212,14 +289,19 @@
         this.$refs[formName].validate(valid => {
           if (valid) {
             const data = {
-              // id: this.ruleForm.userId,
-              name: this.ruleForm.username,
-              position: this.ruleForm.position,
-              company: this.ruleForm.company,
-              homePage: this.ruleForm.homePage,
-              intro: this.ruleForm.intro,
-              orgId: this.ruleForm.orgId,
+              userId: this.ruleForm.userId,
+              // username: this.ruleForm.username,
+              // position: this.ruleForm.position,
+              // company: this.ruleForm.company,
+              // homePage: this.ruleForm.homePage,
+              selfIntroduction: this.ruleForm.selfIntroduction,
+              graduationYear: this.ruleForm.graduationYear,
+              educationalBackground: this.ruleForm.educationalBackground,
+              graduatedFrom: this.ruleForm.graduatedFrom,
+              specializedSubject: this.ruleForm.specializedSubject,
+              // orgId: this.ruleForm.orgId,
             };
+            console.log('更新用户基本信息数据',data);
             this.updateUserBasicInfo(data);
           } else {
             return false;
@@ -234,7 +316,7 @@
         this.ruleForm.positionNum = this.ruleForm.position.length;
         this.ruleForm.companyNum = this.ruleForm.company.length;
         this.ruleForm.homePageNum = this.ruleForm.homePage.length;
-        this.ruleForm.introNum = this.ruleForm.intro.length;
+        this.ruleForm.introNum = this.ruleForm.selfIntroduction.length;
       },
 
       // 用户判重

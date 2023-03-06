@@ -18,12 +18,12 @@
     <div class="img-container">
       <label for="avatarFile">
         <img
-            v-if="!picture"
+            v-if="!avatar"
             style="width: 100%"
             src="@/assets/img/avatar-bg.png"
             alt=""
         />
-        <img v-else style="width: 100%" :src="picture" alt=""/>
+        <img v-else style="width: 100%" :src="avatar" alt=""/>
       </label>
       <input
           style="display: none"
@@ -54,7 +54,7 @@
     data() {
       return {
         loading: false,
-        picture: this.$store.state.picture,
+        avatar: this.$store.state.avatar,
         file: "",
         progress: 0,
       };
@@ -63,14 +63,14 @@
       // 用户选择图片的回调
       onFileChange(e) {
         this.file = e.target.files[0];
-        this.picture = window.URL.createObjectURL(this.file);
+        this.avatar = window.URL.createObjectURL(this.file);
       },
 
       handleOk() {
         // 上传前先做校验，校验是否选择图片以及图片大小是否合法
         if (
-            !this.picture ||
-            this.picture === this.$store.state.picture
+            !this.avatar ||
+            this.avatar === this.$store.state.avatar
         ) {
           this.$message.warning(this.$t("common.noPictureTip"));
           return;
@@ -81,9 +81,10 @@
           return;
         }
         const file = new FormData();
-        file.append("picture", this.file);
+        file.append("avatar", this.file);
+        file.append("base", "/design/user/avatar/");
         this.loading = true;
-        userService.uploadUserPicture(file, this.onUploadProgress.bind(this))
+        userService.uploadUserAvatar(file, this.onUploadProgress.bind(this))
             .then(() => {
               this.$message.success(this.$t("common.uploadSuccessed"));
               this.handleCancel();
@@ -92,7 +93,7 @@
             })
             .catch((err) => {
               this.progress = 0;
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
               this.loading = false;
             });
       },
@@ -113,7 +114,8 @@
 
     watch: {
       visible: function () {
-        this.picture = this.$store.state.picture;
+        // this.avatar = this.$store.state.avatar;
+        this.$store.state.avatar = this.avatar;
       },
     },
   };

@@ -116,8 +116,8 @@
               </a-menu-item>
             </a-menu>
             <div class="options">
-              <a-avatar class="avatar" v-if="$store.state.picture"
-                        :src="$store.state.picture"/>
+              <a-avatar class="avatar" v-if="$store.state.avatar"
+                        :src="$store.state.avatar"/>
               <img v-else src="@/assets/img/default_avatar.png" class="default-avatar" width="32"/>
             </div>
           </a-dropdown>
@@ -264,7 +264,7 @@ export default {
             this.$router.go(0);
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 

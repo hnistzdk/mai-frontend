@@ -1,6 +1,27 @@
 import axios from "axios";
 
 export default {
+
+    // 获取作者信息
+    getUserInfo(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/profile/"+params.userId, )
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+    // 更新用户基本信息
+    updateUserBasicInfo(data) {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/update", data)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+
+
+
     // 获取当前用户权限
     getCurrentUserAccess() {
         return new Promise((resolve, reject) => {
@@ -41,14 +62,6 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 获取作者信息
-    getUserInfo(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/getUserInfo", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
     // 获取关注/粉丝数量
     getFollowCount(params) {
         return new Promise((resolve, reject) => {
@@ -66,21 +79,19 @@ export default {
         });
     },
     // 上传用户头像（更新）
-    uploadUserPicture(data) {
+    uploadUserAvatar(data) {
         return new Promise((resolve, reject) => {
-            axios.post("/user/uploadUserPicture", data)
-                .then((res) => resolve(res))
+            axios.post("/user/avatar", data).then((res) => resolve(res))
                 .catch((err) => reject(err));
         });
     },
-    // 更新用户基本信息
-    updateUserBasicInfo(data) {
+    validateExpire(){
         return new Promise((resolve, reject) => {
-            axios.post("/user/updateUserBasicInfo", data)
-                .then((res) => resolve(res))
+            axios.get("/user/validate").then((res) => resolve(res))
                 .catch((err) => reject(err));
         });
     },
+
     // 发送短信验证码
     sendSmsVerifyCode(params) {
         return new Promise((resolve, reject) => {

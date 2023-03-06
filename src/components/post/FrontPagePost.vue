@@ -177,7 +177,7 @@
                 // this.tempData[index].postCountDTO.isLike = !isLike;
               })
               .catch(err => {
-                this.$message.error(err.desc);
+                this.$message.error(err.msg);
               });
         }
         // 评论
@@ -242,7 +242,7 @@
                   this.$message.success(this.$t("common.approvalSuccessed"));
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           },
         });
@@ -259,7 +259,7 @@
                   this.$message.success(this.$t("common.topSuccessed"));
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           },
         });
@@ -276,7 +276,7 @@
                   this.$message.success(this.$t("common.notTopSuccessed"));
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           },
         });
@@ -293,7 +293,7 @@
                   this.tempData = this.tempData.filter(post => post.id !== postId);
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           },
         });

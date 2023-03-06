@@ -118,7 +118,7 @@ export default {
             this.listData = res.data.list;
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -129,7 +129,7 @@ export default {
             this.$router.push("/user/" + this.$store.state.userId + "/post");
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -145,7 +145,7 @@ export default {
             this.$router.go(-1);
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 

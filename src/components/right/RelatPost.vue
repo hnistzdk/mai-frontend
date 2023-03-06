@@ -57,7 +57,7 @@ export default {
   },
 
   mounted() {
-    this.getRelatPostList(this.params);
+    // this.getRelatPostList(this.params);
   },
 
 };

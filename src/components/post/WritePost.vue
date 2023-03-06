@@ -22,7 +22,7 @@
         </template>
         <div style="cursor: pointer;" @click="routerUserCenter($store.state.userId)">
           <a-avatar :size="46" slot="avatar" class="write-item"
-                    :src="$store.state.picture ? $store.state.picture : require('@/assets/img/default_avatar.png')"/>
+                    :src="$store.state.avatar ? $store.state.avatar : require('@/assets/img/default_avatar.png')"/>
         </div>
       </a-tooltip>
     </div>
@@ -157,7 +157,7 @@ export default {
             this.$refs.md.$img2Url(pos, res.data);
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -182,7 +182,7 @@ export default {
             this.postTitleMap = res.data.titleMap;
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 

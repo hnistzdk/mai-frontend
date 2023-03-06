@@ -165,11 +165,23 @@ export default {
     company: "公司",
     homePage: "个人主页",
     selfIntro: "个人介绍",
+    //新增
+    graduationYear: "毕业年份",
+    educationalBackground:"学历",
+    graduatedFrom:"毕业院校",
+    specializedSubject:"专业",
+    //
     saveChanges: "保存修改",
     fillInYourUsername: "填写你的用户名",
     fillInYourPosition: "填写你的职位",
     fillInYourCompany: "填写你的公司",
     fillInYourHomePage: "填写你的个人主页地址",
+    //新增
+    fillInYourGraduationYear: "请选择你的毕业年份",
+    fillInYourEducationalBackground: "请选择你的学历",
+    fillInYourGraduatedFrom: "请选择你的毕业院校",
+    fillInYourSpecializedSubject: "请选择你的专业",
+    //
     homePageUrl: "不是URL地址，请填写http://或者https://开头的地址",
     fillInYour7788: "填写职业技能、擅长的事情、喜欢的事情等",
     accountSettings: "账号设置",

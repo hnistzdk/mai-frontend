@@ -11,6 +11,7 @@
         <div slot="nextArrow" slot-scope="props" class="custom-slick-arrow" style="right: 10px">
             <a-icon type="right-circle"/>
         </div>
+
         <img src="http://76.nanshengbbs.top/slider-20200706000714_1.png" alt="轮播图"/>
         <img src="http://76.nanshengbbs.top/slider-20200819113519_%E5%8D%97%E7%94%9F%E6%94%B6%E6%AC%BE2.png" alt="轮播图"/>
         <img src="http://76.nanshengbbs.top/slider-20200706001316_2.png" alt="轮播图"/>

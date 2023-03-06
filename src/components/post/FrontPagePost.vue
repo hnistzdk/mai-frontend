@@ -86,7 +86,7 @@
         </div>
         <!-- 用户/标题 -->
         <a-list-item-meta :description="item.title">
-          <a-avatar slot="avatar" :src="item.picture ? item.picture : require('@/assets/img/default_avatar.png')"
+          <a-avatar slot="avatar" :src="item.avatar ? item.avatar : require('@/assets/img/default_avatar.png')"
                     @click.stop="routerUserCenter(item.createUser)"/>
           <a slot="title" class="username" @click.stop="routerUserCenter(item.createUser)">
             <div class="left">

@@ -11,12 +11,12 @@
       </div>
       <div class="post-user">
         <div class="author-info-box">
-          <a-avatar class="avatar" :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"
-                    :size="46" @click="routerUserCenter(data.createUser)"/>
+          <a-avatar class="avatar" :src="data.avatar ? data.avatar : require('@/assets/img/default_avatar.png')"
+                    :size="46" @click="routerUserCenter(data.authorId)"/>
           <div class="author-name-meta" style="padding-left: 10px;">
             <div class="author-name">
-              <a target="_blank" class="username" @click="routerUserCenter(data.createUser)">
-                <span class="name" style="font-size: 17px;">{{ data.createUserName }} </span>
+              <a target="_blank" class="username" @click="routerUserCenter(data.authorId)">
+                <span class="name" style="font-size: 17px;">{{ data.authorUsername }} </span>
 <!--                <img :src="require('@/assets/img/level/' + data.postCountDTO.level + '.svg')" alt=""-->
 <!--                     @click.stop="routerBook"/>-->
               </a>
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="follow-box">
-          <div class="edit" v-if="$store.state.userId === data.createUser">
+          <div class="edit" v-if="$store.state.userId === data.authorId">
 <!--            <a-button class="follow-btn" v-if="!data.postCountDTO.isFollow" @click="routerPostEdit(data.id)"-->
 <!--                      :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">-->
 <!--              {{ $t("common.edit") }}-->
@@ -40,12 +40,12 @@
           </div>
           <div class="follow" v-else>
 <!--            <a-button class="follow-btn" v-if="!data.postCountDTO.isFollow"-->
-<!--                      @click="updateFollowState(data.createUser)"-->
+<!--                      @click="updateFollowState(data.authorId)"-->
 <!--                      :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">-->
 <!--              {{ $t("common.follow") }}-->
 <!--            </a-button>-->
 <!--            <a-button class="follow-btn-close" v-if="data.postCountDTO.isFollow"-->
-<!--                      @click="updateFollowState(data.createUser)">-->
+<!--                      @click="updateFollowState(data.authorId)">-->
 <!--              {{ $t("common.haveFollowed") }}-->
 <!--            </a-button>-->
           </div>
@@ -100,7 +100,7 @@
                 labelIds.push(label.id);
               });
               //初始化标签
-              this.$emit("initLabelIds", labelIds, this.finish, res.data.createUser, this.$utils.toToc(res.data.html));
+              this.$emit("initLabelIds", labelIds, this.finish, res.data.authorId, this.$utils.toToc(res.data.html));
             */
               if (res.data.html) {
                 setTimeout(() => {

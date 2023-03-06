@@ -114,8 +114,7 @@
 
     watch: {
       visible: function () {
-        // this.avatar = this.$store.state.avatar;
-        this.$store.state.avatar = this.avatar;
+        this.avatar = this.$store.state.avatar;
       },
     },
   };

@@ -4,7 +4,7 @@
     <div class="user-list" v-for="(item, index) in data" v-else>
       <div class="item">
         <div class="link">
-          <img :src="item.picture ? item.picture : require('@/assets/img/default-avatar.png')" alt=""
+          <img :src="item.picture ? item.picture : require('@/assets/img/default_avatar.png')" alt=""
                class="avatar" @click="routerUserCenter(getBigCow ? item.toUser : item.fromUser)">
           <div class="info-box" style="flex: 1 1 auto; min-width: 0;">
             <a target="_blank" rel="" class="username"

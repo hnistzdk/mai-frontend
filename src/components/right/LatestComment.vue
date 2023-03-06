@@ -7,7 +7,7 @@
         <a-list-item-meta>
           <span slot="description" v-html="item.content">{{ item.content }}</span>
           <a-avatar slot="avatar"
-                    :src="item.picture ? item.picture : require('@/assets/img/default-avatar.png')"/>
+                    :src="item.picture ? item.picture : require('@/assets/img/default_avatar.png')"/>
         </a-list-item-meta>
       </a-list-item>
     </a-list>

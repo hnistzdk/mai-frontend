@@ -244,7 +244,6 @@
       getUserInfo() {
         userService.getUserInfo({userId: this.ruleForm.userId})
             .then(res => {
-              console.log('用户信息',res.data);
               this.spinning = false;
               this.ruleForm.username = res.data.username;
               this.ruleForm.userNameNum = res.data.username.length;

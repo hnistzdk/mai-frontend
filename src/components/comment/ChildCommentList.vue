@@ -9,7 +9,7 @@
       <a class="username" slot="author" v-if="data.createBy !== data.parentUserId" @click="routerUserCenter(data.parentUsername)">
         {{ data.parentUsername }}
       </a>
-      <a-avatar slot="avatar" :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"
+      <a-avatar slot="avatar" :src="data.avatar ? data.avatar : require('@/assets/img/default_avatar.png')"
                 @click="routerUserCenter(data.createBy)"/>
 
       <p class="comment-content" slot="content">

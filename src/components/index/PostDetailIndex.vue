@@ -119,7 +119,6 @@
       //把贴子信息传回来
       initPostInfo(postInfo){
         this.postInfo = postInfo;
-        console.log('传回的信息',this.postInfo)
       },
 
       refresh() {

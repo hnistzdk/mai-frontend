@@ -6,7 +6,7 @@
 <!--        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>-->
         <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>
       </a>
-      <a-avatar slot="avatar" :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"
+      <a-avatar slot="avatar" :src="data.avatar ? data.avatar : require('@/assets/img/default_avatar.png')"
                 @click="routerUserCenter(data.createBy)"/>
       <p class="comment-content" slot="content">
         <span v-html="data.content" style="width: 100%">{{ data.content }}</span>

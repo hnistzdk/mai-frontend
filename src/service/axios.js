@@ -21,8 +21,8 @@ export default (() => {
     // 每次请求回来的处理
     axios.interceptors.response.use(response => {
             // 后台会在响应头带上用户头像链接，每次和存在store中的比较，不同就替换，实现头像更新
-            if (response.headers["x-user-picture"]) {
-                store.state.avatar = response.headers["x-user-picture"];
+            if (response.headers["x-user-avatar"]) {
+                store.state.avatar = response.headers["x-user-avatar"];
             }
             // 后台会在响应头带上用户任务提醒和消息通知的数量，存在store里面，
             if (response.headers["x-system-notify-count"]) {
@@ -31,8 +31,7 @@ export default (() => {
             if (response.headers["x-task-notify-count"]) {
                 store.state.taskNotifyCount = response.headers["x-task-notify-count"];
             }
-            console.log('axios响应',response)
-            // 和后台约定好响应码为200且响应体的code字段为0的时候才算成功
+            // console.log('axios响应',response)
             if (response.status === 200) {
                 if (response.data) {
                     if (response.data.code === 0) {

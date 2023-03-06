@@ -10,7 +10,7 @@
             <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>
           </span>
           <a-avatar slot="avatar"
-                    :src="item.picture ? item.picture : require('@/assets/img/default-avatar.png')"/>
+                    :src="item.picture ? item.picture : require('@/assets/img/default_avatar.png')"/>
         </a-list-item-meta>
       </a-list-item>
     </a-list>

@@ -177,6 +177,7 @@ import store from "@/store";
 import Register from "@/components/login/Register";
 import MobileResetPassword from "@/components/login/MobileResetPassword";
 import EmailResetPassword from "@/components/login/EmailResetPassword";
+import userService from "@/service/userService";
 
 export default {
   components: {MessageBox, Login, Register, MobileResetPassword, EmailResetPassword},
@@ -185,6 +186,18 @@ export default {
     searchContent: {type: String, default: ""},
   },
 
+  beforeUpdate() {
+    /**
+     * 这里处理头部横栏头像vuex获取不到的问题
+     */
+    userService.getUserInfo({userId: store.state.userId})
+        .then(res => {
+          store.state.avatar = res.data.avatar;
+        })
+        .catch(err => {
+          this.$message.error(err.msg);
+        });
+  },
   data() {
     return {
       visible: false,

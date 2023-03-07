@@ -49,7 +49,7 @@
         </div>
 
         <!-- 管理端 -->
-        <div v-if="!$store.state.isLogin && !$store.state.collapsed" class="header-item" @click="routerManage">
+        <div v-if="$store.state.isLogin && !$store.state.collapsed" class="header-item" @click="routerManage">
           <div class="options">
             <span>{{ $t("common.management") }}</span>
           </div>
@@ -190,13 +190,15 @@ export default {
     /**
      * 这里处理头部横栏头像vuex获取不到的问题
      */
-    userService.getUserInfo({userId: store.state.userId})
-        .then(res => {
-          store.state.avatar = res.data.avatar;
-        })
-        .catch(err => {
-          this.$message.error(err.msg);
-        });
+    if (store.state.isLogin){
+      userService.getUserInfo({userId: store.state.userId})
+          .then(res => {
+            store.state.avatar = res.data.avatar;
+          })
+          .catch(err => {
+            this.$message.error(err.msg);
+          });
+    }
   },
   data() {
     return {

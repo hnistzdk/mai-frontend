@@ -30,14 +30,6 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 更新点赞状态
-    updateLikeCommentState(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/updateLikeCommentState", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
     // 更新评论点赞状态
     updateLikeState(params) {
         return new Promise((resolve, reject) => {

@@ -55,13 +55,12 @@
 </template>
 
 <script>
-import userService from "@/service/userService";
 import CreateComment from "@/components/comment/CreateComment";
 import store from "@/store";
 import commentService from "@/service/commentService";
 
 export default {
-  name: 'ChildComment1',
+  name: 'ChildCommentList',
 
   components: {CreateComment},
 
@@ -85,7 +84,7 @@ export default {
   methods: {
     // 点赞/取消点赞
     likeCommentAction(commentId) {
-      userService.updateLikeCommentState({commentId: commentId})
+      commentService.updateLikeCommentState({commentId: commentId})
           .then(() => {
             this.$emit("getCommentByPostId");
           })

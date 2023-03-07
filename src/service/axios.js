@@ -10,8 +10,16 @@ export default (() => {
     // 每次请求前处理
     axios.interceptors.request.use(config => {
         let token = window.localStorage.getItem('access_token');
+        let userId = window.localStorage.getItem("userId")
+        let username = window.localStorage.getItem("username")
         if (token){
             config.headers.authorization = token;
+        }
+        if (userId){
+            config.headers.userId = userId;
+        }
+        if (username){
+            config.headers.username = username;
         }
         return config
     }, error => {
@@ -53,8 +61,9 @@ export default (() => {
                         window.localStorage.removeItem("username")
                         window.localStorage.removeItem("state")
                         store.state.isLogin = false;
-                        // store.state.loginVisible = true;
+                        store.state.loginVisible = true;
                         // this.$router.go(0);
+                        throw response.data;
                     }else {
                         throw response.data;
                     }
@@ -67,19 +76,18 @@ export default (() => {
                 return Promise.reject(response);
             }
         }, error => {
-            console.log('error',error.response)
+            // console.log('error',error.response)
             let resp = error.response;
             if (resp.status === 401){
-                console.log('ddd')
                 //清除localstorage
                 window.localStorage.removeItem("access_token")
                 window.localStorage.removeItem("expire")
                 window.localStorage.removeItem("userId")
                 window.localStorage.removeItem("username")
                 window.localStorage.removeItem("state")
-                console.log('isLogin',store.state.isLogin)
+                // console.log('isLogin',store.state.isLogin)
                 store.state.isLogin = false;
-                console.log('isLogin',store.state.isLogin)
+                // console.log('isLogin',store.state.isLogin)
                 store.state.loginVisible = true;
                 // this.$router.push('/');
             }else {

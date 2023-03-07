@@ -15,8 +15,8 @@
       </p>
       <span slot="content">
         <a class="operate comment-like">
-          <i class="iconfont icon-like" @click="likeCommentAction(data.commentId)"
-             :style="data.isLike ? 'color:' + $store.state.themeColor : 'color: #8a919f;'">
+          <i class="iconfont icon-like" @click="likeCommentAction(data.commentId,data.like)"
+             :style="data.like ? 'color:' + $store.state.themeColor : 'color: #8a919f;'">
             <small> {{ data.likeCount === 0 ? '' : data.likeCount }}</small>
           </i>
         </a>
@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import userService from "@/service/userService";
 import CreateComment from "@/components/comment/CreateComment";
 import ChildCommentList from "@/components/comment/ChildCommentList";
 import store from "@/store";
@@ -90,8 +89,8 @@ export default {
 
   methods: {
     // 点赞/取消点赞
-    likeCommentAction(commentId) {
-      userService.updateLikeCommentState({commentId: commentId})
+    likeCommentAction(commentId,state) {
+      commentService.updateLikeCommentState({commentId: commentId,state:state})
           .then(() => {
             this.$emit("getCommentByPostId");
           })

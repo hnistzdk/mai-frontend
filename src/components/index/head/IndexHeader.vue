@@ -196,7 +196,7 @@ export default {
             store.state.avatar = res.data.avatar;
           })
           .catch(err => {
-            this.$message.error(err.msg);
+            // this.$message.error(err.msg);
           });
     }
   },

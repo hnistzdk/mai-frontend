@@ -2,7 +2,7 @@
   <div id="left-buttons">
     <!-- 点赞 -->
     <div class="like-div">
-      <a-badge class="badge" :count="data.likeCount" :overflow-count="999" :number-style="data.isLike ? {
+      <a-badge class="badge" :count="data.likeCount" :overflow-count="999" :number-style="data.like ? {
         backgroundColor: $store.state.themeColor,
         boxShadow: '0 0 0 1px ' + $store.state.themeColor+ ' inset',
       } : {
@@ -11,7 +11,7 @@
       }">
         <div @click="likeAction" class="like-icon-container" style="background: #fff;">
           <i class="iconfont icon-like"
-             :style="data.isLike ? 'color:' + $store.state.themeColor : 'color: #8a919f;'"></i>
+             :style="data.like ? 'color:' + $store.state.themeColor : 'color: #8a919f;'"></i>
         </div>
       </a-badge>
     </div>
@@ -61,7 +61,7 @@ export default {
 
     // 点赞/取消点赞
     likeAction() {
-      userService.updateLikeState({postId: this.$route.params.id})
+      postService.updateLikeState({postId: this.$route.params.id,state: this.data.like })
           .then(() => {
             this.getStatisticalData();
           })

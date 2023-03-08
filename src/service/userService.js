@@ -30,14 +30,6 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 更新评论点赞状态
-    updateLikeState(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/updateLikeState", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
     // 获取热门作者列表
     getHotAuthorsList(params) {
         return new Promise((resolve, reject) => {

@@ -62,8 +62,6 @@ export default {
       if (this.$store.state.isLogin) {
         this.form.validateFields((err, values) => {
           if (!err) {
-            // console.log('CreateComment中的postInfo',this.postInfo)
-            // console.log('commentInfo',this.commentInfo)
             if (this.parentId) {
               this.data.parentId = this.parentId;
             } else {
@@ -84,7 +82,6 @@ export default {
 
     // 添加评论
     createComment() {
-      console.log('评论请求参数',this.data)
       commentService.createComment(this.data)
           .then((res) => {
             // 清空表单

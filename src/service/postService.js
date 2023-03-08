@@ -34,6 +34,14 @@ export default {
                 .catch((err) => reject(err));
         });
     },
+    // 更新贴子点赞状态
+    updateLikeState(params) {
+        return new Promise((resolve, reject) => {
+            axios.post("/post/like", params)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
 
 
     // 获取个人发布的贴子（所有）

@@ -11,23 +11,23 @@
                   <span v-text="item.pv"></span>
               </span>
               <span v-if="type==='like-o'" @click.stop="pageViewsLikeComment(type, item.postId, index)">
-<!--                  <span v-if="item.postCountDTO.isLike" :style="{color: $store.state.themeColor}">
+                  <span v-if="item.like" :style="{color: $store.state.themeColor}">
                       <a-icon :type="type" style="margin-right: 6px"/>
-                      <span v-text="item.postCountDTO.likeCount"></span>
+                      <span v-text="item.likeCount"></span>
                   </span>
-                  <span v-if="!item.postCountDTO.isLike">
+                  <span v-if="!item.like">
                       <a-icon :type="type" style="margin-right: 8px"/>
-                      <span v-text="item.postCountDTO.likeCount"></span>
-                  </span>-->
-                <span :style="{color: $store.state.themeColor}">
-                      <a-icon :type="type" style="margin-right: 6px"/>
-                      <span v-text="110"></span>
+                      <span v-text="item.likeCount"></span>
                   </span>
+<!--                <span :style="{color: $store.state.themeColor}">-->
+<!--                      <a-icon :type="type" style="margin-right: 6px"/>-->
+<!--                      <span v-text="data.likeCount"></span>-->
+<!--                </span>-->
               </span>
-<!--              <span v-if="type==='message'" @click.stop="routerPostDetailToComment(item.postId)">-->
-<!--                  <a-icon :type="type" style="margin-right: 6px;"/>-->
-<!--                  <span v-text="item.postCountDTO.commentCount"></span>-->
-<!--              </span>-->
+              <span v-if="type==='message'" @click.stop="routerPostDetailToComment(item.postId)">
+                  <a-icon :type="type" style="margin-right: 6px;"/>
+                  <span v-text="item.commentCount"></span>
+              </span>
               <span v-if="(($store.state.isManage && isAdminAudit) || $store.state.userId === item.createUser) && type==='ellipsis'"
                     @click.stop>
                 <a-dropdown :placement="'bottomCenter'" :trigger="['click']">
@@ -42,22 +42,22 @@
                                  @click="updateState(item.postId, item.state, 0)">
                       <span style="color: red">{{ ' ' + $t("common.reject") }}</span>
                     </a-menu-item>
-                    <!-- 文章置顶 -->
+                    <!-- 贴子置顶 -->
                     <a-menu-item key="postNotTop" v-if="$store.state.isManage && isAdminAudit && !item.top"
                                  @click="postTop(item.postId)">
                       <span style="color: #1869ff">{{ ' ' + $t("common.isTop") }}</span>
                     </a-menu-item>
-                    <!-- 文章取消置顶 -->
+                    <!-- 贴子取消置顶 -->
                     <a-menu-item key="postTop" v-if="$store.state.isManage && isAdminAudit && item.top"
                                  @click="postNotTop(item.postId)">
                       <span style="color: #eb2f96">{{ ' ' + $t("common.isNotTop") }}</span>
                     </a-menu-item>
-                    <!-- 文章编辑 -->
+                    <!-- 贴子编辑 -->
                     <a-menu-item key="postEdit" v-if="$store.state.userId === item.createUser"
                                  @click="routerPostEdit(item.postId)">
                       <span style="color: #722ed1">{{ ' ' + $t("common.edit") }}</span>
                     </a-menu-item>
-                    <!-- 文章删除 -->
+                    <!-- 贴子删除 -->
                     <a-menu-item key="postDel" v-if="$store.state.userId === item.createUser"
                                  @click="postDelete(item.postId, index)">
                       <span style="color: red">{{ ' ' + $t("common.delete") }}</span>
@@ -129,8 +129,7 @@
   </div>
 </template>
 <script>
-  import userService from "@/service/userService";
-  import postService from "@/service/postService";
+import postService from "@/service/postService";
 
   export default {
     props: {
@@ -154,6 +153,9 @@
         ],
       };
     },
+    created() {
+      console.log('this.data',this.data)
+    },
 
     methods: {
       // 浏览点赞评论按钮的点击操作
@@ -164,17 +166,17 @@
         }
         // 点赞
         if (type === 'like-o') {
-          userService.updateLikeState({postId: postId})
+          postService.updateLikeState({postId: postId,state: this.tempData[index].like})
               .then(() => {
                 this.$emit("refresh");
-                // let isLike = this.tempData[index].postCountDTO.isLike;
-                // 取消点赞操作
-                // if (isLike) {
-                //   this.tempData[index].postCountDTO.likeCount--;
+                // let like = this.tempData[index].like;
+                // //取消点赞操作
+                // if (like) {
+                //   this.tempData[index].likeCount--;
                 // } else {
-                //   this.tempData[index].postCountDTO.likeCount++;
+                //   this.tempData[index].likeCount++;
                 // }
-                // this.tempData[index].postCountDTO.isLike = !isLike;
+                // this.tempData[index].like = !like;
               })
               .catch(err => {
                 this.$message.error(err.msg);
@@ -186,7 +188,7 @@
         }
       },
 
-      // 修改文章审批状态
+      // 修改贴子审批状态
       updateState(postId, state, toState) {
         this.$confirm({
           centered: true,
@@ -248,7 +250,7 @@
         });
       },
 
-      // 文章置顶
+      // 贴子置顶
       postTop(postId) {
         this.$confirm({
           centered: true,
@@ -265,7 +267,7 @@
         });
       },
 
-      // 文章取消置顶
+      // 贴子取消置顶
       postNotTop(postId) {
         this.$confirm({
           centered: true,
@@ -299,13 +301,13 @@
         });
       },
 
-      // 路由到文章详情页面
+      // 路由到贴子详情页面
       routerPostDetail(postId) {
         let routeData = this.$router.resolve("/detail/" + postId);
         window.open(routeData.href, '_blank');
       },
 
-      // 路由到文章详情页面（评论处）
+      // 路由到贴子详情页面（评论处）
       routerPostDetailToComment(postId) {
         let routeData = this.$router.resolve("/detail/" + postId + '#post-comment-all');
         window.open(routeData.href, '_blank');
@@ -317,7 +319,7 @@
         window.open(routeData.href, '_blank');
       },
 
-      // 路由到标签文章页面
+      // 路由到标签贴子页面
       routerLabelToPost(labelId) {
         let routeData = this.$router.resolve("/label/" + labelId);
         window.open(routeData.href, '_blank');
@@ -329,7 +331,7 @@
         window.open(routeData.href, '_blank');
       },
 
-      // 路由到文章编辑页面
+      // 路由到贴子编辑页面
       routerPostEdit(postId) {
         this.$router.push("/edit/" + postId);
       },
@@ -416,7 +418,7 @@
     background: #f4f5f57a;
   }
 
-  // 文章题图样式调整
+  // 贴子题图样式调整
   #main-post-content .ant-list-item-extra img {
     max-height: 113px;
     max-width: 150px;

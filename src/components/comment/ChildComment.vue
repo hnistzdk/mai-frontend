@@ -24,7 +24,7 @@
           <i class="iconfont icon-comment" style="color: #8a919f;">
             <small v-if="isShow"> {{ $t("common.cancelReply") }}</small>
             <small v-else> {{ $t("common.reply") }}</small>
-            <small> {{ data.repliesCount }}</small>
+            <small> {{ data.repliesCount === 0 ? '' : data.repliesCount}}</small>
           </i>
         </a>
         <!-- 自己的评论 or 自己的文章  都可以删除对应评论信息 -->
@@ -90,13 +90,18 @@ export default {
   methods: {
     // 点赞/取消点赞
     likeCommentAction(commentId,state) {
-      commentService.updateLikeCommentState({commentId: commentId,state:state})
-          .then(() => {
-            this.$emit("getCommentByPostId");
-          })
-          .catch(err => {
-            this.$message.error(err.msg);
-          });
+      if (!this.$store.state.isLogin){
+        this.$message.error("请先登录");
+        store.state.loginVisible = true;
+      }else {
+        commentService.updateLikeCommentState({commentId: commentId,state:state})
+            .then(() => {
+              this.$emit("getCommentByPostId");
+            })
+            .catch(err => {
+              this.$message.error(err.msg);
+            });
+      }
     },
 
     // 刷新评论数据

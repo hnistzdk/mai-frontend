@@ -157,7 +157,7 @@ export default {
     label: "Label",
     course: "Course",
     resource: "Resource",
-    projectIntro: "Nan`s Forum, a record and time reserve of personal program life. Indifferent to Mingzhi, quiet and far-reaching. Cherish originality and stay committed.",
+    projectIntro: "mai",
     backPersonalHomepage: "Back to homepage",
     personalInformation: "personal info",
     username2: "username",

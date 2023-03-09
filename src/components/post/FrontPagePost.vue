@@ -153,9 +153,6 @@ import postService from "@/service/postService";
         ],
       };
     },
-    created() {
-      console.log('this.data',this.data)
-    },
 
     methods: {
       // 浏览点赞评论按钮的点击操作

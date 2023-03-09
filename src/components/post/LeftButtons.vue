@@ -35,8 +35,8 @@
 
 <script>
 
-import userService from "@/service/userService";
 import postService from "@/service/postService";
+import store from "@/store";
 
 export default {
 
@@ -61,13 +61,18 @@ export default {
 
     // 点赞/取消点赞
     likeAction() {
-      postService.updateLikeState({postId: this.$route.params.id,state: this.data.like })
-          .then(() => {
-            this.getStatisticalData();
-          })
-          .catch(err => {
-            this.$message.error(err.msg);
-          });
+      if (!this.$store.state.isLogin){
+        this.$message.error("请先登录");
+        store.state.loginVisible = true;
+      }else {
+        postService.updateLikeState({postId: this.$route.params.id,state: this.data.like })
+            .then(() => {
+              this.getStatisticalData();
+            })
+            .catch(err => {
+              this.$message.error(err.msg);
+            });
+      }
     },
   },
 

@@ -11,7 +11,10 @@
             <CustomEmpty v-if="spinning"/>
             <div v-else>
               <!-- 轮播图 -->
-              <SlideShow v-if="!$store.state.collapsed && $store.state.isCarousel"/>
+<!--              <SlideShow v-if="!$store.state.collapsed && $store.state.isCarousel"/>-->
+              <Create/>
+
+
               <a-row v-if="!$store.state.collapsed && $store.state.isCarousel">
                 <a-col :span="24" style="height: 2px;"/>
               </a-row>
@@ -123,6 +126,7 @@
   import CustomEmpty from "@/components/utils/CustomEmpty";
   import LatestComment from "@/components/right/LatestComment";
   import FriendDonate from "@/components/right/FriendDonate";
+  import Create from "@/components/post/IndexCreate";
   import userService from "@/service/userService";
 
   export default {
@@ -136,6 +140,7 @@
       FilingInfo,
       CustomEmpty,
       LatestComment,
+      Create,
       FriendDonate
     },
     beforeUpdate() {
@@ -175,7 +180,6 @@
       loadMore() {
         this.params.currentPage++;
         if (this.isApprovedTab) {
-          console.log('isApprovedTab')
           this.getPostList(this.params, true);
         }
         if (this.isPendingReviewTab) {
@@ -206,7 +210,6 @@
               this.finish = true;
             })
             .catch(err => {
-              console.log('err',err)
               this.finish = true;
               this.hasNext = false;
               this.$message.error(err.msg);

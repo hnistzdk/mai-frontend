@@ -46,6 +46,7 @@
 import loginService from "@/service/loginService";
 import userService from "@/service/userService";
 import store from "@/store";
+import dayjs from "dayjs";
 
 export default {
   beforeMount() {
@@ -132,6 +133,10 @@ export default {
                 window.localStorage.setItem("access_token",res.data.accessToken)
                 window.localStorage.setItem("userId",res.data.userId)
                 window.localStorage.setItem("username",res.data.username)
+                //过期分钟数
+                let expiresIn = res.data.expiresIn;
+                let expireTimeStamp = dayjs().add(expiresIn,'minute').valueOf();
+                window.localStorage.setItem("expireTimeStamp",expireTimeStamp);
                 this.handleOk();
                 this.setUserInfo(res.data.userId,res.data.username)
                 //将state存入localStorage供刷新页面后恢复状态

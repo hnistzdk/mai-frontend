@@ -60,7 +60,7 @@
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
             <!-- 备案信息 -->
-            <FilingInfo/>
+<!--            <FilingInfo/>-->
           </a-col>
         </main>
       </a-layout-content>
@@ -114,11 +114,12 @@
         this.labelIds = labelIds;
         this.finishPostDetail = finishPostDetail;
         this.userId = userId;
-        this.postHtml = postHtml;
+        this.postHtml = this.$utils.toToc(postHtml);
       },
       //把贴子信息传回来
       initPostInfo(postInfo){
         this.postInfo = postInfo;
+        this.postHtml = this.$utils.toToc(postInfo.html);
       },
 
       refresh() {

@@ -12,7 +12,6 @@
             <div v-else>
               <!-- 轮播图 -->
 <!--              <SlideShow v-if="!$store.state.collapsed && $store.state.isCarousel"/>-->
-              <Create/>
 
 
               <a-row v-if="!$store.state.collapsed && $store.state.isCarousel">
@@ -24,7 +23,7 @@
                   <span slot="tab">
                     {{ $t("common.approved") + "(" + totalCount + ")" }}
                   </span>
-                  <!-- 文章列表 -->
+                  <!-- 贴子列表 -->
                   <FrontPagePost v-if="!spinning && isApprovedTab"
                                     :finish="finish"
                                     :hasNext="hasNext"
@@ -41,7 +40,7 @@
                   <span slot="tab">
                     {{ $t("common.pendingReview") + "(" + pendingReviewTotal + ")"}}
                   </span>
-                  <!-- 文章列表 -->
+                  <!-- 贴子列表 -->
                   <FrontPagePost v-if="!spinning && isPendingReviewTab"
                                     :finish="finish"
                                     :hasNext="hasNext"
@@ -59,7 +58,7 @@
                   <span slot="tab">
                     {{ $t("common.reviewRejected") + "(" + reviewRejectedTotal + ")"}}
                   </span>
-                  <!-- 文章列表 -->
+                  <!-- 贴子列表 -->
                   <FrontPagePost v-if="!spinning && isReviewRejectedTab"
                                     :finish="finish"
                                     :hasNext="hasNext"
@@ -73,7 +72,7 @@
                                     style="background: #fff;"/>
                 </a-tab-pane>
               </a-tabs>
-              <!-- 文章列表 -->
+              <!-- 贴子列表 -->
               <FrontPagePost v-if="!$store.state.isManage && !spinning"
                                 :finish="finish"
                                 :hasNext="hasNext"
@@ -94,18 +93,18 @@
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 最新评论 -->
-            <LatestComment style="background: #fff;"/>
+            <!-- 全站热榜 -->
+            <HotList style="background: #fff;"/>
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 友情捐赠 -->
-            <FriendDonate style="background: #fff;"/>
-            <a-row>
-              <a-col :span="24" style="height: 10px;"/>
-            </a-row>
-            <!-- 备案信息 -->
-            <FilingInfo/>
+<!--            &lt;!&ndash; 友情捐赠 &ndash;&gt;-->
+<!--            <FriendDonate style="background: #fff;"/>-->
+<!--            <a-row>-->
+<!--              <a-col :span="24" style="height: 10px;"/>-->
+<!--            </a-row>-->
+<!--            &lt;!&ndash; 备案信息 &ndash;&gt;-->
+<!--            <FilingInfo/>-->
           </a-col>
         </main>
       </a-layout-content>
@@ -124,12 +123,13 @@
   import FilingInfo from "@/components/right/FilingInfo";
   import FooterButtons from "@/components/utils/FooterButtons";
   import CustomEmpty from "@/components/utils/CustomEmpty";
-  import LatestComment from "@/components/right/LatestComment";
+  import HotList from "@/components/right/HotList";
   import FriendDonate from "@/components/right/FriendDonate";
-  import Create from "@/components/post/IndexCreate";
+  import IndexCreate from "@/components/post/IndexCreate";
   import userService from "@/service/userService";
 
   export default {
+
     components: {
       IndexHeader,
       FooterButtons,
@@ -139,8 +139,8 @@
       AuthorsList,
       FilingInfo,
       CustomEmpty,
-      LatestComment,
-      Create,
+      HotList,
+      IndexCreate,
       FriendDonate
     },
     beforeUpdate() {
@@ -148,7 +148,7 @@
         userService.validateExpire()
             .then(res=>{
             }).catch(error=>{
-          throw error;
+
         });
       }
     },
@@ -170,7 +170,7 @@
         reviewRejectedTotal: 0,
         hasNext: true,
         finish: false,
-        params: {currentPage: 1, pageSize: 12},
+        params: {currentPage: 1, pageSize: 12, type:1},
         searchContent: '',
       };
     },
@@ -190,7 +190,7 @@
         }
       },
 
-      // 获取文章列表信息
+      // 获取贴子列表信息
       getPostList(params, isLoadMore) {
         if (!isLoadMore) {
           this.params.currentPage = 1;
@@ -216,7 +216,7 @@
             });
       },
 
-      // 获取待审核的文章
+      // 获取待审核的贴子
       getPendingReviewPosts(params, isLoadMore) {
         if (!isLoadMore) {
           this.params.currentPage = 1;
@@ -240,7 +240,7 @@
             });
       },
 
-      // 获取禁用的文章
+      // 获取禁用的贴子
       getDisabledPosts(params, isLoadMore) {
         if (!isLoadMore) {
           this.params.currentPage = 1;
@@ -266,7 +266,7 @@
 
       // 刷新列表
       refresh() {
-        this.params = {currentPage: 1, pageSize: 10};
+        this.params = {currentPage: 1, pageSize: 10,type: 1};
         this.getPostList(this.params);
       },
 

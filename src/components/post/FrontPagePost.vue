@@ -112,13 +112,14 @@
                 {{ $t("common.top") }}
               </template>
               <a-icon type="fire" :style="{color: $store.state.themeColor}" v-if="item.top"/>
-              <!--              <a-icon type="thunderbolt" :style="{color: $store.state.themeColor}" v-if="item.top" />-->
-              <!--              <i class="iconfont icon-right-triangle" :style="{color: $store.state.themeColor}" v-if="item.top"></i>-->
+                            <a-icon type="thunderbolt" :style="{color: $store.state.themeColor}" v-if="item.top" />
+                            <i class="iconfont icon-right-triangle" :style="{color: $store.state.themeColor}" v-if="item.top"></i>
             </a-tooltip>
           </a>
         </a-list-item-meta>
         <div class="post-content">
-          {{ item.content }}
+        <!-- 这里控制一下显示的概要长度  -->
+          {{ item.content.substring(0,item.content.length > 80 ? 80 : item.content.length) }}
         </div>
       </a-list-item>
     </a-list>

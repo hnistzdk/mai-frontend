@@ -1,77 +1,73 @@
 <template>
   <div id="index-create">
     <div class="top">
-      <a-form :form="form" @submit="handleSubmit" style="width: 100%;" class="createPost">
-        <a-form-item>
-          <a-textarea allow-clear @keydown.enter.native="keyDown"
-                      v-decorator="['content', validatorRules.content]"
-                      :placeholder="$t('common.releaseTheIdeaOfThisMoment')"
-                      :auto-size="{ minRows: 5, maxRows: 5 }"/>
-          <div>
-            <a-upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                list-type="picture"
-                :default-file-list="fileList"
-                :data="uploadParam"
-                class="upload-list-inline">
-              <a-button> <a-icon type="upload"/> 上传图片 </a-button>
-            </a-upload>
-          </div>
-          <a-button class="button" type="primary" html-type="submit" style="float: right;">
-            {{ $t("common.release") }}
-          </a-button>
-        </a-form-item>
-      </a-form>
+      <div style="width: 100%;" class="createPost">
+        <a-textarea allow-clear @keydown.enter.native="keyDown"
+                    v-model="content"
+                    :placeholder="$t('common.releaseTheIdeaOfThisMoment')"
+                    :auto-size="{ minRows: 5, maxRows: 5 }"/>
+        <div>
+          <!--            :file-list="fileList"-->
+          <a-upload
+              list-type="picture"
+              :beforeUpload="uploadImg"
+              :file-list="fileList"
+              :data="uploadParam"
+              class="upload-list-inline">
+            <a-button v-if="$store.state.isLogin">
+              <a-icon type="upload"/>
+              上传图片
+            </a-button>
+          </a-upload>
+        </div>
+        <a-button @click="handleSubmit" class="button" type="primary" html-type="submit" style="float: right;">
+          {{ $t("common.release") }}
+        </a-button>
+      </div>
     </div>
   </div>
 </template>
 <script>
 
 import store from "@/store";
+import postService from "@/service/postService";
 
 export default {
-  components: {},
+
+  name: "IndexCreate",
 
   data() {
     return {
-      uploadParam:{
+      uploadParam: {
         //存储的基础路径
-        base:"/design/post/picture/"
+        base: "/design/post/picture/"
       },
-      fileList: [
-        {
-          uid: '-1',
-          name: 'xxx.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-          uid: '-2',
-          name: 'yyy.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-      ],
+      fileList: [],
       data: {},
-      form: this.$form.createForm(this, {name: 'coordinated'}),
-      // 表单验证
-      validatorRules: {
-        content: {
-          // 检验规则
-          rules: [
-            // 是否必须填写
-            {required: false, message: this.$t('common.pleaseEnterComment')}
-          ]
-        }
-      }
+      content: '',
+      images: [],
     };
   },
 
   methods: {
+    //提交
     handleSubmit(e) {
       e.preventDefault();
+      if (!this.$store.state.isLogin) {
+        this.$message.error("请先登录");
+        store.state.loginVisible = true;
+      }
+      this.buildImages();
+      let data = {content: this.content, html: this.content, markdown: this.content, images: this.images, type: 2};
+      postService.postCreate(data)
+          .then(res => {
+            // this.$router.push("/user/" + this.$store.state.userId + "/post");
+            this.$message.success(res.msg);
+            this.$router.go(0);
+          })
+          .catch(err => {
+            this.$message.error(err.msg);
+          });
     },
 
     // 用户点击了ctrl+enter触发
@@ -81,9 +77,33 @@ export default {
       }
     },
 
-    //发布之前把上传的图片拼在后面以便markdown显示
-    buildContent(){
+    //上传图片
+    uploadImg(file) {
+      const data = new FormData();
+      data.append("image", file);
+      data.append("base", this.uploadParam.base);
+      postService.uploadPostImg(data)
+          .then((res) => {
+            let imgData = res.data
+            let imgInfo = {
+              uid: imgData.uid,
+              name: imgData.filename,
+              status: 'done',
+              url: imgData.url,
+              thumbUrl: imgData.url,
+            }
+            this.fileList.push(imgInfo);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    },
 
+    buildImages() {
+      let files = this.fileList;
+      for (let i = 0; i < files.length; i++) {
+        this.images.push(files[i].url)
+      }
     },
 
   },
@@ -105,7 +125,8 @@ export default {
     margin-right: 15px;
   }
 }
-.createPost{
+
+.createPost {
   border: 2px solid rgb(236, 229, 229);
   padding: 5px;
 }
@@ -116,9 +137,11 @@ export default {
   width: 200px;
   margin-right: 8px;
 }
+
 .upload-list-inline /deep/ .ant-upload-animate-enter {
   animation-name: uploadAnimateInlineIn;
 }
+
 .upload-list-inline /deep/ .ant-upload-animate-leave {
   animation-name: uploadAnimateInlineOut;
 }

@@ -11,6 +11,7 @@
         <div>
           <a-menu v-if="!$store.state.collapsed" v-model="current" mode="horizontal">
             <a-menu-item key="frontPage" @click="refresh">{{ $t("common.home") }}</a-menu-item>
+            <a-menu-item value="gossipPage" @click="routerGossip">{{ $t("common.gossip") }}</a-menu-item>
             <a-menu-item key="boilingPoint" @click="routerLabel">{{ $t("common.label") }}</a-menu-item>
             <a-menu-item key="liveStreaming" @click="routerResource">{{ $t("common.resource") }}</a-menu-item>
             <a-tooltip placement="bottom">
@@ -23,6 +24,7 @@
           <a-select class="phone-frontPage" v-if="$store.state.collapsed" :default-value="current"
                     @change="handleChange" style="min-width: 90px; width: 100%">
             <a-select-option value="frontPage" @click="refresh">{{ $t("common.home") }}</a-select-option>
+            <a-select-option value="gossipPage" @click="routerGossip">{{ $t("common.gossip") }}</a-select-option>
             <a-select-option value="boilingPoint" @click="routerLabel">{{ $t("common.label") }}</a-select-option>
             <a-select-option value="liveStreaming" @click="routerResource">{{ $t("common.resource") }}</a-select-option>
             <a-select-option value="course">{{ $t("common.course") }}</a-select-option>
@@ -41,8 +43,8 @@
           </a-space>
         </div>
 
-        <!-- 写文章 -->
-        <div v-if="!$store.state.collapsed && $store.state.isLogin" class="header-item" @click="routerWrite">
+        <!-- 发帖 -->
+        <div v-if="!$store.state.collapsed && $store.state.isLogin && $route.path !== '/gossip'" class="header-item" @click="routerWrite">
           <div class="options">
             <span>{{ $t("common.writePost") }}</span>
           </div>
@@ -314,6 +316,11 @@ export default {
     routerWrite() {
 
       this.$router.push("/write");
+    },
+
+    //路由到职言页面
+    routerGossip(){
+      this.$router.push("/gossip");
     },
 
     // 路由到标签页面

@@ -2,19 +2,19 @@
   <div id="write-post">
     <div class="left">
       <a-input class="write-item" v-model="postTitle" :placeholder="$t('common.enterPostTitle')" size="large"/>
-      <a-popover v-model="visible" :title="$t('common.releasePost')" trigger="click" placement="bottomRight">
-        <div slot="content" style="width: 500px;">
-          <PostBasicInfo
-              :postUser="postAuthor"
-              :postLabel="postLabel"
-              :postTitleMap="postTitleMap"
-              :postTitle="postTitle"
-              :htmlCode="htmlCode"
-              :markdownCode="markdownCode"/>
-        </div>
-        <a-button class="write-item" type="primary" style="height: 30px;"
-                  v-text="$route.params.id ? $t('common.update') : $t('common.release')"></a-button>
-      </a-popover>
+<!--      <a-popover v-model="visible" :title="$t('common.releasePost')" trigger="click" placement="bottomRight">-->
+<!--        <div slot="content" style="width: 500px;">-->
+<!--          <PostBasicInfo-->
+<!--              :postUser="postAuthor"-->
+<!--              :postLabel="postLabel"-->
+<!--              :postTitleMap="postTitleMap"-->
+<!--              :postTitle="postTitle"-->
+<!--              :htmlCode="htmlCode"-->
+<!--              :markdownCode="markdownCode"/>-->
+<!--        </div>-->
+<!--      </a-popover>-->
+      <a-button class="write-item" @click="submitPost" type="primary" style="height: 30px;"
+                v-text="$route.params.id ? $t('common.update') : $t('common.release')"></a-button>
       <a-icon class="write-item" type="swap"/>
       <a-tooltip placement="bottom">
         <template slot="title">
@@ -55,15 +55,15 @@ export default {
 
   data() {
     return {
-      // 文章创建者
+      // 贴子创建者
       postAuthor: 0,
-      // 文章标签
+      // 贴子标签
       postLabel: [],
       // 题图
       postTitleMap: '',
-      // 文章标题
+      // 贴子标题
       postTitle: '',
-      // 文章内容
+      // 贴子内容
       markdownCode: '',
       htmlCode: '',
       visible: false,
@@ -130,6 +130,20 @@ export default {
         subfield: false,
         // 预览
         preview: true,
+      },
+      uploadParam:{
+        //存储的基础路径
+        base:"/design/post/picture/"
+      },
+      // 表单验证
+      validatorRules: {
+        label: {
+          // 检验规则
+          rules: [
+            // 是否必须填写
+            { required: false, message: this.$t('common.selectLabel') }
+          ]
+        }
       }
     };
   },
@@ -145,8 +159,9 @@ export default {
       }
       // 第一步.将图片上传到服务器.
       const formData = new FormData();
-      formData.append('picture', $file);
-      postService.uploadPicture(formData)
+      formData.append("image", $file);
+      formData.append("base", this.uploadParam.base);
+      postService.uploadPostImg(formData)
           .then((res) => {
             /**
              * $vm指为mavonEditor实例，可以通过如下两种方式获取
@@ -154,20 +169,68 @@ export default {
              * 2、通过$refs获取: html声明ref : <mavon-editor ref=md ></mavon-editor>， 此时$vm为 this.$refs.md`（我使用$vm反正是不行的）
              */
             // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-            this.$refs.md.$img2Url(pos, res.data);
+            this.$refs.md.$img2Url(pos, res.data.url);
+          })
+          .catch(err => {
+            this.$message.error(err.msg);
+          });
+    },
+    submitPost(e) {
+      e.preventDefault();
+      if (this.postTitle.length === 0) {
+        this.$message.warning("标题不能为空");
+        return;
+      }
+
+      if (this.htmlCode.length === 0 || this.markdownCode.length === 0) {
+        this.$message.warning("内容不能为空");
+        return;
+      }
+      let data = {"title":this.postTitle,"markdown":this.markdownCode,"html": this.htmlCode,"images":[],type:1}
+      // 地址栏有值（更新贴子）才调用
+      let postId = this.$route.params.id;
+      if (postId) {
+        data.append("postId", postId);
+        this.postUpdate(data);
+      } else {
+        this.postCreate(data);
+      }
+    },
+
+    // 发帖
+    postCreate(data) {
+      postService.postCreate(data)
+          .then(res => {
+            this.$router.push("/user/" + this.$store.state.userId + "/post");
           })
           .catch(err => {
             this.$message.error(err.msg);
           });
     },
 
-    // 获取文章详细信息
+    // 更新贴子
+    postUpdate(data) {
+      if (this.$store.state.userId !== this.postUser) {
+        this.$message.warning("你无权编辑他人撰写的贴子");
+        return;
+      }
+      postService.postUpdate(data)
+          .then(res => {
+            // 返回上一页
+            this.$router.go(-1);
+          })
+          .catch(err => {
+            this.$message.error(err.msg);
+          });
+    },
+
+    // 获取贴子详细信息
     getPostById() {
       postService.getPostById({id: this.$route.params.id})
           .then(res => {
             this.postAuthor = res.data.createUser;
             if (this.$store.state.userId !== this.postAuthor) {
-              this.$message.warning("你无权编辑他人撰写的文章");
+              this.$message.warning("你无权编辑他人撰写的贴子");
               return;
             }
             // 标题
@@ -189,7 +252,7 @@ export default {
     // markdown编辑改变事件
     markdownChange() {
       this.htmlCode = this.$refs.md.d_render;
-      // this.markdownCode = this.$refs.md.d_value;
+      this.markdownCode = this.$refs.md.d_value;
     },
 
     // 路由到用户中心页面
@@ -204,7 +267,7 @@ export default {
   },
 
   mounted() {
-    // 地址栏有值（更新文章）才调用
+    // 地址栏有值（更新贴子）才调用
     if (this.$route.params.id) {
       this.getPostById();
     }

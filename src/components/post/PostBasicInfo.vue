@@ -12,7 +12,7 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <!-- 文章封面 -->
+      <!-- 贴子封面 -->
       <a-form-item :label="$t('common.postCover')">
         <UploadImage
             :postTitleMap="postTitleMap"
@@ -37,15 +37,15 @@ export default {
   components: {UploadImage},
 
   props: {
-    // 文章创建者
+    // 贴子创建者
     postUser: {type: Number, default: 0},
-    // 文章标签
+    // 贴子标签
     postLabel: {type: Array, default: []},
     // 题图
     postTitleMap: {type: String, default: ""},
-    // 文章标题
+    // 贴子标题
     postTitle: {type: String, default: ""},
-    // 文章内容
+    // 贴子内容
     markdownCode: {type: String, default: ""},
     htmlCode: {type: String, default: ""},
   },
@@ -93,10 +93,10 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           let data = {"title":this.postTitle,"markdown":this.markdownCode,"html": this.htmlCode}
-          // 地址栏有值（更新文章）才调用
+          // 地址栏有值（更新贴子）才调用
           let postId = this.$route.params.id;
           if (postId) {
-            data.append("id", postId);
+            data.append("postId", postId);
             this.postUpdate(data);
           } else {
             this.postCreate(data);
@@ -133,10 +133,10 @@ export default {
           });
     },
 
-    // 更新文章
+    // 更新贴子
     postUpdate(data) {
       if (this.$store.state.userId !== this.postUser) {
-        this.$message.warning("你无权编辑他人撰写的文章");
+        this.$message.warning("你无权编辑他人撰写的贴子");
         return;
       }
       postService.postUpdate(data)

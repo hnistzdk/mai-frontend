@@ -45,6 +45,7 @@
   import loginService from "@/service/loginService";
   import store from "@/store";
   import {mapMutations} from "vuex";
+  import dayjs from "dayjs";
 
   export default {
     beforeCreate() {
@@ -87,6 +88,10 @@
                   window.localStorage.setItem("access_token",res.data.accessToken)
                   window.localStorage.setItem("userId",res.data.userId)
                   window.localStorage.setItem("username",res.data.username)
+                  //过期分钟数
+                  let expiresIn = res.data.expiresIn;
+                  let expireTimeStamp = dayjs().add(expiresIn,'minute').valueOf();
+                  window.localStorage.setItem("expireTimeStamp",expireTimeStamp);
                   //设置登录状态
                   this.setLoginState();
                   this.handleOk();

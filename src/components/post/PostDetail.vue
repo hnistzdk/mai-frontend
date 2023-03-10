@@ -64,6 +64,18 @@
             previewBackground="#fff"
             codeStyle="obsidian"
             :xssOptions=false></mavon-editor>
+        <!--  贴子的图片展示 -->
+        <div>
+          <img @click="preView(image)" v-for="(image,index) in images" style="padding-top: 10px;margin-left: 20px"  :width="$store.state.collapsed ? 80 : 150" alt="logo" v-if="image"
+               :src="image"/>
+          <a-modal :visible="visible"
+                   :footer="null"
+                   @cancel="cancel">
+            <img alt="example"
+                 style="width: 100%"
+                 :src="preViewSrc" />
+          </a-modal>
+        </div>
       </div>
     </div>
     <CustomEmpty v-else/>
@@ -75,6 +87,7 @@
   import userService from "@/service/userService";
   import CustomEmpty from "@/components/utils/CustomEmpty";
 
+
   export default {
     components: {CustomEmpty},
 
@@ -82,6 +95,9 @@
       return {
         finish: false,
         data: {},
+        images:[],
+        visible:false,
+        preViewSrc: ''
       };
     },
 
@@ -93,6 +109,8 @@
             .then(res => {
               this.$emit("initPostInfo",res.data);
               this.data = res.data;
+              this.images = res.data.images.split(",");
+              console.log('images',this.images)
               this.finish = true;
               /*// 提取标签id
               let labelIds = [];
@@ -114,6 +132,14 @@
               this.finish = true;
               this.$message.error(err.msg);
             });
+      },
+      preView(src) {
+        this.visible = true;
+        this.preViewSrc = src
+      },
+      // 图片预览关闭
+      cancel() {
+        this.visible = false;
       },
 
 

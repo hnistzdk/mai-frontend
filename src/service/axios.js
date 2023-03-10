@@ -1,11 +1,27 @@
 import axios from "axios";
 import store from '../store/index'
+import dayjs from "dayjs";
 // 设置xhr请求超时时间和baseURL（毫秒）
 axios.defaults.timeout = 15000;
 if (process.env.NODE_ENV === "production") {
     axios.defaults.baseURL = "http://localhost:9527";
 }
 export default (() => {
+    //校验过期时间
+    let expireTimeStamp = window.localStorage.getItem("expireTimeStamp");
+    if (expireTimeStamp){
+        let now = dayjs().valueOf();
+        if (now >= expireTimeStamp){
+            //证明已过期
+            //清除localstorage
+            window.localStorage.removeItem("access_token")
+            window.localStorage.removeItem("expireTimeStamp")
+            window.localStorage.removeItem("userId")
+            window.localStorage.removeItem("username")
+            window.localStorage.removeItem("state")
+            store.state.isLogin = false;
+        }
+    }
 
     // 每次请求前处理
     axios.interceptors.request.use(config => {
@@ -76,7 +92,7 @@ export default (() => {
                 return Promise.reject(response);
             }
         }, error => {
-            // console.log('error',error.response)
+            console.log('error',error.response)
             let resp = error.response;
             if (resp.status === 401){
                 //清除localstorage

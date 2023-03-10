@@ -43,6 +43,24 @@ export default {
         });
     },
 
+    // 上传贴子相关的图片
+    uploadPostImg(params) {
+        return new Promise((resolve, reject) => {
+            axios.post("/file/uploadImg", params)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+    // 获取热榜贴子
+    getPostHotList() {
+        return new Promise((resolve, reject) => {
+            axios.get("/post/list/hot")
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+
 
     // 获取个人发布的贴子（所有）
     getPersonalPosts(params) {

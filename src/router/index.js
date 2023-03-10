@@ -16,6 +16,11 @@ const routes = [
         component: () => import("@/components/index/Index"),
     },
     {
+        path: "/gossip",
+        name: "gossip",
+        component: () => import("@/components/index/GossipIndex"),
+    },
+    {
         path: "/search",
         component: () => import("@/components/index/Index"),
     },

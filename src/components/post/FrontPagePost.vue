@@ -28,7 +28,7 @@
                   <a-icon :type="type" style="margin-right: 6px;"/>
                   <span v-text="item.commentCount"></span>
               </span>
-              <span v-if="(($store.state.isManage && isAdminAudit) || $store.state.userId === item.createUser) && type==='ellipsis'"
+              <span v-if="(($store.state.isManage && isAdminAudit) || $store.state.userId === item.authorId) && type==='ellipsis'"
                     @click.stop>
                 <a-dropdown :placement="'bottomCenter'" :trigger="['click']">
                   <a-menu slot="overlay">
@@ -53,12 +53,12 @@
                       <span style="color: #eb2f96">{{ ' ' + $t("common.isNotTop") }}</span>
                     </a-menu-item>
                     <!-- 贴子编辑 -->
-                    <a-menu-item key="postEdit" v-if="$store.state.userId === item.createUser"
+                    <a-menu-item key="postEdit" v-if="$store.state.userId === item.authorId"
                                  @click="routerPostEdit(item.postId)">
                       <span style="color: #722ed1">{{ ' ' + $t("common.edit") }}</span>
                     </a-menu-item>
                     <!-- 贴子删除 -->
-                    <a-menu-item key="postDel" v-if="$store.state.userId === item.createUser"
+                    <a-menu-item key="postDel" v-if="$store.state.userId === item.authorId"
                                  @click="postDelete(item.postId, index)">
                       <span style="color: red">{{ ' ' + $t("common.delete") }}</span>
                     </a-menu-item>
@@ -87,10 +87,10 @@
         <!-- 用户/标题 -->
         <a-list-item-meta :description="item.title">
           <a-avatar slot="avatar" :src="item.avatar ? item.avatar : require('@/assets/img/default_avatar.png')"
-                    @click.stop="routerUserCenter(item.createUser)"/>
-          <a slot="title" class="username" @click.stop="routerUserCenter(item.createUser)">
+                    @click.stop="routerUserCenter(item.authorId)"/>
+          <a slot="title" class="username" @click.stop="routerUserCenter(item.authorId)">
             <div class="left">
-              <span slot="title" style="padding-right: 2px;"> {{ item.createUserName }} </span>
+              <span slot="title" style="padding-right: 2px;"> {{ item.authorUsername }} </span>
 <!--              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>-->
               <small style="color: #b5b9b9; padding-left: 10px" v-text="$utils.showtime(item.createTime)"></small>
               <!-- 用户中心 -->
@@ -194,7 +194,7 @@ import postService from "@/service/postService";
           onOk: () => {
             postService.updateState({id: postId, state: toState})
                 .then(() => {
-                  this.tempData = this.tempData.filter(post => post.id !== postId);
+                  this.tempData = this.tempData.filter(post => post.postId !== postId);
                   // 待审核
                   if (state === -1) {
                     this.$emit("updatePendingReviewData", this.tempData);
@@ -290,7 +290,7 @@ import postService from "@/service/postService";
           onOk: () => {
             postService.postDelete(postId)
                 .then(() => {
-                  this.tempData = this.tempData.filter(post => post.id !== postId);
+                  this.tempData = this.tempData.filter(post => post.postId !== postId);
                 })
                 .catch(err => {
                   this.$message.error(err.msg);

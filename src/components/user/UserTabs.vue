@@ -18,9 +18,9 @@
       <a-tab-pane key="post">
         <span slot="tab">
           <i class="iconfont icon-relat-post"></i>
-          {{ $t("common.post") + ' ' + writePostTotal }}
+          {{ $t("common.post") + ' ' + postCount }}
         </span>
-        <!-- 文章列表 -->
+        <!-- 贴子列表 -->
         <FrontPagePost
             v-if="isPostTab"
             :finish="finish"
@@ -30,6 +30,23 @@
             :isUserCenter="true"
             :userId="userId"
             @refresh="postRefresh"
+            style="background: #fff;"/>
+      </a-tab-pane>
+      <a-tab-pane key="gossip">
+        <span slot="tab">
+          <i class="iconfont icon-relat-post"></i>
+          {{ $t("common.gossip") + ' ' + gossipCount }}
+        </span>
+        <!-- 职言列表 -->
+        <FrontPagePost
+            v-if="isGossipTab"
+            :finish="finish"
+            :hasNext="hasNext"
+            :data="gossipData"
+            :service="postService"
+            :isUserCenter="true"
+            :userId="userId"
+            @refresh="gossipRefresh"
             style="background: #fff;"/>
       </a-tab-pane>
       <a-tab-pane key="follow">
@@ -50,7 +67,7 @@
           <i class="iconfont icon-like"></i>
           {{ $t("common.like") + ' ' + likePostTotal }}
         </span>
-        <!-- 文章列表 -->
+        <!-- 贴子列表 -->
         <FrontPagePost
             v-if="isLikeTab"
             :finish="finish"
@@ -73,7 +90,6 @@ import dynamicService from "@/service/dynamicService";
 import Dynamic from "@/components/user/Dynamic";
 
 export default {
-  name: "",
 
   components: {Dynamic, FrontPagePost, FollowTabs},
 
@@ -86,8 +102,10 @@ export default {
       defaultActiveKey: 'dynamic',
       // 是否在动态tab下
       isDynamicTab: true,
-      // 是否在文章tab下
+      // 是否在贴子tab下
       isPostTab: false,
+      // 是否在职言tab下
+      isGossipTab: false,
       // 是否在关注tab下
       isFollowTab: false,
       // 是否在点赞tab下
@@ -96,24 +114,28 @@ export default {
       // 动态
       dynamicData: [],
       dynamicTotal: 0,
-      // 我的文章
+      // 我的贴子
       postData: [],
-      // 我点赞的文章
+      // 发表贴子总数
+      postCount: 0,
+      // 职言
+      gossipData: [],
+      // 发表职言总数
+      gossipCount:0,
+      // 我点赞的贴子
       likeData: [],
-      // hasNext和finish名称不能改(和滚动加载相关)
-      hasNext: true,
-      finish: false,
-      // 加载中...
-      dynamicSpinning: true,
-      params: {currentPage: 1, pageSize: 10},
-      // 发表文章总数
-      writePostTotal: 0,
-      // 点赞文章总数
+      // 点赞贴子总数
       likePostTotal: 0,
       // 我关注的人数
       followedTotal: 0,
       // 我的粉丝数
       fanTotal: 0,
+      // hasNext和finish名称不能改(和滚动加载相关)
+      hasNext: true,
+      finish: false,
+      // 加载中...
+      dynamicSpinning: true,
+      params: {currentPage: 1, pageSize: 10,userId:this.userId},
     };
   },
 
@@ -122,13 +144,22 @@ export default {
     loadMore() {
       this.params.currentPage++;
       if (this.isDynamicTab) {
-        this.getDynamicList(this.params, true);
+        let params = this.params;
+        this.getDynamicList(params, true);
       }
       if (this.isLikeTab) {
-        this.getLikesPost(this.params, true);
+        let params = this.params;
+        this.getLikesPost(params, true);
       }
       if (this.isPostTab) {
-        this.getPersonalPosts(this.params, true);
+        let params = this.params;
+        params.type = 1;
+        this.getPersonalPosts(params, true);
+      }
+      if (this.isGossipTab) {
+        let params = this.params;
+        params.type = 2;
+        this.getPersonalGossips(params, true);
       }
     },
 
@@ -160,20 +191,20 @@ export default {
           });
     },
 
-    // 获取个人发布的文章（所有）
+    // 获取个人发布的贴子（所有）
     getPersonalPosts(params, isLoadMore) {
       if (!isLoadMore) {
         this.params.currentPage = 1;
       }
       this.finish = false;
-      params.createUser = this.userId;
+      params.userId = this.userId;
       this.$delete(params, 'likeUser');
       // 不是管理员
       if (!this.$store.state.isManage) {
-        // 只看启用的文章
+        // 只看启用的贴子
         params.postStateEnum = "enable";
       }
-      postService.getPersonalPosts(params)
+      postService.getPostList(params)
           .then(res => {
             if (isLoadMore) {
               this.postData = this.postData.concat(res.data.list);
@@ -181,7 +212,7 @@ export default {
             } else {
               this.postData = res.data.list;
             }
-            this.writePostTotal = res.data.total;
+            this.postCount = res.data.totalCount;
             this.finish = true;
           })
           .catch(err => {
@@ -190,14 +221,44 @@ export default {
           });
     },
 
-    // 获取点赞过的文章
+    // 获取个人发布的职言（所有）
+    getPersonalGossips(params, isLoadMore) {
+      if (!isLoadMore) {
+        this.params.currentPage = 1;
+      }
+      this.finish = false;
+      params.userId = this.userId;
+      this.$delete(params, 'likeUser');
+      // 不是管理员
+      if (!this.$store.state.isManage) {
+        // 只看启用的贴子
+        params.postStateEnum = "enable";
+      }
+      postService.getPostList(params)
+          .then(res => {
+            if (isLoadMore) {
+              this.gossipData = this.gossipData.concat(res.data.list);
+              this.hasNext = res.data.list.length !== 0;
+            } else {
+              this.gossipData = res.data.list;
+            }
+            this.gossipCount = res.data.totalCount;
+            this.finish = true;
+          })
+          .catch(err => {
+            this.finish = true;
+            this.$message.error(err.msg);
+          });
+    },
+
+    // 获取点赞过的贴子
     getLikesPost(params, isLoadMore) {
       if (!isLoadMore) {
         this.params.currentPage = 1;
       }
       this.finish = false;
       params.likeUser = this.userId;
-      this.$delete(params, 'createUser');
+      this.$delete(params, 'userId');
       postService.getLikesPost(params)
           .then(res => {
             if (isLoadMore) {
@@ -206,7 +267,7 @@ export default {
             } else {
               this.likeData = res.data.list;
             }
-            this.likePostTotal = res.data.total;
+            this.likePostTotal = res.data.totalCount;
             this.finish = true;
           })
           .catch(err => {
@@ -229,12 +290,17 @@ export default {
 
     // 刷新列表
     postRefresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      // this.params = {currentPage: 1, pageSize: 10};
       this.getPersonalPosts(this.params);
       this.getLikesPost(this.params);
     },
+    gossipRefresh() {
+      // this.params = {currentPage: 1, pageSize: 10};
+      this.getPersonalGossips(this.params);
+      this.getLikesPost(this.params);
+    },
     likeRefresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      // this.params = {currentPage: 1, pageSize: 10};
       this.getLikesPost(this.params);
     },
 
@@ -244,6 +310,7 @@ export default {
         this.routerDynamic();
         this.isDynamicTab = true;
         this.isPostTab = false;
+        this.isGossipTab = false;
         this.isLikeTab = false;
         this.isFollowTab = false;
         this.hasNext = true;
@@ -258,10 +325,30 @@ export default {
         this.routerPost();
         this.isDynamicTab = false;
         this.isPostTab = true;
+        this.isGossipTab = false;
         this.isLikeTab = false;
         this.isFollowTab = false;
         this.hasNext = true;
-        this.getPersonalPosts(this.params);
+        let params = this.params;
+        params.type = 1;
+        this.getPersonalPosts(params);
+        // 解決和mounted()滚动加载重复的问题
+        if (!isFirst) {
+          // 监听滚动，做滚动加载
+          this.$utils.scroll.call(this, document.querySelector('#app'));
+        }
+      }
+      if (activeKey === 'gossip') {
+        this.routerGossip();
+        this.isDynamicTab = false;
+        this.isPostTab = false;
+        this.isGossipTab = true;
+        this.isLikeTab = false;
+        this.isFollowTab = false;
+        this.hasNext = true;
+        let params = this.params;
+        params.type = 2;
+        this.getPersonalGossips(params);
         // 解決和mounted()滚动加载重复的问题
         if (!isFirst) {
           // 监听滚动，做滚动加载
@@ -272,6 +359,7 @@ export default {
         this.routerLike();
         this.isDynamicTab = false;
         this.isPostTab = false;
+        this.isGossipTab = false;
         this.isLikeTab = true;
         this.isFollowTab = false;
         this.hasNext = true;
@@ -286,6 +374,7 @@ export default {
         this.routerFollow();
         this.isDynamicTab = false;
         this.isPostTab = false;
+        this.isGossipTab = false;
         this.isLikeTab = false;
         this.isFollowTab = true;
       }
@@ -295,9 +384,13 @@ export default {
     routerDynamic() {
       this.$router.push("/user/" + this.userId);
     },
-    // 路由到页面(文章)
+    // 路由到页面(贴子)
     routerPost() {
       this.$router.push("/user/" + this.userId + "/post");
+    },
+    // 路由到页面(职言)
+    routerGossip() {
+      this.$router.push("/user/" + this.userId + "/gossip");
     },
     // 路由到页面(关注)
     routerFollow() {
@@ -311,8 +404,9 @@ export default {
 
   mounted() {
     this.getDynamicList(this.params);
-    this.getPersonalPosts({currentPage: 1, pageSize: 1});
-    this.getLikesPost({currentPage: 1, pageSize: 1});
+    this.getPersonalPosts({currentPage: 1, pageSize: 10,type: 1,userId:this.userId});
+    this.getPersonalGossips({currentPage: 1, pageSize: 10,type: 2,userId:this.userId});
+    this.getLikesPost({currentPage: 1, pageSize: 10});
     this.getFollowCount();
     // 监听滚动，做滚动加载
     this.$utils.scroll.call(this, document.querySelector('#app'));

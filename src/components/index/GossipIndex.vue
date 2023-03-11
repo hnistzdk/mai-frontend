@@ -24,7 +24,7 @@
                   <span slot="tab">
                     {{ $t("common.approved") + "(" + totalCount + ")" }}
                   </span>
-                  <!-- 文章列表 -->
+                  <!-- 贴子列表 -->
                   <FrontPagePost v-if="!spinning && isApprovedTab"
                                  :finish="finish"
                                  :hasNext="hasNext"
@@ -41,7 +41,7 @@
                   <span slot="tab">
                     {{ $t("common.pendingReview") + "(" + pendingReviewTotal + ")"}}
                   </span>
-                  <!-- 文章列表 -->
+                  <!-- 贴子列表 -->
                   <FrontPagePost v-if="!spinning && isPendingReviewTab"
                                  :finish="finish"
                                  :hasNext="hasNext"
@@ -59,7 +59,7 @@
                   <span slot="tab">
                     {{ $t("common.reviewRejected") + "(" + reviewRejectedTotal + ")"}}
                   </span>
-                  <!-- 文章列表 -->
+                  <!-- 贴子列表 -->
                   <FrontPagePost v-if="!spinning && isReviewRejectedTab"
                                  :finish="finish"
                                  :hasNext="hasNext"
@@ -73,7 +73,7 @@
                                  style="background: #fff;"/>
                 </a-tab-pane>
               </a-tabs>
-              <!-- 文章列表 -->
+              <!-- 贴子列表 -->
               <FrontPagePost v-if="!$store.state.isManage && !spinning"
                              :finish="finish"
                              :hasNext="hasNext"
@@ -191,7 +191,7 @@ export default {
       }
     },
 
-    // 获取文章列表信息
+    // 获取贴子列表信息
     getPostList(params, isLoadMore) {
       if (!isLoadMore) {
         this.params.currentPage = 1;
@@ -217,7 +217,7 @@ export default {
           });
     },
 
-    // 获取待审核的文章
+    // 获取待审核的贴子
     getPendingReviewPosts(params, isLoadMore) {
       if (!isLoadMore) {
         this.params.currentPage = 1;
@@ -241,7 +241,7 @@ export default {
           });
     },
 
-    // 获取禁用的文章
+    // 获取禁用的贴子
     getDisabledPosts(params, isLoadMore) {
       if (!isLoadMore) {
         this.params.currentPage = 1;

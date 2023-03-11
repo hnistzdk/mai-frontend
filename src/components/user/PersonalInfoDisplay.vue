@@ -5,11 +5,11 @@
       <div class="left">
         <div class="avatar">
           <a-avatar :size="88" class="avatar"
-                    :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"/>
+                    :src="data.avatar ? data.avatar : require('@/assets/img/default_avatar.png')"/>
         </div>
         <div class="info" v-if="data.level !== undefined">
           <div class="username">
-            <span>{{ data.name }} </span>
+            <span>{{ data.username }} </span>
             <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt=""/>
           </div>
           <div class="office">
@@ -22,9 +22,9 @@
             </span>
           </div>
           <div class="intro">
-            <span v-if="data.intro">
+            <span v-if="data.selfIntroduction">
               <i class="iconfont icon-intro"></i>
-              <span>{{ data.intro }}</span>
+              <span>{{ data.selfIntroduction }}</span>
             </span>
             <span v-else-if="$store.state.userId === data.id" @click="routerSetUp">
               <a><a-icon type="plus"/>{{ $t("common.notHobbies") }}</a>

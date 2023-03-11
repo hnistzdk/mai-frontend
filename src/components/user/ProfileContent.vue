@@ -15,22 +15,7 @@
 <!--                     disabled="true"-->
 <!--                     :placeholder="$t('common.fillInYourUsername')"/>-->
 <!--          </a-form-model-item>-->
-          <!-- 职位 -->
-<!--          <a-form-model-item has-feedback prop="position" :label="$t('common.position')">-->
-<!--            <a-input v-model="ruleForm.position"-->
-<!--                     :suffix="ruleForm.positionNum + '/50'"-->
-<!--                     @change="commonChange"-->
-<!--                     :maxLength="50"-->
-<!--                     :placeholder="$t('common.fillInYourPosition')"/>-->
-<!--          </a-form-model-item>-->
-          <!-- 公司 -->
-<!--          <a-form-model-item has-feedback prop="company" :label="$t('common.company')">-->
-<!--            <a-input v-model="ruleForm.company"-->
-<!--                     :suffix="ruleForm.companyNum + '/50'"-->
-<!--                     @change="commonChange"-->
-<!--                     :maxLength="50"-->
-<!--                     :placeholder="$t('common.fillInYourCompany')"/>-->
-<!--          </a-form-model-item>-->
+
           <!-- 个人主页 -->
 <!--          <a-form-model-item has-feedback prop="homePage" :label="$t('common.homePage')">-->
 <!--            <a-input v-model="ruleForm.homePage"-->
@@ -50,6 +35,24 @@
                         :auto-size="{ minRows: 5, maxRows: 8 }"
                         class="selfIntroduction"/>
           </a-form-model-item>
+
+          <!-- 职位 -->
+          <a-form-model-item has-feedback prop="position" :label="$t('common.position')">
+            <a-input v-model="ruleForm.position"
+                     :suffix="ruleForm.positionNum + '/50'"
+                     @change="commonChange"
+                     :maxLength="50"
+                     :placeholder="$t('common.fillInYourPosition')"/>
+          </a-form-model-item>
+          <!-- 公司 -->
+          <a-form-model-item has-feedback prop="company" :label="$t('common.company')">
+            <a-input v-model="ruleForm.company"
+                     :suffix="ruleForm.companyNum + '/50'"
+                     @change="commonChange"
+                     :maxLength="50"
+                     :placeholder="$t('common.fillInYourCompany')"/>
+          </a-form-model-item>
+
           <!-- 毕业年份 -->
           <a-form-item :label="$t('common.graduationYear')">
             <a-select v-model="ruleForm.graduationYear"
@@ -248,11 +251,11 @@
               this.ruleForm.username = res.data.username;
               this.ruleForm.userNameNum = res.data.username.length;
 
-              // this.ruleForm.position = res.data.position ? res.data.position : '';
-              // this.ruleForm.positionNum = res.data.position ? res.data.position.length : 0;
-              //
-              // this.ruleForm.company = res.data.company ? res.data.company : '';
-              // this.ruleForm.companyNum = res.data.company ? res.data.company.length : 0;
+              this.ruleForm.position = res.data.position ? res.data.position : '';
+              this.ruleForm.positionNum = res.data.position ? res.data.position.length : 0;
+
+              this.ruleForm.company = res.data.company ? res.data.company : '';
+              this.ruleForm.companyNum = res.data.company ? res.data.company.length : 0;
               //
               // this.ruleForm.homePage = res.data.homePage ? res.data.homePage : '';
               // this.ruleForm.homePageNum = res.data.homePage ? res.data.homePage.length : 0;
@@ -290,8 +293,8 @@
             const data = {
               userId: this.ruleForm.userId,
               // username: this.ruleForm.username,
-              // position: this.ruleForm.position,
-              // company: this.ruleForm.company,
+              position: this.ruleForm.position,
+              company: this.ruleForm.company,
               // homePage: this.ruleForm.homePage,
               selfIntroduction: this.ruleForm.selfIntroduction,
               graduationYear: this.ruleForm.graduationYear,

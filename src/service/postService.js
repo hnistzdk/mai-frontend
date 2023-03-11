@@ -12,7 +12,6 @@ export default {
     // 获取贴子详情
     getPostById(params) {
         return new Promise((resolve, reject) => {
-            // axios.get("/post/getById", {params})
             axios.get("/post/detail/"+params.id)
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));

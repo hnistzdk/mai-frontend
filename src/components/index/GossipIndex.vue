@@ -12,7 +12,8 @@
             <div v-else>
               <!-- 轮播图 -->
               <!--              <SlideShow v-if="!$store.state.collapsed && $store.state.isCarousel"/>-->
-              <IndexCreate/>
+              <!-- 发布  -->
+              <IndexCreate v-if="$store.state.isLogin"/>
 
 
               <a-row v-if="!$store.state.collapsed && $store.state.isCarousel">
@@ -85,7 +86,7 @@
           </a-col>
           <a-col v-if="!$store.state.collapsed" :span="6">
             <!-- 系统简介 -->
-            <ProjectIntro style="background: #fff;"/>
+<!--            <ProjectIntro style="background: #fff;"/>-->
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>

@@ -56,6 +56,7 @@ export default {
       if (!this.$store.state.isLogin) {
         this.$message.error("请先登录");
         store.state.loginVisible = true;
+        return;
       }
       this.buildImages();
       let data = {content: this.content, html: this.content, markdown: this.content, images: this.images, type: 2};

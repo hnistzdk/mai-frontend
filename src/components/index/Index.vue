@@ -84,7 +84,7 @@
           </a-col>
           <a-col v-if="!$store.state.collapsed" :span="6">
             <!-- 系统简介 -->
-            <ProjectIntro style="background: #fff;"/>
+<!--            <ProjectIntro style="background: #fff;"/>-->
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>

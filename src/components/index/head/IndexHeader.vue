@@ -11,7 +11,7 @@
         <div>
           <a-menu v-if="!$store.state.collapsed" v-model="current" mode="horizontal">
             <a-menu-item key="frontPage" @click="refresh">{{ $t("common.home") }}</a-menu-item>
-            <a-menu-item value="gossipPage" @click="routerGossip">{{ $t("common.gossip") }}</a-menu-item>
+            <a-menu-item key="gossipPage" @click="routerGossip">{{ $t("common.gossip") }}</a-menu-item>
             <a-menu-item key="boilingPoint" @click="routerLabel">{{ $t("common.label") }}</a-menu-item>
             <a-menu-item key="liveStreaming" @click="routerResource">{{ $t("common.resource") }}</a-menu-item>
             <a-tooltip placement="bottom">
@@ -358,6 +358,11 @@ export default {
     if (name === 'home') {
       // 添加新值
       this.current.push('frontPage');
+    }
+    // 职言
+    if (name === 'gossip') {
+      // 添加新值
+      this.current.push('gossipPage');
     }
     // 标签
     if (name === 'label') {

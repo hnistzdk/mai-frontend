@@ -121,7 +121,7 @@
       // 绑定|解绑邮箱
       toggleBindEmail() {
         if (this.user.email) {
-          userService.untieEmail()
+          userService.unbindEmail()
               .then(() => {
                 this.$message.success(this.$t("common.unBindEmailSuccessed"));
                 this.refresh();

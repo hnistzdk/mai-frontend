@@ -69,12 +69,68 @@ export default {
                 .catch((err) => reject(err));
         });
     },
+    //过期校验
     validateExpire(){
         return new Promise((resolve, reject) => {
             axios.get("/user/validate").then((res) => resolve(res))
                 .catch((err) => reject(err));
         });
     },
+
+    // 发送邮件验证码
+    sendEmailVerifyCode(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/sendEmailVerifyCode", params)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+    // 判断email是否已经绑定
+    isEmailExist(data) {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/isEmailExist/" + data)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+
+    // 邮箱判重
+    isValidEmail(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/isValidEmail", {params})
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+    // 绑定邮箱
+    bindEmail(data) {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/bindEmail", data)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+    // 解绑邮箱
+    unbindEmail() {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/unbindEmail")
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+    // 邮箱重置密码
+    emailResetPassword(data) {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/emailResetPassword", data)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
 
     // 发送短信验证码
     sendSmsVerifyCode(params) {
@@ -84,14 +140,7 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 发送邮件验证码
-    sendEmailVerifyCode(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/sendEmailVerifyCode", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
+
     // 绑定手机
     bindPhone(data) {
         return new Promise((resolve, reject) => {
@@ -108,22 +157,7 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 绑定邮箱
-    bindEmail(data) {
-        return new Promise((resolve, reject) => {
-            axios.post("/user/bindEmail", data)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 解绑邮箱
-    untieEmail(data) {
-        return new Promise((resolve, reject) => {
-            axios.post("/user/untieEmail", data)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
+
     // 更新密码
     updatePassword(data) {
         return new Promise((resolve, reject) => {
@@ -132,14 +166,7 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 邮箱判重
-    isValidEmail(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/isValidEmail", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
+
     // 手机判重
     isValidPhone(params) {
         return new Promise((resolve, reject) => {
@@ -164,26 +191,10 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 判断email是否已经绑定
-    isEmailExist(data) {
-        return new Promise((resolve, reject) => {
-            axios.post("/user/isEmailExist/" + data)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
     // 手机重置密码
     phoneResetPassword(data) {
         return new Promise((resolve, reject) => {
             axios.post("/user/phoneResetPassword", data)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 邮箱重置密码
-    emailResetPassword(data) {
-        return new Promise((resolve, reject) => {
-            axios.post("/user/emailResetPassword", data)
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

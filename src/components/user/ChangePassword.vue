@@ -71,91 +71,91 @@
 </template>
 
 <script>
-  import userService from "@/service/userService";
+import userService from "@/service/userService";
 
-  export default {
-    props: {
-      visible: {type: Boolean, default: false},
-    },
+export default {
+  props: {
+    visible: {type: Boolean, default: false},
+  },
 
-    data() {
+  data() {
+    return {
+      loading: false,
+      form: this.$form.createForm(this, {name: 'coordinated'}),
+    };
+  },
+
+  computed: {
+    //由于修改密码modal宽度较小，屏幕小的时候需要将label缩写
+    labels() {
+      if (this.$store.state.width >= 500) {
+        return {
+          oldPassword: this.$t("common.oldPassword"),
+          newPassword: this.$t("common.newPassword"),
+          confirmPassword: this.$t("common.confirmPassword"),
+        };
+      }
       return {
-        loading: false,
-        form: this.$form.createForm(this, {name: 'coordinated'}),
+        oldPassword: this.$t("common.oldPasswordShort"),
+        newPassword: this.$t("common.newPasswordShort"),
+        confirmPassword: this.$t("common.confirmPasswordShort"),
       };
     },
+  },
 
-    computed: {
-      //由于修改密码modal宽度较小，屏幕小的时候需要将label缩写
-      labels() {
-        if (this.$store.state.width >= 500) {
-          return {
-            oldPassword: this.$t("common.oldPassword"),
-            newPassword: this.$t("common.newPassword"),
-            confirmPassword: this.$t("common.confirmPassword"),
-          };
-        }
-        return {
-          oldPassword: this.$t("common.oldPasswordShort"),
-          newPassword: this.$t("common.newPasswordShort"),
-          confirmPassword: this.$t("common.confirmPasswordShort"),
-        };
-      },
-    },
-
-    methods: {
-      // 用户点击确定后校验表单并且发送请求修改密码
-      handleOk() {
-        this.form.validateFields(
-            (err, {oldPassword, newPassword, newPasswordAgain}) => {
-              if (err) {
-                return;
-              }
-              if (newPassword !== newPasswordAgain) {
-                this.$message.warning(this.$t("common.passwordNotMatch"));
-                return;
-              }
-              userService.updatePassword({oldPassword, newPassword})
-                  .then(() => {
-                    this.$message.success(this.$t("common.changePasswordSuccessed"));
-                    this.$emit("refresh");
-                    this.handleCancel();
-                  })
-                  .catch((err) => {
-                    this.$message.error(err.desc);
-                  });
+  methods: {
+    // 用户点击确定后校验表单并且发送请求修改密码
+    handleOk() {
+      this.form.validateFields(
+          (err, {oldPassword, newPassword, newPasswordAgain}) => {
+            if (err) {
+              return;
             }
-        );
-      },
-
-      // 点击取消需要充值表单
-      handleCancel() {
-        this.form.resetFields();
-        this.$emit("closeModal");
-      },
+            if (newPassword !== newPasswordAgain) {
+              this.$message.warning(this.$t("common.passwordNotMatch"));
+              return;
+            }
+            userService.resetPassword({oldPassword: oldPassword, newPassword: newPassword})
+                .then(() => {
+                  this.$message.success(this.$t("common.changePasswordSuccessed"));
+                  this.$emit("refresh");
+                  this.handleCancel();
+                })
+                .catch((err) => {
+                  this.$message.error(err.msg);
+                });
+          }
+      );
     },
 
-    beforeCreate() {
-      this.form = this.$form.createForm(this);
-      this.verifyForm = this.$form.createForm(this, "verify");
+    // 点击取消需要充值表单
+    handleCancel() {
+      this.form.resetFields();
+      this.$emit("closeModal");
     },
-  };
+  },
+
+  beforeCreate() {
+    this.form = this.$form.createForm(this);
+    this.verifyForm = this.$form.createForm(this, "verify");
+  },
+};
 </script>
 
 <style lang="less" scoped>
-  .input-item:first-child {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+.input-item:first-child {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
-  .change-password-modal {
-    .ant-form-item {
-      margin-bottom: 0;
-    }
+.change-password-modal {
+  .ant-form-item {
+    margin-bottom: 0;
   }
+}
 
-  button {
-    margin-left: 10px;
-  }
+button {
+  margin-left: 10px;
+}
 </style>

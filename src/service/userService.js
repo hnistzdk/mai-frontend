@@ -80,11 +80,40 @@ export default {
     // 发送邮件验证码
     sendEmailVerifyCode(params) {
         return new Promise((resolve, reject) => {
-            axios.get("/user/sendEmailVerifyCode", params)
+            axios.get("/user/sendEmailVerifyCode", {params})
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });
     },
+
+    // 绑定邮箱
+    bindEmail(params) {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/bindEmail", params)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+    // 解绑邮箱
+    unbindEmail(params) {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/unbindEmail",params)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+    // 邮箱判重
+    isValidEmail(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/isValidEmail", {params})
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+
+
 
     // 判断email是否已经绑定
     isEmailExist(data) {
@@ -96,31 +125,6 @@ export default {
     },
 
 
-    // 邮箱判重
-    isValidEmail(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/isValidEmail", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-
-    // 绑定邮箱
-    bindEmail(data) {
-        return new Promise((resolve, reject) => {
-            axios.post("/user/bindEmail", data)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 解绑邮箱
-    unbindEmail() {
-        return new Promise((resolve, reject) => {
-            axios.post("/user/unbindEmail")
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
 
     // 邮箱重置密码
     emailResetPassword(data) {
@@ -158,10 +162,10 @@ export default {
         });
     },
 
-    // 更新密码
-    updatePassword(data) {
+    // 重置密码
+    resetPassword(data) {
         return new Promise((resolve, reject) => {
-            axios.post("/user/updatePassword", data)
+            axios.post("/user/resetPassword", data)
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

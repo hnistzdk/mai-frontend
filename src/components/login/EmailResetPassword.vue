@@ -123,7 +123,7 @@
 
       // 发送验证码
       sendEmailVerifyCode(email) {
-        userService.sendEmailVerifyCode({ email: email })
+        userService.sendEmailVerifyCode({ email: email ,type: 'reset' })
             .then(() => {
               this.$message.success(this.$t("common.verifyCodeSendSuccessed"));
             })

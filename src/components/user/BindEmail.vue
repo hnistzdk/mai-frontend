@@ -86,7 +86,7 @@
           email = values.email;
         });
         this.verifyForm.validateFields((err, values) => {
-          // 校验验证码，如果每填写就返回
+          // 校验验证码，如果没填写就返回
           if (err) {
             return;
           }
@@ -105,14 +105,14 @@
           return;
         }
         // 校验成功后发送请求绑定邮箱
-        userService.bindEmail({email, code})
+        userService.bindEmail({"email":email, "code":code})
             .then(() => {
               this.$message.success(this.$t("common.bindEmailSuccessed"));
               this.$emit("refresh");
               this.handleCancel();
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -128,14 +128,13 @@
       sendEmailVerifyCode() {
         this.form.validateFields((err, values) => {
           if (!err) {
-            userService
-                .sendEmailVerifyCode(values)
+            userService.sendEmailVerifyCode({email:values.email,type:'bind'})
                 .then(() => {
                   this.$message.success(this.$t("common.verifyCodeSendSuccessed"));
                   this.sentVerifyCode = true;
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           }
         });
@@ -151,35 +150,8 @@
           callback(this.$t("common.emailInvalid"));
           return;
         }
-        const email = {email: value};
-        this.isValidEmail(email)
-            .then(() => {
-              callback();
-            })
-            .catch(reason => {
-              if (reason.desc) {
-                callback(reason.desc);
-              }
-              callback();
-            });
+        callback();
       },
-
-      // 发送数据判断该邮箱是否已经被绑定
-      isValidEmail(email) {
-        return new Promise((resolve, reject) => {
-          userService.isValidEmail(email)
-              .then(res => {
-                if (res.code === 0) {
-                  resolve(res);
-                } else {
-                  throw res;
-                }
-              })
-              .catch(err => {
-                reject(err);
-              });
-        });
-      }
     },
 
     beforeCreate() {

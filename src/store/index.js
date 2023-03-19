@@ -54,6 +54,7 @@ export default new Vuex.Store({
         taskNotifyCount: 0,
         // 南生运营域名
         manageDomain: 'http://manage-test.nanshengbbs.top',
+        commentRefreshPostStatisticalData: false,
         // 国际化方法
         translate: function (val) {
             // 国际化方法
@@ -72,7 +73,7 @@ export default new Vuex.Store({
                 re = arr[l - 1];
             }
             return re || arr[l - 1];
-        }
+        },
     },
     getters: {
         formCol(state) {
@@ -107,6 +108,9 @@ export default new Vuex.Store({
             utils.updateTheme(color);
             window.localStorage.themeColor = color;
             state.themeColor = color;
+        },
+        changeCommentRefreshPostStatisticalData(state,commentRefreshPostStatisticalData) {  //  重复赋值
+            state.commentRefreshPostStatisticalData = commentRefreshPostStatisticalData;
         },
         clear(state){
             state = {
@@ -154,6 +158,7 @@ export default new Vuex.Store({
                 taskNotifyCount: 0,
                 // 南生运营域名
                 manageDomain: 'http://manage-test.nanshengbbs.top',
+                commentRefreshPostStatisticalData: false,
                 // 国际化方法
                 translate: function (val) {
                     // 国际化方法

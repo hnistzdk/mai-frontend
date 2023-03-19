@@ -60,7 +60,7 @@ export default {
     like: "Like",
     postRead: "Post is read",
     read: "Read",
-    nanshengValue: "Nan`s Value",
+    nanshengValue: "exp",
     follow: "Follow",
     followed: "Followed",
     followMe: "My Fans",

@@ -10,13 +10,14 @@
                 @click="routerUserCenter(data.createBy)"/>
       <p class="comment-content" slot="content">
         <span v-html="data.content" style="width: 100%">{{ data.content }}</span>
-        <span class="del" v-if="data.createBy === $store.state.userId"
-              @click="deleteComment(data.commentId)">{{ $t("common.delete") }}</span>
+<!--        <span class="del" v-if="data.createBy === $store.state.userId"-->
+<!--              @click="deleteComment(data.commentId)">{{ $t("common.delete") }}</span>-->
       </p>
       <span slot="content">
         <a class="operate comment-like">
           <i class="iconfont icon-like" @click="likeCommentAction(data.commentId,data.like)"
              :style="data.like ? 'color:' + $store.state.themeColor : 'color: #8a919f;'">
+            <small> {{ $t("common.like") }}</small>
             <small> {{ data.likeCount === 0 ? '' : data.likeCount }}</small>
           </i>
         </a>
@@ -28,7 +29,7 @@
           </i>
         </a>
         <!-- 自己的评论 or 自己的文章  都可以删除对应评论信息 -->
-        <b v-if="data.createBy === $store.state.userId || postUserId === $store.state.userId">
+        <b v-if="data.createBy === $store.state.userId || postInfo.authorId === $store.state.userId">
           <a-dropdown :placement="'bottomCenter'" :trigger="['click']">
             <a-menu slot="overlay">
               <a-menu-item key="delete" @click="deleteComment(data.commentId)">
@@ -64,6 +65,7 @@ import CreateComment from "@/components/comment/CreateComment";
 import ChildCommentList from "@/components/comment/ChildCommentList";
 import store from "@/store";
 import commentService from "@/service/commentService";
+
 
 export default {
   name: 'ChildComment',
@@ -121,7 +123,6 @@ export default {
 
     //  删除评论
     deleteComment(commentId) {
-      console.log('当前评论信息',this.commentInfo)
       this.$confirm({
         centered: true,
         title: this.$t("common.deleteCommentTitle"),
@@ -130,6 +131,11 @@ export default {
           commentService.deleteComment(commentId)
               .then(() => {
                 this.$emit("getCommentByPostId");
+
+                //以下通过vuex更新贴子统计数据
+                let commentRefreshPostStatisticalData = this.$store.state.commentRefreshPostStatisticalData;
+                this.$store.commit("changeCommentRefreshPostStatisticalData", !commentRefreshPostStatisticalData);
+
               })
               .catch((err) => {
                 this.$message.error(err.msg);

@@ -62,7 +62,7 @@ export default {
     like: "点赞",
     postRead: "贴子被阅读",
     read: "阅读",
-    nanshengValue: "南生值",
+    nanshengValue: "经验值",
     follow: "关注",
     followed: "我关注的",
     followMe: "关注我的",

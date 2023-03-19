@@ -110,7 +110,6 @@
               this.$emit("initPostInfo",res.data);
               this.data = res.data;
               this.images = res.data.images.split(",");
-              console.log('images',this.images)
               this.finish = true;
               /*// 提取标签id
               let labelIds = [];

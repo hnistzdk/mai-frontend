@@ -47,7 +47,7 @@ export default {
   },
 
   methods: {
-    // 获取文章一些统计数据
+    // 获取贴子一些统计数据
     getStatisticalData() {
       postService.getStatisticalData({postId: this.$route.params.id})
           .then((res) => {
@@ -55,6 +55,7 @@ export default {
             this.$emit("postCommentCountFn", res.data.commentCount);
           })
           .catch(err => {
+            console.log('err',err)
             this.$message.error(err.msg);
           });
     },
@@ -78,7 +79,23 @@ export default {
 
   mounted() {
     this.getStatisticalData();
+  },
+
+  computed :{
+    //用于删除评论后更新贴子统计数据的计算属性
+    commentRefreshPostStatisticalData(){
+      return this.$store.state.commentRefreshPostStatisticalData;
+    }
+  },
+
+  watch:{
+    //用于删除评论后更新贴子统计数据的计算属性的监听
+    commentRefreshPostStatisticalData(){
+      this.getStatisticalData();
+    }
   }
+
+
 };
 </script>
 

@@ -29,7 +29,7 @@
         searchContent: '',
         hasNext: false,
         finish: false,
-        params: {currentPage: 1, pageSize: 25},
+        params: {currentPage: 1, pageSize: global.labelDefaultPageSize},
       };
     },
 
@@ -64,7 +64,7 @@
       // 刷新列表
       refresh(labelName) {
         this.searchContent = labelName;
-        this.params = {currentPage: 1, pageSize: 25};
+        this.params = {currentPage: 1, pageSize: global.labelDefaultPageSize};
         if (labelName) {
           this.params.labelName = labelName;
         }

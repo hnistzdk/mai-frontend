@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       data: [],
-      params: {currentPage: 1, pageSize: 4},
+      params: {currentPage: 1, pageSize: global.relatedDefaultPageSize},
       finish: false,
     };
   },

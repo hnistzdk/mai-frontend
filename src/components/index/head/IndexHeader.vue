@@ -205,7 +205,7 @@ export default {
   data() {
     return {
       visible: false,
-      params: {currentPage: 1, pageSize: 10},
+      params: {currentPage: 1, pageSize: global.defaultPageSize},
       // 如果不用watch监听searchContent值的变化,只会在该组件被创建时赋值一次
       searchContentTemp: this.searchContent,
       current: ['frontPage'],

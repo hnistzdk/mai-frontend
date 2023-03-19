@@ -172,7 +172,7 @@ export default {
       reviewRejectedTotal: 0,
       hasNext: true,
       finish: false,
-      params: {currentPage: 1, pageSize: 12, type:2},
+      params: {currentPage: 1, pageSize: global.defaultPageSize, type:2},
       searchContent: '',
     };
   },
@@ -268,7 +268,7 @@ export default {
 
     // 刷新列表
     refresh() {
-      this.params = {currentPage: 1, pageSize: 10, type: 2};
+      this.params = {currentPage: 1, pageSize: global.defaultPageSize, type: 2};
       this.getPostList(this.params);
     },
 

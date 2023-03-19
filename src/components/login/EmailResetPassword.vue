@@ -107,9 +107,9 @@
 
       // 判断邮箱是否已经绑定
       isEmailExist(email) {
-        return userService.isEmailExist(email)
+        return userService.emailExist(email)
             .then((res) => {
-              if (res.data) {
+              if (res.code != 1) {
                 // 发送验证码
                 this.sendEmailVerifyCode(email);
               } else {
@@ -117,7 +117,7 @@
               }
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -128,7 +128,7 @@
               this.$message.success(this.$t("common.verifyCodeSendSuccessed"));
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -142,16 +142,12 @@
           if (valid) {
             userService.emailResetPassword({email:this.ruleForm.email, code: this.ruleForm.code, newPassword: this.ruleForm.newPassword})
                 .then(res => {
-                  if (res.data) {
-                    // 密码重置成功，请重新登录
-                    this.$message.success(this.$t("common.pleaseLoginAgain"));
-                    this.login();
-                  } else {
-                    this.$message.warning(err.desc);
-                  }
+                  // 密码重置成功，请重新登录
+                  this.$message.success(this.$t("common.pleaseLoginAgain"));
+                  this.login();
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           } else {
             return false;

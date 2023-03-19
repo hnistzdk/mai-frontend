@@ -56,7 +56,7 @@ export default {
       postFile: null,
       // 标签
       listData: [],
-      params: {currentPage: 1, pageSize: 10},
+      params: {currentPage: 1, pageSize: global.defaultPageSize},
       form: this.$form.createForm(this, {name: 'coordinated'}),
       // 表单验证
       validatorRules: {
@@ -155,7 +155,7 @@ export default {
   },
 
   mounted() {
-    this.params.pageSize = 100;
+    this.params.pageSize = global.defaultPageSize;
     // this.getLabelList(this.params);
     // v-mode和v-decorator冲突问题解决方案
     this.form.setFieldsValue({

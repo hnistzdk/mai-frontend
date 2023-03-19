@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       data: [],
-      params: {currentPage: 1, pageSize: 3},
+      params: {currentPage: 1, pageSize: global.defaultPageSize},
       finish: false,
     };
   },

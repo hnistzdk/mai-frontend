@@ -53,7 +53,7 @@ export default {
       fanData: [],
       hasNext: true,
       finish: false,
-      params: {currentPage: 1, pageSize: 10},
+      params: {currentPage: 1, pageSize: global.defaultPageSize},
       // 获取我关注的
       getBigCow: Number(this.userId),
       // 关注我的
@@ -108,7 +108,7 @@ export default {
 
     // 刷新列表
     refresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      this.params = {currentPage: 1, pageSize: global.defaultPageSize};
       this.getFollowUsers(this.params);
       this.$emit("getFollowCount");
     },

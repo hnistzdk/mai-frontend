@@ -135,7 +135,7 @@ import postService from "@/service/postService";
   export default {
     props: {
       data: {},
-      pageSize: {type: Number, default: 0},
+      pageSize: {type: Number, default: global.defaultPageSize},
       current: {type: Number, default: 1},
       finish: {type: Boolean, default: false},
       hasNext: {type: Boolean, default: false},

@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       data: [],
-      params: {currentPage: 1, pageSize: 6},
+      params: {currentPage: 1, pageSize: global.hotListDefaultPageSize},
     };
   },
 

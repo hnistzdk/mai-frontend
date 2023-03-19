@@ -18,8 +18,10 @@ import utils from "./utils/utils"
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import axios from "axios";
+import constants from './constants/constants'
 
-Vue.config.productionTip = false;
+// true为开启开发模式
+Vue.config.productionTip = true;
 
 // 引入自定义工具模块
 Vue.prototype.$utils = utils
@@ -29,8 +31,8 @@ Vue.prototype.$t = store.state.translate.bind(store.state)
 axios.defaults.baseURL = "http://localhost:9527";
 Vue.use(Antd);
 Vue.use(mavonEditor)
+Vue.use(constants)
 
-Vue
 
 export default new Vue({
     router,

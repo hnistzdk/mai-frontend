@@ -103,22 +103,12 @@ export default {
         });
     },
 
-    // 邮箱判重
-    isValidEmail(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/isValidEmail", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-
-
 
 
     // 判断email是否已经绑定
-    isEmailExist(data) {
+    emailExist(data) {
         return new Promise((resolve, reject) => {
-            axios.post("/user/isEmailExist/" + data)
+            axios.post("/user/emailExist/" + data)
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

@@ -47,7 +47,7 @@ export default {
       listData: [],
       hasNext: true,
       finish: false,
-      params: {currentPage: 1, pageSize: 10},
+      params: {currentPage: 1, pageSize: global.labelDefaultPageSize},
       labelData: {},
     };
   },
@@ -85,7 +85,7 @@ export default {
 
     // 获取标签
     getLabelList() {
-      labelService.getLabelList({id: this.labelId, currentPage: 1, pageSize: 10})
+      labelService.getLabelList({id: this.labelId, currentPage: 1, pageSize: global.labelDefaultPageSize})
           .then(res => {
             this.labelData = res.data.list[0];
           })
@@ -96,7 +96,7 @@ export default {
 
     // 刷新列表
     refresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      this.params = {currentPage: 1, pageSize: global.labelDefaultPageSize};
       // this.getPostList(this.params);
     },
   },

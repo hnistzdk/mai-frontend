@@ -35,7 +35,7 @@ export default {
       listData: [],
       hasNext: false,
       finish: false,
-      params: {currentPage: 1, pageSize: 10},
+      params: {currentPage: 1, pageSize: global.defaultPageSize},
     };
   },
 
@@ -71,7 +71,7 @@ export default {
 
     // 刷新列表
     refresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      this.params = {currentPage: 1, pageSize: global.defaultPageSize};
       this.getHotAuthorsList(this.params);
     },
   },

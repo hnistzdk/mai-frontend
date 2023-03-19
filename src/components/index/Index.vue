@@ -170,7 +170,7 @@
         reviewRejectedTotal: 0,
         hasNext: true,
         finish: false,
-        params: {currentPage: 1, pageSize: 12, type:1},
+        params: {currentPage: 1, pageSize: global.defaultPageSize, type:1},
         searchContent: '',
       };
     },
@@ -266,7 +266,7 @@
 
       // 刷新列表
       refresh() {
-        this.params = {currentPage: 1, pageSize: 10,type: 1};
+        this.params = {currentPage: 1, pageSize: global.defaultPageSize,type: 1};
         this.getPostList(this.params);
       },
 

@@ -135,7 +135,7 @@ export default {
       finish: false,
       // 加载中...
       dynamicSpinning: true,
-      params: {currentPage: 1, pageSize: 10,userId:this.userId},
+      params: {currentPage: 1, pageSize: global.defaultPageSize,userId:this.userId},
     };
   },
 
@@ -171,7 +171,7 @@ export default {
       this.finish = false;
       let tempParams = {};
       tempParams.currentPage = params.currentPage
-      tempParams.pageSize = 15;
+      tempParams.pageSize = global.defaultPageSize;
       tempParams.userId = this.userId;
       dynamicService.getDynamicList(tempParams)
           .then(res => {
@@ -290,17 +290,17 @@ export default {
 
     // 刷新列表
     postRefresh() {
-      // this.params = {currentPage: 1, pageSize: 10};
+      // this.params = {currentPage: 1, pageSize: global.defaultPageSize};
       this.getPersonalPosts(this.params);
       this.getLikesPost(this.params);
     },
     gossipRefresh() {
-      // this.params = {currentPage: 1, pageSize: 10};
+      // this.params = {currentPage: 1, pageSize: global.defaultPageSize};
       this.getPersonalGossips(this.params);
       this.getLikesPost(this.params);
     },
     likeRefresh() {
-      // this.params = {currentPage: 1, pageSize: 10};
+      // this.params = {currentPage: 1, pageSize: global.defaultPageSize};
       this.getLikesPost(this.params);
     },
 
@@ -404,9 +404,9 @@ export default {
 
   mounted() {
     this.getDynamicList(this.params);
-    this.getPersonalPosts({currentPage: 1, pageSize: 10,type: 1,userId:this.userId});
-    this.getPersonalGossips({currentPage: 1, pageSize: 10,type: 2,userId:this.userId});
-    this.getLikesPost({currentPage: 1, pageSize: 10});
+    this.getPersonalPosts({currentPage: 1, pageSize: global.defaultPageSize,type: 1,userId:this.userId});
+    this.getPersonalGossips({currentPage: 1, pageSize: global.defaultPageSize,type: 2,userId:this.userId});
+    this.getLikesPost({currentPage: 1, pageSize: global.defaultPageSize});
     this.getFollowCount();
     // 监听滚动，做滚动加载
     this.$utils.scroll.call(this, document.querySelector('#app'));

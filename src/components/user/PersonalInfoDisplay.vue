@@ -36,7 +36,7 @@
         <div class="link">
           <a-tooltip placement="left">
             <template slot="title">
-              GitHub（开发中...）
+              GitHub
             </template>
             <i class="iconfont icon-GitHub" style="color: #00000038;"></i>
           </a-tooltip>
@@ -48,7 +48,7 @@
           </a-tooltip>
         </div>
         <div class="follow-box">
-          <div class="personalEdit" v-if="$store.state.userId === data.id">
+          <div class="personalEdit" v-if="$store.state.userId === data.userId">
             <a-button class="follow-btn"
                       v-if="!data.isFollow"
                       @click="routerSetUp"
@@ -59,13 +59,13 @@
           <div class="follow" v-else>
             <a-button class="follow-btn"
                       v-if="!data.isFollow"
-                      @click="updateFollowState(data.id)"
+                      @click="updateFollowState()"
                       :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
               {{ $t("common.follow") }}
             </a-button>
             <a-button class="follow-btn-close"
                       v-if="data.isFollow"
-                      @click="updateFollowState(data.id)">
+                      @click="updateFollowState()">
               {{ $t("common.haveFollowed") }}
             </a-button>
           </div>
@@ -81,37 +81,37 @@
       <div>
         <a-tooltip placement="top" v-if="data.points >= 0">
           <template slot="title">
-            新手
+            初入职场
           </template>
           <img src="@/assets/img/level/badge-Lv1.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 100">
           <template slot="title">
-            麒麟儿
+            兢兢业业
           </template>
           <img src="@/assets/img/level/badge-Lv2.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 300">
           <template slot="title">
-            三好学生
+            反骨仔
           </template>
           <img src="@/assets/img/level/badge-Lv3.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 600">
           <template slot="title">
-            技术贡献者
+            职场老鸟
           </template>
           <img src="@/assets/img/level/badge-Lv4.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 1000">
           <template slot="title">
-            优秀作者
+            老白兔
           </template>
           <img src="@/assets/img/level/badge-Lv5.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 1500">
           <template slot="title">
-            共建者
+            被裁者
           </template>
           <img src="@/assets/img/level/badge-Lv6.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
         </a-tooltip>
@@ -122,6 +122,7 @@
 
 <script>
   import userService from "@/service/userService";
+  import store from "@/store";
 
   export default {
     name: "",
@@ -132,13 +133,18 @@
 
     methods: {
       // 更新关注状态
-      updateFollowState(toUser) {
-        userService.updateFollowState({toUser: toUser})
+      updateFollowState() {
+        if (!this.$store.state.isLogin){
+          this.$message.error("请先登录");
+          store.state.loginVisible = true;
+          return;
+        }
+        userService.updateFollowState({toUser: this.data.userId,toUsername: this.data.username})
             .then(() => {
               this.$emit("refresh");
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 

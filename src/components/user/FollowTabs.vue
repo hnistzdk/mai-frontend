@@ -6,7 +6,7 @@
           {{ $t("common.follow") + ' ' + followedTotal }}
         </span>
         <FollowAuthorsListContent
-            :getBigCow="getBigCow"
+            :getFollow="getFollow"
             :finish="finish"
             :hasNext="hasNext"
             :data="followData"
@@ -18,7 +18,7 @@
         {{ $t("common.fan") + ' ' + fanTotal }}
       </span>
         <FollowAuthorsListContent
-            :getBigCow="getBigCow"
+            :getFollow="getFollow"
             :finish="finish"
             :hasNext="hasNext"
             :data="fanData"
@@ -53,9 +53,9 @@ export default {
       fanData: [],
       hasNext: true,
       finish: false,
-      params: {currentPage: 1, pageSize: global.defaultPageSize},
+      params: {currentPage: 1, pageSize: global.defaultPageSize,userId:this.userId},
       // 获取我关注的
-      getBigCow: Number(this.userId),
+      getFollow: Number(this.userId),
       // 关注我的
       getFan: Number,
     };
@@ -74,24 +74,26 @@ export default {
         this.params.currentPage = 1;
       }
       this.finish = false;
-      if (this.getBigCow) {
-        params.getBigCow = this.getBigCow
+      if (this.getFollow) {
+        params.getFollow = this.getFollow
         this.$delete(params, 'getFan');
+        params.type = 1;
       } else {
         params.getFan = this.getFan
-        this.$delete(params, 'getBigCow');
+        this.$delete(params, 'getFollow');
+        params.type = 2;
       }
       userService.getFollowUsers(params)
           .then(res => {
             if (isLoadMore) {
-              if (this.getBigCow) {
+              if (this.getFollow) {
                 this.followData = this.followData.concat(res.data.list);
               } else {
                 this.fanData = this.fanData.concat(res.data.list);
               }
               this.hasNext = res.data.list.length !== 0;
             } else {
-              if (this.getBigCow) {
+              if (this.getFollow) {
                 this.followData = res.data.list;
               } else {
                 this.fanData = res.data.list;
@@ -108,7 +110,7 @@ export default {
 
     // 刷新列表
     refresh() {
-      this.params = {currentPage: 1, pageSize: global.defaultPageSize};
+      this.params = {currentPage: 1, pageSize: global.defaultPageSize,type:1};
       this.getFollowUsers(this.params);
       this.$emit("getFollowCount");
     },
@@ -116,14 +118,14 @@ export default {
     // tab切换回调
     changeTab(activeKey) {
       if (activeKey === 'followed') {
-        this.getBigCow = this.userId;
+        this.getFollow = this.userId;
         this.getFan = 0;
         this.getFollowUsers(this.params);
         this.$emit("getFollowCount");
       }
       if (activeKey === 'fan') {
         this.getFan = this.userId;
-        this.getBigCow = 0;
+        this.getFollow = 0;
         this.getFollowUsers(this.params);
         this.$emit("getFollowCount");
       }

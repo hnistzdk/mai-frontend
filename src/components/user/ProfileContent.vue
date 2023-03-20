@@ -32,7 +32,7 @@
                         @change="commonChange"
                         :maxLength="150"
                         :placeholder="$t('common.fillInYour7788')"
-                        :auto-size="{ minRows: 5, maxRows: 8 }"
+                        :auto-size="{ minRows: 4, maxRows: 8 }"
                         class="selfIntroduction"/>
           </a-form-model-item>
 

@@ -4,29 +4,29 @@
     <div class="user-list" v-for="(item, index) in data" v-else>
       <div class="item">
         <div class="link">
-          <img :src="item.picture ? item.picture : require('@/assets/img/default_avatar.png')" alt=""
-               class="avatar" @click="routerUserCenter(getBigCow ? item.toUser : item.fromUser)">
+          <img :src="item.userInfo.avatar ? item.userInfo.avatar : require('@/assets/img/default_avatar.png')" alt=""
+               class="avatar" @click="routerUserCenter(getFollow ? item.toUser : item.fromUser)">
           <div class="info-box" style="flex: 1 1 auto; min-width: 0;">
             <a target="_blank" rel="" class="username"
-               @click="routerUserCenter(getBigCow ? item.toUser : item.fromUser)">
-              <span class="name" style="padding-right: 2px;" v-text="item.name"></span>
-              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt=""/>
+               @click="routerUserCenter(getFollow ? item.toUser : item.fromUser)">
+              <span class="name" style="padding-right: 2px;" v-text="item.userInfo.username"></span>
+              <img :src="require('@/assets/img/level/' + item.userInfo.level + '.svg')" alt=""/>
             </a>
-            <div class="detail" v-text="item.intro"></div>
+            <div class="detail" v-text="item.userInfo.selfIntroduction"></div>
             <div class="describe">
               <span>{{ $t("common.get") }}</span>
-              <span> {{ item.likeCount + ' ' + $t("common.praise") }}</span>
+              <span> {{ item.userInfo.likeCount + ' ' + $t("common.praise") }}</span>
               <span>·</span>
-              <span> {{ item.readCount + ' ' + $t("common.read") }}</span>
+              <span> {{ item.userInfo.readCount + ' ' + $t("common.read") }}</span>
             </div>
           </div>
-          <a-button class="follow-btn" v-if="!item.isFollow"
-                    @click="updateFollowState(getBigCow ? item.toUser : item.fromUser, index)"
+          <a-button class="follow-btn" v-if="!item.userInfo.isFollow && $store.state.userId !== item.fromUser"
+                    @click="updateFollowState(getFollow ? item.toUser : item.fromUser, index)"
                     :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
             {{ $t("common.follow") }}
           </a-button>
-          <a-button class="follow-btn-close" v-if="item.isFollow"
-                    @click="updateFollowState(getBigCow ? item.toUser : item.fromUser, index)">
+          <a-button class="follow-btn-close" v-if="item.userInfo.isFollow && $store.state.userId !== item.toUser"
+                    @click="updateFollowState(getFollow ? item.toUser : item.fromUser, index)">
             {{ $t("common.haveFollowed") }}
           </a-button>
         </div>
@@ -38,24 +38,30 @@
 
 <script>
   import userService from "@/service/userService";
+  import store from "@/store";
 
   export default {
     props: {
       data: {type: Array, default: []},
       finish: {type: Boolean, default: false},
       hasNext: {type: Boolean, default: false},
-      getBigCow: {type: Number, default: 0},
+      getFollow: {type: Number, default: 0},
     },
 
     methods: {
       // 更新关注状态
       updateFollowState(toUser, index) {
-        userService.updateFollowState({toUser: toUser})
+        if (!this.$store.state.isLogin){
+          this.$message.error("请先登录");
+          store.state.loginVisible = true;
+          return;
+        }
+        userService.updateFollowState({toUser: toUser,toUsername:this.data[index].toUsername})
             .then(() => {
-              this.data[index].isFollow = !this.data[index].isFollow;
+              this.$emit("refresh");
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 

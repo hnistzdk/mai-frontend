@@ -86,6 +86,7 @@
   import postService from "@/service/postService";
   import userService from "@/service/userService";
   import CustomEmpty from "@/components/utils/CustomEmpty";
+  import store from "@/store";
 
 
   export default {
@@ -225,6 +226,11 @@
 
       // 更新关注状态
       updateFollowState(toUser) {
+        if (!this.$store.state.isLogin){
+          this.$message.error("请先登录");
+          store.state.loginVisible = true;
+          return;
+        }
         userService.updateFollowState({toUser: toUser})
             .then(() => {
               this.getPostById();

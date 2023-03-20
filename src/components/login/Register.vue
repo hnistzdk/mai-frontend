@@ -139,6 +139,7 @@ export default {
                 window.localStorage.setItem("expireTimeStamp",expireTimeStamp);
                 this.handleOk();
                 this.setUserInfo(res.data.userId,res.data.username)
+                this.login();
                 //将state存入localStorage供刷新页面后恢复状态
                 window.localStorage.setItem("state",JSON.stringify(store.state));
                 // 刷新当前页面
@@ -156,7 +157,7 @@ export default {
     // 直接登录
     login() {
       this.$store.state.registerVisible = false;
-      this.$store.state.loginVisible = true;
+      this.$store.state.isLogin = true;
     },
 
     // 用户判重

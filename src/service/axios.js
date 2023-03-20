@@ -35,7 +35,7 @@ export default (() => {
             config.headers.userId = userId;
         }
         if (username){
-            config.headers.username = username;
+            config.headers.username = encodeURIComponent(username);
         }
         return config
     }, error => {
@@ -92,7 +92,7 @@ export default (() => {
                 return Promise.reject(response);
             }
         }, error => {
-            console.log('error',error.response)
+            console.log('error',error)
             let resp = error.response;
             if (resp.status === 401){
                 //清除localstorage

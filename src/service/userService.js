@@ -2,7 +2,16 @@ import axios from "axios";
 
 export default {
 
-    // 获取作者信息
+    // 用户判重
+    verifyUsername(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/verify", {params})
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+    // 获取用户信息
     getUserInfo(params) {
         return new Promise((resolve, reject) => {
             axios.get("/user/profile/"+params.userId, )
@@ -19,49 +28,6 @@ export default {
         });
     },
 
-
-
-
-    // 获取当前用户权限
-    getCurrentUserAccess() {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/getCurrentUserRights")
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 获取热门作者列表
-    getHotAuthorsList(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/getHotAuthorsList", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 获取关注的用户信息
-    getFollowUsers(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/getFollowUsers", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 获取关注/粉丝数量
-    getFollowCount(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/getFollowCount", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-    // 更新关注状态
-    updateFollowState(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/updateFollowState", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
     // 上传用户头像（更新）
     uploadUserAvatar(data) {
         return new Promise((resolve, reject) => {
@@ -69,6 +35,35 @@ export default {
                 .catch((err) => reject(err));
         });
     },
+
+    // 更新关注状态
+    updateFollowState(params) {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/follow",params)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+
+    // 获取关注者和粉丝信息
+    getFollowUsers(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/follow/list", {params})
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+    // 获取关注/粉丝数量
+    getFollowCount(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/follow/followCount", {params})
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+
     //过期校验
     validateExpire(){
         return new Promise((resolve, reject) => {
@@ -76,6 +71,16 @@ export default {
                 .catch((err) => reject(err));
         });
     },
+
+    // 重置密码
+    resetPassword(data) {
+        return new Promise((resolve, reject) => {
+            axios.post("/user/resetPassword", data)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
 
     // 发送邮件验证码
     sendEmailVerifyCode(params) {
@@ -94,6 +99,7 @@ export default {
                 .catch((err) => reject(err));
         });
     },
+
     // 解绑邮箱
     unbindEmail(params) {
         return new Promise((resolve, reject) => {
@@ -102,8 +108,6 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-
-
 
     // 判断email是否已经绑定
     emailExist(data) {
@@ -114,8 +118,6 @@ export default {
         });
     },
 
-
-
     // 邮箱重置密码
     emailResetPassword(data) {
         return new Promise((resolve, reject) => {
@@ -124,6 +126,9 @@ export default {
                 .catch((err) => reject(err));
         });
     },
+
+
+
 
 
     // 发送短信验证码
@@ -152,15 +157,6 @@ export default {
         });
     },
 
-    // 重置密码
-    resetPassword(data) {
-        return new Promise((resolve, reject) => {
-            axios.post("/user/resetPassword", data)
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
-
     // 手机判重
     isValidPhone(params) {
         return new Promise((resolve, reject) => {
@@ -169,14 +165,7 @@ export default {
                 .catch((err) => reject(err));
         });
     },
-    // 用户判重
-    verifyUsername(params) {
-        return new Promise((resolve, reject) => {
-            axios.get("/user/verify", {params})
-                .then((res) => resolve(res))
-                .catch((err) => reject(err));
-        });
-    },
+
     // 判断手机是否已经绑定
     isPhoneExist(data) {
         return new Promise((resolve, reject) => {
@@ -189,6 +178,23 @@ export default {
     phoneResetPassword(data) {
         return new Promise((resolve, reject) => {
             axios.post("/user/phoneResetPassword", data)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
+    // 获取当前用户权限
+    getCurrentUserAccess() {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/getCurrentUserRights")
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+    // 获取热门作者列表
+    getHotAuthorsList(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/user/getHotAuthorsList", {params})
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

@@ -55,6 +55,13 @@
         comments: [],
         // 排序规则（默认最热）
         sortRule: 'hottest',
+        // hasNext和finish名称不能改(和滚动加载相关)
+        hasNext: true,
+        finish: false,
+        currentPage: 1,
+        pageSize: global.defaultPageSize,
+        userId:this.userId,
+        totalCount:0
       };
     },
 
@@ -64,13 +71,30 @@
         this.refresh();
       },
 
+      loadMore(){
+        this.currentPage++;
+        this.getCommentByPostId(true);
+      },
+
       // 获取贴子的评论信息
-      getCommentByPostId() {
-        commentService.getCommentByPostId({postId: this.$route.params.id, sortRule: this.sortRule})
+      getCommentByPostId(isLoadMore) {
+        if (!isLoadMore) {
+          this.currentPage = 1;
+        }
+        this.finish = false;
+        commentService.getCommentByPostId({postId: this.$route.params.id, sortRule: this.sortRule,currentPage:this.currentPage,pageSize:this.pageSize})
             .then((res) => {
-              this.comments = res.data;
+              if (isLoadMore){
+                this.comments = this.comments.concat(res.data.list);
+                this.hasNext = res.data.list.length !== 0;
+              }else {
+                this.comments = res.data.list;
+              }
+              this.totalCount = res.data.totalCount;
+              this.finish = true;
             })
             .catch(err => {
+              this.finish = true;
               this.$message.error(err.msg);
             });
       },
@@ -81,11 +105,26 @@
         // 获取文章一些统计数据(刷新)
         this.$emit("refresh");
       },
+      //处理下拉刷新
+      handleScroll(){
+        let app = document.querySelector("#app");
+        let currentScrollTop = app.scrollTop;
+        let currentOffsetHeight = app.scrollHeight;
+        let currentClientHeight = app.clientHeight;
+        if ((currentScrollTop + currentClientHeight >= currentOffsetHeight) && (this.comments.length < this.totalCount)) {
+          this.loadMore();
+        }
+      }
     },
 
     mounted() {
       this.getCommentByPostId();
+      document.querySelector("#app").addEventListener("scroll", this.handleScroll,true);
     },
+
+    destroyed() {
+      window.removeEventListener('scroll',this.handleScroll,true);
+    }
 
   }
 </script>

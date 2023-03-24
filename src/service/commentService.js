@@ -36,7 +36,7 @@ export default {
   // 删除评论
   deleteComment(data) {
     return new Promise((resolve, reject) => {
-      axios.post("/comment/delete/" + data)
+      axios.post("/comment/delete/" + data.commentId + '/' + data.postId)
           .then((res) => resolve(res))
           .catch((err) => reject(err));
     });

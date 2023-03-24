@@ -122,7 +122,7 @@ export default {
         title: this.$t("common.deleteCommentTitle"),
         content: this.$t("common.deletePrompt"),
         onOk: () => {
-          commentService.deleteComment(commentId)
+          commentService.deleteComment({commentId:commentId,postId:this.postInfo.postId})
               .then(() => {
                 this.$emit("getCommentByPostId");
 

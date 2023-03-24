@@ -4,6 +4,7 @@
       <a class="username" slot="author" @click="routerUserCenter(data.createBy)">
         {{ data.createUsername }}
 <!--        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>-->
+<!--        <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>-->
         <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>
       </a>
       <a-avatar slot="avatar" :src="data.avatar ? data.avatar : require('@/assets/img/default_avatar.png')"
@@ -128,7 +129,7 @@ export default {
         title: this.$t("common.deleteCommentTitle"),
         content: this.$t("common.deletePrompt"),
         onOk: () => {
-          commentService.deleteComment(commentId)
+          commentService.deleteComment({commentId:commentId,postId:this.postInfo.postId})
               .then(() => {
                 this.$emit("getCommentByPostId");
 

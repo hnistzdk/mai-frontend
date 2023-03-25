@@ -52,7 +52,8 @@
       <a-tab-pane key="follow">
         <span slot="tab">
           <i class="iconfont icon-follow"></i>
-          {{ $t("common.follow") + ' ' + Number(followedTotal + fanTotal) }}
+          <!--          {{ $t("common.follow") + ' ' + Number(followedTotal + fanTotal) }}-->
+          {{ $t("common.follow") + ' ' + Number(followedTotal) }}
         </span>
         <FollowTabs
             v-if="isFollowTab"
@@ -121,7 +122,7 @@ export default {
       // 职言
       gossipData: [],
       // 发表职言总数
-      gossipCount:0,
+      gossipCount: 0,
       // 我点赞的贴子
       likeData: [],
       // 点赞贴子总数
@@ -135,7 +136,7 @@ export default {
       finish: false,
       // 加载中...
       dynamicSpinning: true,
-      params: {currentPage: 1, pageSize: global.defaultPageSize,userId:this.userId},
+      params: {currentPage: 1, pageSize: global.defaultPageSize, userId: this.userId},
     };
   },
 
@@ -175,6 +176,7 @@ export default {
       tempParams.userId = this.userId;
       dynamicService.getDynamicList(tempParams)
           .then(res => {
+            console.log('data', res.data.list)
             if (isLoadMore) {
               this.dynamicData = this.dynamicData.concat(res.data.list);
               this.hasNext = res.data.list.length !== 0;
@@ -404,8 +406,8 @@ export default {
 
   mounted() {
     this.getDynamicList(this.params);
-    this.getPersonalPosts({currentPage: 1, pageSize: global.defaultPageSize,type: 1,userId:this.userId});
-    this.getPersonalGossips({currentPage: 1, pageSize: global.defaultPageSize,type: 2,userId:this.userId});
+    this.getPersonalPosts({currentPage: 1, pageSize: global.defaultPageSize, type: 1, userId: this.userId});
+    this.getPersonalGossips({currentPage: 1, pageSize: global.defaultPageSize, type: 2, userId: this.userId});
     this.getLikesPost({currentPage: 1, pageSize: global.defaultPageSize});
     this.getFollowCount();
     // 监听滚动，做滚动加载

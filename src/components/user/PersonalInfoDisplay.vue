@@ -50,7 +50,6 @@
         <div class="follow-box">
           <div class="personalEdit" v-if="$store.state.userId === data.userId">
             <a-button class="follow-btn"
-                      v-if="!data.isFollow"
                       @click="routerSetUp"
                       :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
               {{ $t("common.personalEdit") }}

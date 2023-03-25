@@ -5,28 +5,32 @@
     <div v-for="(item, index) in data" :key="index">
       <div class="author-info" :style="index === 0 ? 'padding: 0 20px 8px 20px;' : 'padding: 8px 20px;'">
         <div class="dynamic-notTime">
-          <a-avatar class="userHead" slot="avatar" :src="item.picture ? item.picture : require('@/assets/img/default_avatar.png')" :size="56"/>
-          <span target="_blank" rel="" class="username" style="padding-left: 10px; color: #000">{{ item.userName }}</span>
+          <a-avatar class="userHead" slot="avatar"
+                    :src="item.avatar ? item.avatar : require('@/assets/img/default_avatar.png')" :size="56"/>
+          <span target="_blank" rel="" class="username" style="padding-left: 10px; color: #000">{{
+              item.username
+            }}</span>
 
           <div class="template">
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 'writePost'">{{ $t("common.dynamicWritten") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 'likePost'">{{ $t("common.dynamicLiked") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 'likeComment'">{{ $t("common.dynamicLiked") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 'commentPost'">{{ $t("common.dynamicCommented") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 'commentReply'">{{ $t("common.dynamicReply") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 'followUser'">{{ $t("common.dynamicFollowed") }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 1">{{$t("common.dynamicWritten") }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 2">{{$t("common.dynamicCommented") }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 3">{{ $t("common.dynamicLiked") }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 4">{{ $t("common.dynamicLiked") }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 5">{{ $t("common.dynamicReply") }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 6">{{$t("common.dynamicFollowed") }}</span>
           </div>
 
           <div class="title">
-            <a @click="routerPostDetail(item.objectId)" v-if="item.type === 'writePost'">{{ item.title }}</a>
-            <a @click="routerPostDetail(item.objectId)" v-if="item.type === 'likePost'">{{ item.title }}</a>
-            <a @click="routerPostDetail(item.objectId, item.commentId)" v-if="item.type === 'likeComment'">{{ item.title }}</a>
-            <a @click="routerPostDetail(item.objectId, item.commentId)" v-if="item.type === 'commentPost'">{{ item.title }}</a>
-            <a @click="routerPostDetail(item.objectId, item.commentId)" v-if="item.type === 'commentReply'">{{ item.title }}</a>
-            <a @click="routerUserCenter(item.objectId)" v-if="item.type === 'followUser'">{{ item.title }}</a>
+            <a @click="routerPostDetail(item.objectId)" v-if="item.type === 1">{{ item.title }}</a>
+            <a @click="routerPostDetail(item.objectId, item.commentId)" v-if="item.type === 2">{{ item.title }}</a>
+            <a @click="routerPostDetail(item.objectId)" v-if="item.type === 3">{{ item.title }}</a>
+            <a @click="routerPostDetail(item.objectId, item.commentId)" v-if="item.type === 4">{{ item.title }}</a>
+            <a @click="routerPostDetail(item.objectId, item.commentId)" v-if="item.type === 5">{{ item.title }}</a>
+            <a @click="routerUserCenter(item.objectId)" v-if="item.type === 6">{{ item.title }}</a>
           </div>
         </div>
-        <small style="color: #b5b9b9; padding-left: 10px;flex-shrink: 0" v-text="$utils.showtime(item.createTime)"></small>
+        <small style="color: #b5b9b9; padding-left: 10px;flex-shrink: 0"
+               v-text="$utils.showtime(item.createTime)"></small>
       </div>
       <div style="height: 10px; background: #f0f2f5;" v-if="index !== total - 1"></div>
     </div>
@@ -43,7 +47,7 @@ import CustomEmpty from "@/components/utils/CustomEmpty";
 export default {
   name: "Dynamic",
 
-  components: { CustomEmpty },
+  components: {CustomEmpty},
 
   props: {
     // 加载中...
@@ -52,6 +56,24 @@ export default {
     total: {type: Number, default: 0},
     finish: {type: Boolean, default: false},
     hasNext: {type: Boolean, default: false},
+  },
+  data() {
+    return {
+      dynamicType: {
+        //发帖
+        dynamicTypePost: 1,
+        //评论贴子
+        dynamicTypePostComment: 2,
+        //点赞贴子
+        dynamicTypePostLike: 3,
+        //评论点赞
+        dynamicTypeCommentLike: 4,
+        //评论回复
+        dynamicTypeCommentReply: 5,
+        //关注
+        dynamicTypeFollow: 6
+      },
+    }
   },
 
   methods: {
@@ -83,7 +105,7 @@ export default {
     line-height: 30px;
     border-radius: 3px;
     background: #ffffff;
-    box-shadow:  9px 9px 18px #ffffff,
+    box-shadow: 9px 9px 18px #ffffff,
       -9px -9px 18px #ffffff;
 
     .dynamic-notTime {

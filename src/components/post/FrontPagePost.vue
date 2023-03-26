@@ -284,12 +284,14 @@ import postService from "@/service/postService";
 
       // 删除
       postDelete(postId, index) {
+        console.log('postId',postId);
         this.$confirm({
           centered: true,
           title: this.$t("common.deletePostTitle"),
           onOk: () => {
             postService.postDelete(postId)
                 .then(() => {
+                  this.$message.success('删除成功');
                   this.tempData = this.tempData.filter(post => post.postId !== postId);
                 })
                 .catch(err => {

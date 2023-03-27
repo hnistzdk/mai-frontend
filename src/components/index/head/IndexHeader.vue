@@ -82,12 +82,26 @@
                       :placement="'bottomRight'" :trigger="['click']">
             <div class="ant-dropdown-menu" slot="overlay">
               <MessageBox :visible.sync="visible"/>
+<!--              <a-menu-item key="replyMe">-->
+<!--                <i class="">回复我的</i>-->
+<!--              </a-menu-item>-->
+<!--              <a-menu-item key="getLike">-->
+<!--                <i class="">收到的赞</i>-->
+<!--              </a-menu-item>-->
+<!--              <a-divider style="margin: 3px 0 3px 0"/>-->
+<!--              <a-menu-item key="newFans">-->
+<!--                <i class="">新增粉丝</i>-->
+<!--              </a-menu-item>-->
+<!--              <a-menu-item key="systemMessage">-->
+<!--                <i class="">系统通知</i>-->
+<!--              </a-menu-item>-->
             </div>
             <div class="options">
               <a-badge class="badge" :count="$store.state.isLogin ? messageNumbers : 0" :overflow-count="99">
                 <i
                     class="iconfont icon-bell"></i></a-badge>
             </div>
+
           </a-dropdown>
         </div>
 

@@ -6,11 +6,11 @@
           <img src="@/assets/img/message/header-message.svg" alt=""/>
         </div>
         <div class="content">
-          <a-tooltip @mouseenter="onMouseOver" :title="showTitle ? item.message : null" class="title">{{
-              item.message
+          <a-tooltip @mouseenter="onMouseOver" :title="showTitle ? item.content : null" class="title">{{
+              item.content
             }}
           </a-tooltip>
-          <div class="title-copy">{{ item.message }}</div>
+          <div class="title-copy">{{ item.content }}</div>
           <div class="time">
             {{ $moment(item.createTime).format("YYYY-MM-DD HH:mm:ss") }}
           </div>
@@ -42,8 +42,8 @@
         list: [],
         hasNext: false,
         finish: false,
-        current: 1,
-        size: 10,
+        currentPage: 1,
+        pageSize: global.defaultPageSize,
         showTitle: false
       };
     },
@@ -61,7 +61,7 @@
       //调用后台api将所有的消息状态改为已读
       makeAllRead(e) {
         e.preventDefault();
-        messageService.makeAllRead({type: 1})
+        messageService.makeAllRead({noticeType: 1})
             .then(() => {
               this.getMessageList();
             })
@@ -71,18 +71,18 @@
       },
       //加载更多（滚动加载）
       loadMore() {
-        this.current++;
+        this.currentPage++;
         this.getMessageList(true);
       },
       // 获取消息列表信息
       getMessageList(isLoadMore) {
         if (!isLoadMore) {
-          this.current = 1;
+          this.currentPage = 1;
         }
         this.finish = false;
-        messageService.getMessageList({current: this.current, size: this.size, type: 1, isRead: false})
+        messageService.getMessageList({currentPage: this.currentPage, pageSize: this.pageSize, noticeType: 1, isRead: false})
             /**
-             * @type {type} 1: 系统通知 0： 任务提醒
+             * @noticeType {noticeType} 1: 系统通知 0： 任务提醒
              */
             .then(res => {
               if (isLoadMore) {

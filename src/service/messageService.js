@@ -4,7 +4,7 @@ export default {
     // 分页获取通知信息
     getMessageList(params) {
         return new Promise((resolve, reject) => {
-            axios.get("/notify/getList", {params})
+            axios.get("/message/list", {params})
                 .then(res => resolve(res))
                 .catch(err => reject(err));
         });
@@ -12,7 +12,7 @@ export default {
     // 全部已读
     makeAllRead(params) {
         return new Promise((resolve, reject) => {
-            axios.post("/notify/haveRead", null, {params})
+            axios.post("/message/allRead",  params)
                 .then(res => resolve(res))
                 .catch(err => reject(err));
         });
@@ -20,7 +20,7 @@ export default {
     // 标记已读
     markRead(data) {
         return new Promise((resolve, reject) => {
-            axios.post("/notify/markRead", data)
+            axios.post("/message/markRead", data)
                 .then(res => resolve(res))
                 .catch(err => reject(err));
         });

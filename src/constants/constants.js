@@ -55,3 +55,15 @@ global.dynamicTypeCommentReply = 5;
  * @type {number}
  */
 global.dynamicTypeFollow = 6;
+
+/**
+ * 职言最大图片数量
+ * @type {number}
+ */
+global.gossipMaxImgCount = 1;
+
+/**
+ * 最大上传图片尺寸不超过3m
+ * @type {number}
+ */
+global.maxImageSize = 3 * 1024 *1024;

@@ -13,7 +13,7 @@
 <!--              :markdownCode="markdownCode"/>-->
 <!--        </div>-->
 <!--      </a-popover>-->
-      <a-button class="write-item" @click="submitPost" type="primary" style="height: 30px;"
+      <a-button class="write-item" @click="submitPost" shape="round" type="primary" style="height: 30px;"
                 v-text="$route.params.id ? $t('common.update') : $t('common.release')"></a-button>
       <a-icon class="write-item" type="swap"/>
       <a-tooltip placement="bottom">
@@ -51,7 +51,7 @@ import Login from "@/components/login/Login";
 import Register from "@/components/login/Register";
 
 export default {
-  components: {PostBasicInfo, Login, Register},
+  components: {IndexHeader, PostBasicInfo, Login, Register},
 
   data() {
     return {
@@ -132,7 +132,7 @@ export default {
         preview: true,
       },
       uploadParam:{
-        //存储的基础路径
+        //图片存储的base路径
         base:"/design/post/picture/"
       },
       // 表单验证
@@ -151,8 +151,8 @@ export default {
   methods: {
     // 绑定@imgAdd event
     imgAdd(pos, $file) {
-      // 校验图片大小（不能超过5M）
-      if ($file.size > 5 * 1024 * 1024) {
+      // 校验图片大小（不能超过3M）
+      if ($file.size > global.maxImageSize) {
         this.$message.warning(this.$t("common.avatarSizeTip"));
         this.$refs.md.$img2Url(pos, null);
         return;
@@ -186,11 +186,11 @@ export default {
         this.$message.warning("内容不能为空");
         return;
       }
-      let data = {"title":this.postTitle,"markdown":this.markdownCode,"html": this.htmlCode,"images":[],type:1}
+      let data = {title:this.postTitle,markdown:this.markdownCode,html: this.htmlCode,images:[],type:1}
       // 地址栏有值（更新贴子）才调用
       let postId = this.$route.params.id;
       if (postId) {
-        data.append("postId", postId);
+        data.postId = postId;
         this.postUpdate(data);
       } else {
         this.postCreate(data);
@@ -210,10 +210,11 @@ export default {
 
     // 更新贴子
     postUpdate(data) {
-      if (this.$store.state.userId !== this.postUser) {
+      if (this.$store.state.userId !== this.postAuthor) {
         this.$message.warning("你无权编辑他人撰写的贴子");
         return;
       }
+      console.log('update',data);
       postService.postUpdate(data)
           .then(res => {
             // 返回上一页
@@ -228,7 +229,8 @@ export default {
     getPostById() {
       postService.getPostById({id: this.$route.params.id})
           .then(res => {
-            this.postAuthor = res.data.createUser;
+            this.postAuthor = res.data.authorId;
+            console.log('this.$store.state.userId',this.$store.state.userId)
             if (this.$store.state.userId !== this.postAuthor) {
               this.$message.warning("你无权编辑他人撰写的贴子");
               return;
@@ -238,9 +240,9 @@ export default {
             // 内容
             this.markdownCode = res.data.markdown;
             // 标签
-            res.data.labelDTOS.forEach((item) => {
-              this.postLabel.push(item.id);
-            })
+            // res.data.labelDTOS.forEach((item) => {
+            //   this.postLabel.push(item.id);
+            // })
             // 题图
             this.postTitleMap = res.data.titleMap;
           })

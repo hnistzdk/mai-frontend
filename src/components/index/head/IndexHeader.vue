@@ -109,9 +109,9 @@
         <div class="header-item avatar-container" v-if="$store.state.isLogin">
           <a-dropdown :placement="'bottomRight'" :trigger="['click']">
             <a-menu @click="handleClick" slot="overlay">
-              <a-menu-item key="writePost">
-                <i class="iconfont icon-writePost"></i>{{ ' ' + $t("common.writePost") }}
-              </a-menu-item>
+<!--              <a-menu-item key="writePost">-->
+<!--                <i class="iconfont icon-writePost"></i>{{ ' ' + $t("common.writePost") }}-->
+<!--              </a-menu-item>-->
               <a-menu-item key="PROFILE">
                 <i class="iconfont icon-user-picture"></i>{{ ' ' + $t("common.profile") }}
               </a-menu-item>

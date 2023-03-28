@@ -176,7 +176,6 @@ export default {
       tempParams.userId = this.userId;
       dynamicService.getDynamicList(tempParams)
           .then(res => {
-            console.log('data', res.data.list)
             if (isLoadMore) {
               this.dynamicData = this.dynamicData.concat(res.data.list);
               this.hasNext = res.data.list.length !== 0;
@@ -200,7 +199,7 @@ export default {
       }
       this.finish = false;
       params.userId = this.userId;
-      this.$delete(params, 'likeUser');
+      this.$delete(params, 'userId');
       // 不是管理员
       if (!this.$store.state.isManage) {
         // 只看启用的贴子
@@ -230,7 +229,7 @@ export default {
       }
       this.finish = false;
       params.userId = this.userId;
-      this.$delete(params, 'likeUser');
+      this.$delete(params, 'userId');
       // 不是管理员
       if (!this.$store.state.isManage) {
         // 只看启用的贴子
@@ -259,8 +258,8 @@ export default {
         this.params.currentPage = 1;
       }
       this.finish = false;
-      params.likeUser = this.userId;
-      this.$delete(params, 'userId');
+      params.userId = this.userId;
+      // this.$delete(params, 'userId');
       postService.getLikesPost(params)
           .then(res => {
             if (isLoadMore) {

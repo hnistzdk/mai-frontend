@@ -32,12 +32,12 @@
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
             <!-- 友情捐赠 -->
-            <FriendDonate style="background: #fff;"/>
+<!--            <FriendDonate style="background: #fff;"/>-->
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
             <!-- 备案信息 -->
-            <FilingInfo/>
+<!--            <FilingInfo/>-->
           </a-col>
         </main>
       </a-layout-content>

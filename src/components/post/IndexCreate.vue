@@ -5,24 +5,29 @@
         <a-textarea allow-clear @keydown.enter.native="keyDown"
                     v-model="content"
                     :placeholder="$t('common.releaseTheIdeaOfThisMoment')"
-                    :auto-size="{ minRows: 5, maxRows: 5 }"/>
+                    :auto-size="{ minRows: 5, maxRows: 5 }"
+                    style="padding-bottom: 10px"
+        />
         <div>
-          <!--            :file-list="fileList"-->
           <a-upload
               list-type="picture"
               :beforeUpload="uploadImg"
               :file-list="fileList"
               :data="uploadParam"
+              :remove="removeImg"
               class="upload-list-inline">
-            <a-button v-if="$store.state.isLogin">
-              <a-icon type="upload"/>
-              上传图片
-            </a-button>
           </a-upload>
         </div>
-        <a-button @click="handleSubmit" class="button" type="primary" html-type="submit" style="float: right;">
-          {{ $t("common.release") }}
-        </a-button>
+        <div>
+          <a-button v-if="$store.state.isLogin">
+            <a-icon type="file-image" theme="twoTone" />
+            图片
+          </a-button>
+          <a-button @click="handleSubmit" class="button"  shape="round" type="primary" html-type="submit" style="float: right;">
+            {{ $t("common.release") }}
+          </a-button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -60,6 +65,10 @@ export default {
       }
       this.buildImages();
       let data = {content: this.content, html: this.content, markdown: this.content, images: this.images, type: 2};
+      if (this.content.length === 0 || this.htmlCode.length === 0 || this.markdownCode.length === 0) {
+        this.$message.warning("内容不能为空");
+        return;
+      }
       postService.postCreate(data)
           .then(res => {
             // this.$router.push("/user/" + this.$store.state.userId + "/post");
@@ -78,8 +87,22 @@ export default {
       }
     },
 
+    removeImg(nowFile){
+      this.fileList = this.fileList.filter(file => file.uid !== nowFile.uid);
+    },
+
     //上传图片
     uploadImg(file) {
+      let imageCount = this.fileList.length;
+      if (imageCount >= global.gossipMaxImgCount){
+        this.$message.warning("最多只能上传"+global.gossipMaxImgCount+"张图片");
+        return;
+      }
+      // 校验图片大小（不能超过3M）
+      if (file.size > global.maxImageSize) {
+        this.$message.warning(this.$t("common.avatarSizeTip"));
+        return;
+      }
       const data = new FormData();
       data.append("image", file);
       data.append("base", this.uploadParam.base);

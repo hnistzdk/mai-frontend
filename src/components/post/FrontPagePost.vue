@@ -53,14 +53,15 @@
                       <span style="color: #eb2f96">{{ ' ' + $t("common.isNotTop") }}</span>
                     </a-menu-item>
                     <!-- 贴子编辑 -->
-                    <a-menu-item key="postEdit" v-if="$store.state.userId === item.authorId"
-                                 @click="routerPostEdit(item.postId)">
+                    <a-menu-item key="postEdit" v-if="$store.state.userId === item.authorId && item.type === 0"
+                                 @click="routerPostEdit(item.postId,item.type)">
                       <span style="color: #722ed1">{{ ' ' + $t("common.edit") }}</span>
                     </a-menu-item>
                     <!-- 贴子删除 -->
                     <a-menu-item key="postDel" v-if="$store.state.userId === item.authorId"
-                                 @click="postDelete(item.postId, index)">
-                      <span style="color: red">{{ ' ' + $t("common.delete") }}</span>
+                                 @click="postDelete(item.postId, item.type)">
+                      <span v-if="item.type === 0" style="color: red">{{ ' ' + $t("common.delete") }}</span>
+                      <span v-else style="color: red">{{ ' ' + $t("common.delete") }}</span>
                     </a-menu-item>
                   </a-menu>
                   <div class="options">
@@ -283,11 +284,11 @@ import postService from "@/service/postService";
       },
 
       // 删除
-      postDelete(postId, index) {
-        console.log('postId',postId);
+      postDelete(postId, type) {
+        let title = type === 0 ? this.$t("common.deletePostTitle") : this.$t("common.deleteGossip")
         this.$confirm({
           centered: true,
-          title: this.$t("common.deletePostTitle"),
+          title: title,
           onOk: () => {
             postService.postDelete(postId)
                 .then(() => {
@@ -332,7 +333,7 @@ import postService from "@/service/postService";
       },
 
       // 路由到贴子编辑页面
-      routerPostEdit(postId) {
+      routerPostEdit(postId,type) {
         this.$router.push("/edit/" + postId);
       },
     },

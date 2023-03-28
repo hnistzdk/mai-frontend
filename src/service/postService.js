@@ -96,7 +96,7 @@ export default {
     // 获取点赞过的文章
     getLikesPost(params) {
         return new Promise((resolve, reject) => {
-            axios.get("/post/getLikesPost", {params})
+            axios.get("/post/list/like", {params})
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

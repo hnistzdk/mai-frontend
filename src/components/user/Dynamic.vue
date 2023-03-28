@@ -30,7 +30,7 @@
           </div>
         </div>
         <small style="color: #b5b9b9; padding-left: 10px;flex-shrink: 0"
-               v-text="$utils.showtime(item.createTime)"></small>
+               v-text="$utils.showtime(item.updateTime)"></small>
       </div>
       <div style="height: 10px; background: #f0f2f5;" v-if="index !== total - 1"></div>
     </div>

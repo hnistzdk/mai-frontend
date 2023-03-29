@@ -51,7 +51,7 @@ import Login from "@/components/login/Login";
 import Register from "@/components/login/Register";
 
 export default {
-  components: {IndexHeader, PostBasicInfo, Login, Register},
+  components: {PostBasicInfo, Login, Register},
 
   data() {
     return {

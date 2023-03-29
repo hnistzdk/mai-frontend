@@ -65,7 +65,7 @@ export default {
       }
       this.buildImages();
       let data = {content: this.content, html: this.content, markdown: this.content, images: this.images, type: 2};
-      if (this.content.length === 0 || this.htmlCode.length === 0 || this.markdownCode.length === 0) {
+      if (this.content.length === 0) {
         this.$message.warning("内容不能为空");
         return;
       }

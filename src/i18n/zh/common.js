@@ -15,7 +15,7 @@ export default {
     makeAllRead: "全部已读",
     more: "查看更多",
     noAgain: "我是有底线的...",
-    searchPlaceholder: "搜索",
+    searchPlaceholder: "搜索贴子/职言/用户",
     searchLabel: "搜索标签",
     profile: "我的主页",
     logOut: "退出",

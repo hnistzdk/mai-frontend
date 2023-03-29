@@ -22,7 +22,7 @@ const routes = [
     },
     {
         path: "/search",
-        component: () => import("@/components/index/Index"),
+        component: () => import("@/components/search/SearchResultIndex"),
     },
     {
         path: "/recommended",

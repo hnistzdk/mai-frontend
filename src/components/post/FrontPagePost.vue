@@ -53,7 +53,7 @@
                       <span style="color: #eb2f96">{{ ' ' + $t("common.isNotTop") }}</span>
                     </a-menu-item>
                     <!-- 贴子编辑 -->
-                    <a-menu-item key="postEdit" v-if="$store.state.userId === item.authorId && item.type === 0"
+                    <a-menu-item key="postEdit" v-if="$store.state.userId === item.authorId && item.type === 1"
                                  @click="routerPostEdit(item.postId,item.type)">
                       <span style="color: #722ed1">{{ ' ' + $t("common.edit") }}</span>
                     </a-menu-item>
@@ -87,7 +87,7 @@
         </div>
         <!-- 用户/标题 -->
         <a-list-item-meta :description="item.title">
-          <a-avatar slot="avatar" :src="item.avatar ? item.avatar : require('@/assets/img/default_avatar.png')"
+          <a-avatar slot="avatar" :src="item.userInfoVO.avatar ? item.userInfoVO.avatar : require('@/assets/img/default_avatar.png')"
                     @click.stop="routerUserCenter(item.authorId)"/>
           <a slot="title" class="username" @click.stop="routerUserCenter(item.authorId)">
             <div class="left">
@@ -117,6 +117,8 @@
                             <i class="iconfont icon-right-triangle" :style="{color: $store.state.themeColor}" v-if="item.top"></i>
             </a-tooltip>
           </a>
+          <small slot="title" style="color: #b5b9b9;"> {{ item.userInfoVO.company }} </small>
+          <small slot="title" style="color: #b5b9b9;"> {{ item.userInfoVO.position }} </small>
         </a-list-item-meta>
         <div class="post-content">
         <!-- 这里控制一下显示的概要长度  -->

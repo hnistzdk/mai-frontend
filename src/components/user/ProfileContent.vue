@@ -39,10 +39,16 @@
           <!-- 职位 -->
           <a-form-model-item has-feedback prop="position" :label="$t('common.position')">
             <a-input v-model="ruleForm.position"
-                     :suffix="ruleForm.positionNum + '/50'"
+                     :suffix="ruleForm.positionNum + '/20'"
                      @change="commonChange"
-                     :maxLength="50"
+                     :maxLength="20"
                      :placeholder="$t('common.fillInYourPosition')"/>
+<!--            <a-select v-model="ruleForm.position"-->
+<!--                      @change="commonChange"-->
+<!--                      :placeholder="$t('common.fillInYourPosition')"-->
+<!--                      :options="positionOptions"-->
+<!--                      class="graduationYear">-->
+            </a-select>
           </a-form-model-item>
           <!-- 公司 -->
           <a-form-model-item has-feedback prop="company" :label="$t('common.company')">
@@ -192,6 +198,25 @@
           {value:"初中",label:"初中"},
           {value:"小学",label:"小学"},
         ],
+        positionOptions:[
+          {value:"Java工程师",label:"Java工程师"},
+          {value:"C++工程师",label:"C++工程师"},
+          {value:"iOS工程师",label:"iOS工程师"},
+          {value:"安卓工程师",label:"安卓工程师"},
+          {value:"运维工程师",label:"运维工程师"},
+          {value:"前端工程师",label:"前端工程师"},
+          {value:"算法工程师",label:"算法工程师"},
+          {value:"PHP工程师",label:"PHP工程师"},
+          {value:"测试工程师",label:"测试工程师"},
+          {value:"安全工程师",label:"安全工程师"},
+          {value:"C#工程师",label:"C#工程师"},
+          {value:"数据库工程师",label:"数据库工程师"},
+          {value:"数据分析师",label:"数据分析师"},
+          {value:"产品",label:"产品"},
+          {value:"运营",label:"运营"},
+          {value:"其他",label:"其他"},
+        ],
+
         graduationYearOptions: this.getGraduationYearsOptions(),
         ruleForm: {
           userId: this.$store.state.userId,

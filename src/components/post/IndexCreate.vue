@@ -16,13 +16,13 @@
               :data="uploadParam"
               :remove="removeImg"
               class="upload-list-inline">
+            <a-button v-if="$store.state.isLogin">
+              <a-icon type="file-image" theme="twoTone" />
+              图片
+            </a-button>
           </a-upload>
         </div>
         <div>
-          <a-button v-if="$store.state.isLogin">
-            <a-icon type="file-image" theme="twoTone" />
-            图片
-          </a-button>
           <a-button @click="handleSubmit" class="button"  shape="round" type="primary" html-type="submit" style="float: right;">
             {{ $t("common.release") }}
           </a-button>

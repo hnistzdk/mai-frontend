@@ -5,10 +5,13 @@
     <a-list item-layout="horizontal" :data-source="data" :split="false">
       <a-list-item slot="renderItem" slot-scope="item, index" @click="routerPostDetail(item.postId, item.id)">
         <a-list-item-meta>
-          <span slot="description" v-html="item.title">{{ item.title }}</span>
-<!--          <a-avatar slot="avatar"-->
-<!--                    :src="item.picture ? item.picture : require('@/assets/img/default_avatar.png')"/>-->
+          <span slot="description" v-text="item.title">
+          </span>
         </a-list-item-meta>
+        <span>
+            <a-icon type="fire" theme="twoTone" two-tone-color="#eb2f96"/>
+          <span v-text="$utils.showHot(item.pv)"></span>
+        </span>
       </a-list-item>
     </a-list>
   </div>

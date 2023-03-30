@@ -3,18 +3,10 @@
     <a-list item-layout="vertical" size="large" :data-source="tempData">
       <a-list-item slot="renderItem" key="item.title" slot-scope="item, index" style="cursor: pointer;"
                    @click="routerPostDetail(item.postId)">
-        <!-- 标签/题图 -->
         <div slot="extra" class="label-titleMap">
-          <div slot="title">
-            <a v-for="(label, index) in item.labelDTOS" :key="item.labelName" style="float: right"
-               @click.stop="routerLabelToPost(label.id)">
-              <span class="label-name">{{ label.labelName }}</span>
-              <a-divider v-if="index !== 0" type="vertical"/>
-            </a>
-          </div>
           <div>
-            <img style="padding-top: 10px" :width="$store.state.collapsed ? 80 : 150" alt="logo" v-if="item.titleMap"
-                 :src="item.titleMap"/>
+            <img style="padding-top: 10px" :width="$store.state.collapsed ? 80 : 150" alt="logo" v-if="item.images"
+                 :src="item.images.split(',')[0]"/>
           </div>
         </div>
         <!-- 用户/标题 -->
@@ -41,9 +33,7 @@
           <small slot="title" style="color: #b5b9b9;"> {{ item.userInfoVO.position }} </small>
         </a-list-item-meta>
         <div class="post-content">
-          <!-- 这里控制一下显示的概要长度  -->
-          {{ item.content.substring(0,item.content.length > 80 ? 80 : item.content.length) }}
-<!--          {{ item.highlightContent.substring(0,item.highlightContent.length > 80 ? 80 : item.highlightContent.length) }}-->
+          <p v-html="item.highlightContent"></p>
         </div>
       </a-list-item>
     </a-list>
@@ -54,7 +44,6 @@
   </div>
 </template>
 <script>
-import postService from "@/service/postService";
 
 export default {
   props: {
@@ -87,21 +76,7 @@ export default {
       }
       // 点赞
       if (type === 'like-o') {
-        postService.updateLikeState({postId: postId,state: this.tempData[index].like})
-            .then(() => {
-              this.$emit("refresh");
-              let like = this.tempData[index].like;
-              //取消点赞操作
-              if (like) {
-                this.tempData[index].likeCount--;
-              } else {
-                this.tempData[index].likeCount++;
-              }
-              this.tempData[index].like = !like;
-            })
-            .catch(err => {
-              this.$message.error(err.msg);
-            });
+        console.log("点赞")
       }
       // 评论
       if (type === 'message') {
@@ -109,120 +84,6 @@ export default {
       }
     },
 
-    // 修改贴子审批状态
-    updateState(postId, state, toState) {
-      this.$confirm({
-        centered: true,
-        title: this.$t("common.confirmReject"),
-        onOk: () => {
-          postService.updateState({id: postId, state: toState})
-              .then(() => {
-                this.tempData = this.tempData.filter(post => post.postId !== postId);
-                // 待审核
-                if (state === -1) {
-                  this.$emit("updatePendingReviewData", this.tempData);
-                  // 通过
-                  if (toState === 1) {
-                    this.$emit("updatePendingReviewTotal", -1)
-                    this.$emit("updateTotal", 1)
-                    this.$emit("updateReviewRejectedTotal", -1)
-                  }
-                  // 拒绝
-                  if (toState === 0) {
-                    this.$emit("updatePendingReviewTotal", -1)
-                    this.$emit("updateTotal", -1)
-                    this.$emit("updateReviewRejectedTotal", 1)
-                  }
-                }
-                // 审核拒绝
-                if (state === 0) {
-                  this.$emit("updateReviewRejectedData", this.tempData);
-                  // 通过
-                  if (toState === 1) {
-                    this.$emit("updateTotal", 1)
-                    this.$emit("updateReviewRejectedTotal", -1)
-                  }
-                  // 拒绝
-                  if (toState === 0) {
-                    this.$emit("updateTotal", -1)
-                    this.$emit("updateReviewRejectedTotal", 1)
-                  }
-                }
-                // 审核通过
-                if (state === 1) {
-                  this.$emit("updateData", this.tempData);
-                  // 通过
-                  if (toState === 1) {
-                    this.$emit("updateTotal", 1)
-                    this.$emit("updateReviewRejectedTotal", -1)
-                  }
-                  // 拒绝
-                  if (toState === 0) {
-                    this.$emit("updateTotal", -1)
-                    this.$emit("updateReviewRejectedTotal", 1)
-                  }
-                }
-                this.$message.success(this.$t("common.approvalSuccessed"));
-              })
-              .catch(err => {
-                this.$message.error(err.msg);
-              });
-        },
-      });
-    },
-
-    // 贴子置顶
-    postTop(postId) {
-      this.$confirm({
-        centered: true,
-        title: this.$t("common.confirmTop"),
-        onOk: () => {
-          postService.postTop({id: postId, top: true})
-              .then(() => {
-                this.$message.success(this.$t("common.topSuccessed"));
-              })
-              .catch(err => {
-                this.$message.error(err.msg);
-              });
-        },
-      });
-    },
-
-    // 贴子取消置顶
-    postNotTop(postId) {
-      this.$confirm({
-        centered: true,
-        title: this.$t("common.confirmNotTop"),
-        onOk: () => {
-          postService.postTop({id: postId, top: false})
-              .then(() => {
-                this.$message.success(this.$t("common.notTopSuccessed"));
-              })
-              .catch(err => {
-                this.$message.error(err.msg);
-              });
-        },
-      });
-    },
-
-    // 删除
-    postDelete(postId, type) {
-      let title = type === 0 ? this.$t("common.deletePostTitle") : this.$t("common.deleteGossip")
-      this.$confirm({
-        centered: true,
-        title: title,
-        onOk: () => {
-          postService.postDelete(postId)
-              .then(() => {
-                this.$message.success('删除成功');
-                this.tempData = this.tempData.filter(post => post.postId !== postId);
-              })
-              .catch(err => {
-                this.$message.error(err.msg);
-              });
-        },
-      });
-    },
 
     // 路由到贴子详情页面
     routerPostDetail(postId) {

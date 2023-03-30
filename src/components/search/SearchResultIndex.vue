@@ -33,8 +33,8 @@
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 友情捐赠 -->
-            <!--            <FriendDonate style="background: #fff;"/>-->
+            <!-- 全站热榜 -->
+            <HotList style="background: #fff;"/>
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
@@ -57,11 +57,14 @@ import FriendDonate from "@/components/right/FriendDonate";
 import PersonalInfoDisplay from "@/components/user/PersonalInfoDisplay";
 import FooterButtons from "@/components/utils/FooterButtons";
 import SearchTabs from "@/components/search/SearchTabs";
+import HotList from "@/components/right/HotList";
 
 export default {
   name: "",
   components: {
-    IndexHeader, PersonalAchievement, FilingInfo, FollowCount, PersonalInfoDisplay, SearchTabs, FooterButtons, FriendDonate},
+    IndexHeader, PersonalAchievement, FilingInfo, FollowCount
+    , PersonalInfoDisplay, SearchTabs, FooterButtons, FriendDonate
+  ,HotList},
 
   data() {
     return {

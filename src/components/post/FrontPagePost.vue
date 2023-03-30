@@ -60,8 +60,7 @@
                     <!-- 贴子删除 -->
                     <a-menu-item key="postDel" v-if="$store.state.userId === item.authorId"
                                  @click="postDelete(item.postId, item.type)">
-                      <span v-if="item.type === 0" style="color: red">{{ ' ' + $t("common.delete") }}</span>
-                      <span v-else style="color: red">{{ ' ' + $t("common.delete") }}</span>
+                      <span style="color: red">{{ ' ' + $t("common.delete") }}</span>
                     </a-menu-item>
                   </a-menu>
                   <div class="options">
@@ -71,18 +70,11 @@
               </span>
           </span>
         </template>
-        <!-- 标签/题图 -->
+        <!--  主要展示职言的图片 -->
         <div slot="extra" class="label-titleMap">
-          <div slot="title">
-            <a v-for="(label, index) in item.labelDTOS" :key="item.labelName" style="float: right"
-               @click.stop="routerLabelToPost(label.id)">
-              <span class="label-name">{{ label.labelName }}</span>
-              <a-divider v-if="index !== 0" type="vertical"/>
-            </a>
-          </div>
           <div>
-            <img style="padding-top: 10px" :width="$store.state.collapsed ? 80 : 150" alt="logo" v-if="item.titleMap"
-                 :src="item.titleMap"/>
+            <img style="padding-top: 10px" :width="$store.state.collapsed ? 80 : 150" alt="logo" v-if="item.images"
+                 :src="item.images.split(',')[0]"/>
           </div>
         </div>
         <!-- 用户/标题 -->
@@ -167,17 +159,17 @@ import postService from "@/service/postService";
         }
         // 点赞
         if (type === 'like-o') {
-          postService.updateLikeState({postId: postId,state: this.tempData[index].like})
+          let like = this.tempData[index].like;
+          //取消点赞操作
+          if (like) {
+            this.tempData[index].likeCount = this.tempData[index].likeCount-1;
+          } else {
+            this.tempData[index].likeCount = this.tempData[index].likeCount+1;
+          }
+          this.tempData[index].like = !like;
+          postService.updateLikeState({postId: postId,state: like})
               .then(() => {
-                this.$emit("refresh");
-                // let like = this.tempData[index].like;
-                // //取消点赞操作
-                // if (like) {
-                //   this.tempData[index].likeCount--;
-                // } else {
-                //   this.tempData[index].likeCount++;
-                // }
-                // this.tempData[index].like = !like;
+
               })
               .catch(err => {
                 this.$message.error(err.msg);
@@ -287,7 +279,7 @@ import postService from "@/service/postService";
 
       // 删除
       postDelete(postId, type) {
-        let title = type === 0 ? this.$t("common.deletePostTitle") : this.$t("common.deleteGossip")
+        let title = type === 1 ? this.$t("common.deletePostTitle") : this.$t("common.deleteGossip")
         this.$confirm({
           centered: true,
           title: title,
@@ -295,7 +287,8 @@ import postService from "@/service/postService";
             postService.postDelete(postId)
                 .then(() => {
                   this.$message.success('删除成功');
-                  this.tempData = this.tempData.filter(post => post.postId !== postId);
+                  this.$emit("refresh");
+                  // this.tempData = this.tempData.filter(post => post.postId !== postId);
                 })
                 .catch(err => {
                   this.$message.error(err.msg);

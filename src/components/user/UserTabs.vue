@@ -199,7 +199,6 @@ export default {
       }
       this.finish = false;
       params.userId = this.userId;
-      this.$delete(params, 'userId');
       // 不是管理员
       if (!this.$store.state.isManage) {
         // 只看启用的贴子
@@ -229,7 +228,6 @@ export default {
       }
       this.finish = false;
       params.userId = this.userId;
-      this.$delete(params, 'userId');
       // 不是管理员
       if (!this.$store.state.isManage) {
         // 只看启用的贴子
@@ -259,7 +257,6 @@ export default {
       }
       this.finish = false;
       params.userId = this.userId;
-      // this.$delete(params, 'userId');
       postService.getLikesPost(params)
           .then(res => {
             if (isLoadMore) {

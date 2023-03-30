@@ -2,17 +2,6 @@
   <div id="write-post">
     <div class="left">
       <a-input class="write-item" v-model="postTitle" :placeholder="$t('common.enterPostTitle')" size="large"/>
-<!--      <a-popover v-model="visible" :title="$t('common.releasePost')" trigger="click" placement="bottomRight">-->
-<!--        <div slot="content" style="width: 500px;">-->
-<!--          <PostBasicInfo-->
-<!--              :postUser="postAuthor"-->
-<!--              :postLabel="postLabel"-->
-<!--              :postTitleMap="postTitleMap"-->
-<!--              :postTitle="postTitle"-->
-<!--              :htmlCode="htmlCode"-->
-<!--              :markdownCode="markdownCode"/>-->
-<!--        </div>-->
-<!--      </a-popover>-->
       <a-button class="write-item" @click="submitPost" shape="round" type="primary" style="height: 30px;"
                 v-text="$route.params.id ? $t('common.update') : $t('common.release')"></a-button>
       <a-icon class="write-item" type="swap"/>
@@ -149,6 +138,7 @@ export default {
   },
 
   methods: {
+
     // 绑定@imgAdd event
     imgAdd(pos, $file) {
       // 校验图片大小（不能超过3M）
@@ -201,7 +191,7 @@ export default {
     postCreate(data) {
       postService.postCreate(data)
           .then(res => {
-            this.$router.push("/user/" + this.$store.state.userId + "/post");
+            this.$utils.successTimeModal(()=>this.$router.push("/user/" + this.$store.state.userId + "/post"),"发帖成功","即将跳转到个人中心");
           })
           .catch(err => {
             this.$message.error(err.msg);
@@ -214,11 +204,10 @@ export default {
         this.$message.warning("你无权编辑他人撰写的贴子");
         return;
       }
-      console.log('update',data);
       postService.postUpdate(data)
           .then(res => {
             // 返回上一页
-            this.$router.go(-1);
+            this.$utils.successTimeModal(()=>this.$router.go(-1),"更新成功","即将跳转到个人中心");
           })
           .catch(err => {
             this.$message.error(err.msg);

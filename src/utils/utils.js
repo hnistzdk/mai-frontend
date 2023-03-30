@@ -1,3 +1,5 @@
+import { Modal } from 'ant-design-vue';
+
 export default {
   isClamp(event) {
     /**
@@ -82,6 +84,13 @@ export default {
     );
   },
 
+  showHot(pv){
+    if (pv > 10000){
+      return (pv/10000+'').substring(0,3) + 'W';
+    }
+    return pv;
+  },
+
   // 将h标签转化为ul>li的形式
   toToc(data) {
     // 过滤出<h?>标签
@@ -136,6 +145,71 @@ export default {
 
     // 去掉回车换行
     return result.replace(/\r?\n|\r/g, "");
+  },
+
+  /**
+   * 成功倒计时模态框
+   * @param callback
+   * @param title
+   * @param content
+   * @param secondsToGo
+   */
+  successTimeModal(callback, title, content, secondsToGo) {
+    secondsToGo = secondsToGo ? secondsToGo : 5;
+    const modal = Modal.success({
+      title: title ? title : '提示',
+      content: content ? `${secondsToGo}秒后即将` + content : `${secondsToGo}秒后即将跳转`,
+      onOk() {callback()}
+    });
+    const interval = setInterval(() => {
+      secondsToGo -= 1;
+      modal.update({
+        content: content ? `${secondsToGo}秒后即将` + content : `${secondsToGo}秒后即将跳转`,
+      });
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(interval);
+      modal.destroy();
+      callback();
+    }, secondsToGo * 1000);
+  },
+
+  /**
+   * 成功模态框
+   * @param callback
+   * @param title
+   * @param content
+   */
+  successModal(callback, title, content) {
+    Modal.success({
+      title: title ? title : '提示',
+      content: content ? content : '操作成功',
+      onOk() {callback()}
+    });
+  },
+
+  infoModal(callback, title, content) {
+    Modal.info({
+      title: title ? title : '提示',
+      content: content ? content : '操作成功',
+      onOk() {callback()}
+    });
+  },
+
+  errorModal(callback, title, content) {
+    Modal.error({
+      title: title ? title : '提示',
+      content: content ? content : '发送错误',
+      onOk() {callback()}
+    });
+  },
+
+  warningModal(callback, title, content) {
+    Modal.warning({
+      title: title ? title : '提示',
+      content: content ? content : '警告',
+      onOk() {callback()}
+    });
   },
 
 };

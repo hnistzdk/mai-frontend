@@ -85,6 +85,7 @@ export default {
       commentService.createComment(this.data)
           .then((res) => {
             // 清空表单
+            this.$message.success('评论成功')
             this.form.resetFields();
             this.$emit("refresh");
           })

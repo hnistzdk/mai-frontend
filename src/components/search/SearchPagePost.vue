@@ -17,7 +17,7 @@
             <div class="left">
               <span slot="title" style="padding-right: 2px;"> {{ item.authorUsername }} </span>
               <!--              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>-->
-              <small style="color: #b5b9b9; padding-left: 10px" v-text="$utils.showtime(item.createTime)"></small>
+              <small style="color: #b5b9b9; padding-left: 10px" v-text="$utils.showtime(item.updateTime)"></small>
             </div>
             <!-- 置顶图标 -->
             <a-tooltip placement="left">

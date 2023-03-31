@@ -4,13 +4,17 @@
     <a-divider style="margin: 10px 0 0 0;"/>
     <a-list item-layout="horizontal" :data-source="data" :split="false">
       <a-list-item slot="renderItem" slot-scope="item, index" @click="routerPostDetail(item.postId, item.id)">
+
         <a-list-item-meta>
-          <span slot="description" v-text="item.title">
-          </span>
+          <!-- 排行图片  -->
+          <a-avatar class="el-image__inner" slot="avatar" :src="require('@/assets/img/hotList/' + (index+1) + '.png')" />
+          <!-- 标题  -->
+          <span slot="description" style="font-size: small;">{{item.title}}</span>
         </a-list-item-meta>
         <span>
-            <a-icon type="fire" theme="twoTone" two-tone-color="#eb2f96"/>
           <span v-text="$utils.showHot(item.pv)"></span>
+          <a-icon type="fire" theme="twoTone" two-tone-color="#eb2f96"/>
+          <span v-html="'&nbsp;&nbsp;&nbsp;'"></span>
         </span>
       </a-list-item>
     </a-list>
@@ -95,5 +99,11 @@ export default {
 
 #latest-comment .full-list:hover {
   background: #8b87870a;
+}
+
+.el-image__inner{
+  vertical-align: top;
+  width: 65%;
+  height: 65%;
 }
 </style>

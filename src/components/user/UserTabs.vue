@@ -46,6 +46,7 @@
             :service="postService"
             :isUserCenter="true"
             :userId="userId"
+            :is-gossip-tap="isGossipTab"
             @refresh="gossipRefresh"
             style="background: #fff;"/>
       </a-tab-pane>

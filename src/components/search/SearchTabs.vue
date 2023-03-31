@@ -24,16 +24,16 @@
           <i class="iconfont icon-relat-post"></i>
           {{ $t("common.post") }}
         </span>
-        <a-skeleton v-if="showSkeleton"/>
         <!-- 贴子 -->
         <SearchPagePost
-            v-if="isPostTab && !showSkeleton"
+            v-if="isPostTab && !spinning"
             :finish="finish"
             :hasNext="hasNext"
             :data="postData"
             :userId="userId"
             @refresh="postRefresh"
             style="background: #fff;"/>
+        <a-skeleton v-if="showSkeleton"/>
       </a-tab-pane>
 
       <!--  职言tab -->
@@ -42,16 +42,16 @@
           <i class="iconfont icon-relat-post"></i>
           {{ $t("common.gossip") }}
         </span>
-        <a-skeleton v-if="showSkeleton"/>
         <!-- 职言 -->
         <SearchPagePost
-            v-if="isGossipTab && !showSkeleton"
+            v-if="isGossipTab && !spinning"
             :finish="finish"
             :hasNext="hasNext"
             :data="gossipData"
             :userId="userId"
             @refresh="gossipRefresh"
             style="background: #fff;"/>
+        <a-skeleton v-if="showSkeleton"/>
       </a-tab-pane>
 
       <!-- 选择排序方式 -->
@@ -99,6 +99,8 @@ export default {
       // hasNext和finish名称不能改(和滚动加载相关)
       hasNext: true,
       finish: false,
+      // 加载中...
+      spinning: true,
       // 加载中...
       dynamicSpinning: true,
       query: '',
@@ -189,13 +191,12 @@ export default {
       params = this.buildPostSearchParams();
       if (params.query.length === 0){
         this.finish = true;
+        this.hasNext = false;
         return;
       }
       this.showSkeleton = true;
       searchService.searchPost(params)
           .then(res => {
-            console.log(res.data.list)
-            this.showSkeleton = false;
             if (isLoadMore) {
               this.postData = this.postData.concat(res.data.list);
               this.hasNext = res.data.list.length !== 0;
@@ -204,10 +205,13 @@ export default {
             }
             this.postCount = res.data.totalCount;
             this.finish = true;
+            this.spinning = false;
+            this.showSkeleton = false;
           })
           .catch(err => {
-            this.showSkeleton = false;
             this.finish = true;
+            this.hasNext = false;
+            this.showSkeleton = false;
             this.$message.error(err.msg);
           });
     },
@@ -225,12 +229,12 @@ export default {
       params = this.buildPostSearchParams();
       if (params.query.length === 0){
         this.finish = true;
+        this.hasNext = false;
         return;
       }
       this.showSkeleton = true;
       searchService.searchPost(params)
           .then(res => {
-            this.showSkeleton = false;
             if (isLoadMore) {
               this.gossipData = this.gossipData.concat(res.data.list);
               this.hasNext = res.data.list.length !== 0;
@@ -239,10 +243,13 @@ export default {
             }
             this.gossipCount = res.data.totalCount;
             this.finish = true;
+            this.spinning = false;
+            this.showSkeleton = false;
           })
           .catch(err => {
-            this.showSkeleton = false;
             this.finish = true;
+            this.hasNext = false;
+            this.showSkeleton = false;
             this.$message.error(err.msg);
           });
     },

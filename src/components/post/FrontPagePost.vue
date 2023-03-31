@@ -1,5 +1,6 @@
 <template>
   <div id="main-post-content">
+    <IndexCreate v-if="isGossipTap"/>
     <a-list item-layout="vertical" size="large" :data-source="tempData">
       <a-list-item slot="renderItem" key="item.title" slot-scope="item, index" style="cursor: pointer;"
                    @click="routerPostDetail(item.postId)">
@@ -57,6 +58,13 @@
                                  @click="routerPostEdit(item.postId,item.type)">
                       <span style="color: #722ed1">{{ ' ' + $t("common.edit") }}</span>
                     </a-menu-item>
+
+                    <!-- 职言编辑 -->
+                    <a-menu-item key="gossipEdit" v-if="$store.state.userId === item.authorId && item.type === 2"
+                                 @click="gossipEdit(item)">
+                      <span style="color: #722ed1">{{ ' ' + $t("common.edit") }}</span>
+                    </a-menu-item>
+
                     <!-- 贴子删除 -->
                     <a-menu-item key="postDel" v-if="$store.state.userId === item.authorId"
                                  @click="postDelete(item.postId, item.type)">
@@ -85,7 +93,7 @@
             <div class="left">
               <span slot="title" style="padding-right: 2px;"> {{ item.authorUsername }} </span>
 <!--              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>-->
-              <small style="color: #b5b9b9; padding-left: 10px" v-text="$utils.showtime(item.createTime)"></small>
+              <small style="color: #b5b9b9; padding-left: 10px" v-text="'更新于     '+$utils.showtime(item.updateTime)"></small>
               <!-- 用户中心 -->
               <div v-if="isUserCenter && ($store.state.userId === userId || $store.state.isManage)">
                 <small style="color: #faad14; padding-left: 10px" v-if="item.state === -1">{{
@@ -126,9 +134,14 @@
 </template>
 <script>
 import postService from "@/service/postService";
+import middleUtil from "@/utils/MiddleUtil";
+import IndexCreate from "@/components/post/IndexCreate";
 
   export default {
+    components:{IndexCreate},
     props: {
+      // 是在职言tab下才显示发布框
+      isGossipTap:{type: Boolean, default: false},
       data: {},
       pageSize: {type: Number, default: global.defaultPageSize},
       current: {type: Number, default: 1},
@@ -331,6 +344,16 @@ import postService from "@/service/postService";
       routerPostEdit(postId,type) {
         this.$router.push("/edit/" + postId);
       },
+
+      //职言编辑
+      gossipEdit(item){
+        let data = {
+          postId: item.postId,
+          content: item.content,
+          images: item.images
+        }
+        middleUtil.$emit('fillEditData',data);
+      }
     },
 
     mounted() {

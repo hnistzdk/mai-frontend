@@ -51,11 +51,11 @@
         </div>
 
         <!-- 管理端 -->
-        <div v-if="$store.state.isLogin && !$store.state.collapsed" class="header-item" @click="routerManage">
-          <div class="options">
-            <span>{{ $t("common.management") }}</span>
-          </div>
-        </div>
+<!--        <div v-if="$store.state.isLogin && !$store.state.collapsed" class="header-item" @click="routerManage">-->
+<!--          <div class="options">-->
+<!--            <span>{{ $t("common.management") }}</span>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <!-- 主题色 -->
         <div class="header-item">
@@ -82,19 +82,6 @@
                       :placement="'bottomRight'" :trigger="['click']">
             <div class="ant-dropdown-menu" slot="overlay">
               <MessageBox :visible.sync="visible"/>
-<!--              <a-menu-item key="replyMe">-->
-<!--                <i class="">回复我的</i>-->
-<!--              </a-menu-item>-->
-<!--              <a-menu-item key="getLike">-->
-<!--                <i class="">收到的赞</i>-->
-<!--              </a-menu-item>-->
-<!--              <a-divider style="margin: 3px 0 3px 0"/>-->
-<!--              <a-menu-item key="newFans">-->
-<!--                <i class="">新增粉丝</i>-->
-<!--              </a-menu-item>-->
-<!--              <a-menu-item key="systemMessage">-->
-<!--                <i class="">系统通知</i>-->
-<!--              </a-menu-item>-->
             </div>
             <div class="options">
               <a-badge class="badge" :count="$store.state.isLogin ? messageNumbers : 0" :overflow-count="99">
@@ -105,13 +92,35 @@
           </a-dropdown>
         </div>
 
+        <div class="header-item badge-container" v-if="$store.state.isLogin">
+          <a-badge :dot="$store.state.allMessageCount >= 0">
+            <a-dropdown :trigger="['click']" >
+              <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+                <i class="iconfont icon-bell"></i>
+              </a>
+              <a-menu slot="overlay" @click="handleClickMessage">
+                <a-menu-item key="reply">
+                  回复我的
+                </a-menu-item>
+                <a-menu-item key="like">
+                  收到的赞
+                </a-menu-item>
+                <a-menu-item key="fan">
+                  新增粉丝
+                </a-menu-item>
+                <a-menu-divider />
+                <a-menu-item key="system">
+                  系统通知
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
+          </a-badge>
+        </div>
+
         <!-- 头像 -->
         <div class="header-item avatar-container" v-if="$store.state.isLogin">
           <a-dropdown :placement="'bottomRight'" :trigger="['click']">
             <a-menu @click="handleClick" slot="overlay">
-<!--              <a-menu-item key="writePost">-->
-<!--                <i class="iconfont icon-writePost"></i>{{ ' ' + $t("common.writePost") }}-->
-<!--              </a-menu-item>-->
               <a-menu-item key="PROFILE">
                 <i class="iconfont icon-user-picture"></i>{{ ' ' + $t("common.profile") }}
               </a-menu-item>
@@ -121,10 +130,6 @@
               </a-menu-item>
               <a-menu-item key="about">
                 <i class="iconfont icon-about"></i>{{ ' ' + $t("common.about") }}
-              </a-menu-item>
-              <a-divider style="margin: 3px 0 3px 0"/>
-              <a-menu-item key="management">
-                <i class="iconfont icon-setUp"></i>{{ ' ' + $t("common.management") }}
               </a-menu-item>
               <a-divider style="margin: 3px 0 3px 0"/>
               <a-menu-item key="LOG_OUT">
@@ -181,6 +186,14 @@
         </div>
       </div>
     </div>
+    <a-modal title="回复我的"
+             :destroyOnClose="true"
+             :visible="showReply"
+             :footer="null"
+             :width="900"
+             @cancel="handleCancelReply">
+      <ReplyMessageList/>
+    </a-modal>
   </a-layout-header>
 </template>
 
@@ -194,9 +207,10 @@ import Register from "@/components/login/Register";
 import MobileResetPassword from "@/components/login/MobileResetPassword";
 import EmailResetPassword from "@/components/login/EmailResetPassword";
 import userService from "@/service/userService";
+import ReplyMessageList from "@/components/index/messages/ReplyMessageList";
 
 export default {
-  components: {MessageBox, Login, Register, MobileResetPassword, EmailResetPassword},
+  components: {MessageBox, Login, Register, MobileResetPassword, EmailResetPassword,ReplyMessageList},
 
   props: {
     searchContent: {type: String, default: ""},
@@ -218,6 +232,7 @@ export default {
   },
   data() {
     return {
+      showReply: false,
       visible: false,
       params: {currentPage: 1, pageSize: global.defaultPageSize},
       // 如果不用watch监听searchContent值的变化,只会在该组件被创建时赋值一次
@@ -268,6 +283,23 @@ export default {
       if (key === "LOG_OUT") {
         this.logout();
       }
+    },
+    handleClickMessage({key}){
+      if (key === 'reply') {
+        this.routerReplyMessage();
+      }
+      if (key === 'like') {
+        this.routerLikeMessage();
+      }
+      if (key === 'fan') {
+        this.routerFanMessage();
+      }
+      if (key === 'system') {
+        this.routerSystemMessage();
+      }
+    },
+    handleCancelReply(){
+      this.showReply = false;
     },
 
     // 显示登录框
@@ -361,6 +393,25 @@ export default {
     routerManage() {
       window.open(this.$store.state.manageDomain, '_blank');
     },
+
+    //路由到回复我的消息
+    routerReplyMessage(){
+      this.showReply = true;
+      // this.$router.push("/message/reply")
+    },
+    //路由到收到的赞消息
+    routerLikeMessage(){
+      this.$router.push("/message/like")
+    },
+    //路由到新增粉丝消息
+    routerFanMessage(){
+      this.$router.push("/message/fan")
+    },
+    //路由到系统通知消息
+    routerSystemMessage(){
+      this.$router.push("/message/system")
+    },
+
   },
 
   mounted() {

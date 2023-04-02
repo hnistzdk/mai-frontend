@@ -65,7 +65,7 @@
               this.getMessageList();
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
       //加载更多（滚动加载）
@@ -94,7 +94,7 @@
             })
             .catch(err => {
               this.finish = true;
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       }
     },

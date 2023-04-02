@@ -52,6 +52,11 @@ export default new Vuex.Store({
         systemNotifyCount: 0,
         // 任务提醒数量
         taskNotifyCount: 0,
+        allMessageCount: 0,
+        replyMessageCount:0,
+        likeMessageCount:0,
+        fanMessageCount:0,
+        systemMessageCount:0,
         // 南生运营域名
         manageDomain: 'http://manage-test.nanshengbbs.top',
         commentRefreshPostStatisticalData: false,
@@ -156,6 +161,11 @@ export default new Vuex.Store({
                 systemNotifyCount: 0,
                 // 任务提醒数量
                 taskNotifyCount: 0,
+                allMessageCount: 0,
+                replyMessageCount:0,
+                likeMessageCount:0,
+                fanMessageCount:0,
+                systemMessageCount:0,
                 // 南生运营域名
                 manageDomain: 'http://manage-test.nanshengbbs.top',
                 commentRefreshPostStatisticalData: false,

@@ -36,7 +36,7 @@
     <a-modal title="表情符号" :visible="isModalVisible" :footer="null" :dialog-style="{ right: '12%',bottom: '10%' }"
              @cancel="handleCancel">
       <div class="face">
-        <Picker perLine="8" @select="showEmoji" :i18n="I18N" />
+        <Picker @select="showEmoji" :i18n="I18N" />
       </div>
     </a-modal>
   </div>

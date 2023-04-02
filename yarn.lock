@@ -7310,6 +7310,11 @@
   "resolved" "https://registry.npm.taobao.org/requires-port/download/requires-port-1.0.0.tgz"
   "version" "1.0.0"
 
+"reqwest@^2.0.5":
+  "integrity" "sha512-KDc5sCo/rESlrkkvIhrZkAb46m+GeTqpAOtB955QXT/Db/zxyXLy6wFx9J4ihPW2WR4k4odObvdO1Jea2VYtFw=="
+  "resolved" "https://registry.npmjs.org/reqwest/-/reqwest-2.0.5.tgz"
+  "version" "2.0.5"
+
 "resize-observer-polyfill@^1.5.1":
   "integrity" "sha1-DpAg3T0hAkRY1OvSfiPkAmmBBGQ="
   "resolved" "https://registry.npm.taobao.org/resize-observer-polyfill/download/resize-observer-polyfill-1.5.1.tgz"
@@ -8705,6 +8710,11 @@
   "integrity" "sha1-ud0Jihfh9a25G9+WEfA4UxDafLE="
   "resolved" "https://registry.npm.taobao.org/vue-i18n/download/vue-i18n-8.22.1.tgz?cache=0&sync_timestamp=1603122748956&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-i18n%2Fdownload%2Fvue-i18n-8.22.1.tgz"
   "version" "8.22.1"
+
+"vue-infinite-scroll@^2.0.2":
+  "integrity" "sha512-n+YghR059YmciANGJh9SsNWRi1YZEBVlODtmnb/12zI+4R72QZSWd+EuZ5mW6auEo/yaJXgxzwsuhvALVnm73A=="
+  "resolved" "https://registry.npmjs.org/vue-infinite-scroll/-/vue-infinite-scroll-2.0.2.tgz"
+  "version" "2.0.2"
 
 "vue-loader@^15.9.2":
   "integrity" "sha1-wuzvihoIAqx2xtaGZBtd3lIq4mc="

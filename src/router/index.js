@@ -105,7 +105,38 @@ const routes = [
     {
         path: "*",
         component: () => import("@/components/errorPage/NotFound")
-    }
+    },
+    // {
+    //     path: "/message",
+    //     component: () => import("@/components/index/messages/ReplyMessage"),
+    //     children: [
+    //         {
+    //             path: "",
+    //             redirect: "reply"
+    //         },
+    //         {
+    //             path: "reply",
+    //             name: "reply",
+    //             component: () => import("@/components/index/messages/ReplyMessage")
+    //         },
+    //         {
+    //             path: "like",
+    //             name: "like",
+    //             component: () => import("@/components/index/messages/LikeMessage")
+    //         },
+    //         {
+    //             path: "fan",
+    //             name: "fan",
+    //             component: () => import("@/components/index/messages/FanMessage")
+    //         },
+    //         {
+    //             path: "system",
+    //             name: "system",
+    //             component: () => import("@/components/index/messages/SystemMessage")
+    //         },
+    //
+    //     ]
+    // },
 ];
 
 const router = new VueRouter({

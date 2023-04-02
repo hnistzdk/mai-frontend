@@ -190,9 +190,17 @@
              :destroyOnClose="true"
              :visible="showReply"
              :footer="null"
-             :width="900"
+             :width="800"
              @cancel="handleCancelReply">
       <ReplyMessageList/>
+    </a-modal>
+    <a-modal title="收到的赞"
+             :destroyOnClose="true"
+             :visible="showLike"
+             :footer="null"
+             :width="800"
+             @cancel="handleCancelLike">
+      <LikeMessageList/>
     </a-modal>
   </a-layout-header>
 </template>
@@ -208,9 +216,11 @@ import MobileResetPassword from "@/components/login/MobileResetPassword";
 import EmailResetPassword from "@/components/login/EmailResetPassword";
 import userService from "@/service/userService";
 import ReplyMessageList from "@/components/index/messages/ReplyMessageList";
+import LikeMessageList from "@/components/index/messages/LikeMessageList";
 
 export default {
-  components: {MessageBox, Login, Register, MobileResetPassword, EmailResetPassword,ReplyMessageList},
+  components: {MessageBox, Login, Register, MobileResetPassword, EmailResetPassword,ReplyMessageList
+  ,LikeMessageList},
 
   props: {
     searchContent: {type: String, default: ""},
@@ -233,6 +243,7 @@ export default {
   data() {
     return {
       showReply: false,
+      showLike: false,
       visible: false,
       params: {currentPage: 1, pageSize: global.defaultPageSize},
       // 如果不用watch监听searchContent值的变化,只会在该组件被创建时赋值一次
@@ -286,20 +297,21 @@ export default {
     },
     handleClickMessage({key}){
       if (key === 'reply') {
-        this.routerReplyMessage();
+        this.showReply = true;
       }
       if (key === 'like') {
-        this.routerLikeMessage();
+        this.showLike = true;
       }
       if (key === 'fan') {
-        this.routerFanMessage();
       }
       if (key === 'system') {
-        this.routerSystemMessage();
       }
     },
     handleCancelReply(){
       this.showReply = false;
+    },
+    handleCancelLike(){
+      this.showLike = false;
     },
 
     // 显示登录框
@@ -392,24 +404,6 @@ export default {
     // 路由到管理端
     routerManage() {
       window.open(this.$store.state.manageDomain, '_blank');
-    },
-
-    //路由到回复我的消息
-    routerReplyMessage(){
-      this.showReply = true;
-      // this.$router.push("/message/reply")
-    },
-    //路由到收到的赞消息
-    routerLikeMessage(){
-      this.$router.push("/message/like")
-    },
-    //路由到新增粉丝消息
-    routerFanMessage(){
-      this.$router.push("/message/fan")
-    },
-    //路由到系统通知消息
-    routerSystemMessage(){
-      this.$router.push("/message/system")
     },
 
   },

@@ -6,7 +6,7 @@
           <span v-if="type === 'reply'">
             <a style="margin-right: 8px" class="operate comment-comment" @click.stop="routerPostDetail(item.objectId, item.commentId)">
               <i class="iconfont icon-comment" style="color: #8a919f;">
-                <small> {{ $t("common.reply") }}</small>
+                <small> 去看看</small>
               </i>
             </a>
           </span>
@@ -23,9 +23,9 @@
         </span>
       </template>
       <a-list-item-meta >
-          <span slot="description">
-            回复 {{'@'+$store.state.username}}：{{item.content}}
-          </span>
+<!--          <span slot="description">-->
+<!--            回复 {{'@'+$store.state.username}}：{{item.content}}-->
+<!--          </span>-->
         <a-avatar slot="avatar" :src="item.senderAvatar ? item.senderAvatar : require('@/assets/img/default_avatar.png')"
                   @click.stop="routerUserCenter(item.senderId)"/>
         <span slot="title">
@@ -33,13 +33,14 @@
                 {{ item.senderUsername }}
             </a>
             <span class="left">
-                <span style="padding-right: 2px;"> 回复了你的{{item.objectType === 1 ? '贴子' : '评论:'}} </span>
-              <a-badge :dot="!item.readFlag"></a-badge>
+                <span style="padding-right: 2px;"> 点赞了你的{{item.objectType === 1 ? '贴子' : '评论:'}} </span>
             </span>
           </span>
-        <span slot="title" v-if="item.objectType === 2">
-            {{item.commentVO.content}}
-          </span>
+        <span slot="title">
+            <span v-if="item.objectType === 2" style="color: #8a919f;">{{item.content}}</span>
+          <a-badge :dot="!item.readFlag"></a-badge>
+        </span>
+
         <div slot="title">
           <a @click.stop="routerPostDetail(item.objectId)">
             <span v-if="item.objectType === 1">{{item.postDetailVO.title ? item.postDetailVO.title : item.postDetailVO.content}}</span>
@@ -68,23 +69,23 @@ export default {
         { type: 'reply', text: '156' },
       ],
       data: [],
-      messageType: 1,
+      messageType: 2,
       noticeType: 1,
       currentPage: 1,
       pageSize: global.defaultPageSize,
-      params: {currentPage: 1, pageSize: global.defaultPageSize,noticeType:1,messageType:1},
+      params: {currentPage: 1, pageSize: global.defaultPageSize,noticeType:1,messageType:2},
       totalCount: 0,
       pagination: {
         onChange: (page,pageSize) => {
           this.pagination.current = page;
           this.pagination.pageSize = pageSize;
-          let params = {currentPage: page, pageSize: pageSize,noticeType:1,messageType:1};
+          let params = {currentPage: page, pageSize: pageSize,noticeType:1,messageType:2};
           messageService.getMessageList(params)
               .then((res) =>{
                 this.data = res.data.list;
                 this.pagination.total = res.data.totalCount;
               }).catch((err) => {
-                this.$message.error(err.msg);
+            this.$message.error(err.msg);
           });
         },
         defaultCurrent: 1,
@@ -98,24 +99,25 @@ export default {
     this.params.currentPage = 1;
     messageService.getMessageList(this.params)
         .then((res) =>{
+          console.log('res',res.data)
           this.data = res.data.list;
           this.pagination.total = res.data.totalCount;
         }).catch((err) => {
-          this.$message.error(err.msg);
+      this.$message.error(err.msg);
     });
   },
   methods: {
     readOne(item,index){
-        //当前的状态
+      //当前的状态
       let params = {noticeId:item.noticeId, readFlag: item.readFlag,userId:this.$store.state.userId};
       this.data[index].readFlag = !params.readFlag;
       messageService.markRead(params)
           .then((res) => {
             this.$message.success(res.msg)
           }).catch((err) => {
-          //请求异常改回来
-          this.data[index].readFlag = params.readFlag;
-          this.$message.error(err.msg)
+        //请求异常改回来
+        this.data[index].readFlag = params.readFlag;
+        this.$message.error(err.msg)
       });
 
     },
@@ -129,8 +131,8 @@ export default {
           .then((res) => {
             this.$message.success(res.msg)
           }).catch((err) => {
-            this.$message.error(err.msg)
-          });
+        this.$message.error(err.msg)
+      });
     },
 
     // 路由到用户中心页面

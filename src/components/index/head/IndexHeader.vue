@@ -12,22 +12,13 @@
           <a-menu v-if="!$store.state.collapsed" v-model="current" mode="horizontal">
             <a-menu-item key="frontPage" @click="refresh">{{ $t("common.home") }}</a-menu-item>
             <a-menu-item key="gossipPage" @click="routerGossip">{{ $t("common.gossip") }}</a-menu-item>
-            <a-menu-item key="boilingPoint" @click="routerLabel">{{ $t("common.label") }}</a-menu-item>
             <a-menu-item key="liveStreaming" @click="routerResource">{{ $t("common.resource") }}</a-menu-item>
-            <a-tooltip placement="bottom">
-              <template slot="title">
-                {{ $t("common.inDevelopment") }}
-              </template>
-              <a-menu-item key="course">{{ $t("common.course") }}</a-menu-item>
-            </a-tooltip>
           </a-menu>
           <a-select class="phone-frontPage" v-if="$store.state.collapsed" :default-value="current"
                     @change="handleChange" style="min-width: 90px; width: 100%">
             <a-select-option value="frontPage" @click="refresh">{{ $t("common.home") }}</a-select-option>
             <a-select-option value="gossipPage" @click="routerGossip">{{ $t("common.gossip") }}</a-select-option>
-            <a-select-option value="boilingPoint" @click="routerLabel">{{ $t("common.label") }}</a-select-option>
             <a-select-option value="liveStreaming" @click="routerResource">{{ $t("common.resource") }}</a-select-option>
-            <a-select-option value="course">{{ $t("common.course") }}</a-select-option>
           </a-select>
         </div>
       </div>
@@ -50,13 +41,6 @@
           </div>
         </div>
 
-        <!-- 管理端 -->
-<!--        <div v-if="$store.state.isLogin && !$store.state.collapsed" class="header-item" @click="routerManage">-->
-<!--          <div class="options">-->
-<!--            <span>{{ $t("common.management") }}</span>-->
-<!--          </div>-->
-<!--        </div>-->
-
         <!-- 主题色 -->
         <div class="header-item">
           <a-dropdown overlayClassName="header-theme-color-config" :placement="'bottomRight'"
@@ -76,42 +60,44 @@
           </a-dropdown>
         </div>
 
-        <!-- 消息通知 -->
         <div class="header-item badge-container" v-if="$store.state.isLogin">
-          <a-dropdown class="dropdown" v-model="visible" overlayClassName="header-message-box"
-                      :placement="'bottomRight'" :trigger="['click']">
-            <div class="ant-dropdown-menu" slot="overlay">
-              <MessageBox :visible.sync="visible"/>
-            </div>
-            <div class="options">
-              <a-badge class="badge" :count="$store.state.isLogin ? messageNumbers : 0" :overflow-count="99">
-                <i
-                    class="iconfont icon-bell"></i></a-badge>
-            </div>
-
-          </a-dropdown>
-        </div>
-
-        <div class="header-item badge-container" v-if="$store.state.isLogin">
-          <a-badge :dot="$store.state.allMessageCount >= 0">
-            <a-dropdown :trigger="['click']" >
+          <a-badge :dot="$store.state.allMessageCount > 0">
+            <a-dropdown class="dropdown" overlayClassName="header-message-box" :trigger="['click']">
               <a class="ant-dropdown-link" @click="e => e.preventDefault()">
                 <i class="iconfont icon-bell"></i>
               </a>
               <a-menu slot="overlay" @click="handleClickMessage">
                 <a-menu-item key="reply">
-                  回复我的
+                  <span style="display: flex">
+                    <span style="padding-right: 5px;">回复我的</span>
+                    <a-badge :count="$store.state.replyMessageCount" :overflow-count="99"/>
+                  </span>
                 </a-menu-item>
+
                 <a-menu-item key="like">
-                  收到的赞
+                  <span style="display: flex">
+
+                  </span>
+                  <span style="padding-right: 5px;">收到的赞</span>
+                  <a-badge :count="$store.state.likeMessageCount" :overflow-count="99"/>
                 </a-menu-item>
-                <a-menu-item key="fan">
-                  新增粉丝
+
+                <a-menu-item key="follow">
+                  <span style="display: flex">
+                    <span style="padding-right: 5px;">新增粉丝</span>
+                    <a-badge  :count="$store.state.followMessageCount" :overflow-count="99"/>
+                  </span>
                 </a-menu-item>
                 <a-menu-divider />
-                <a-menu-item key="system">
-                  系统通知
-                </a-menu-item>
+
+<!--                <a-menu-item key="system">-->
+<!--                  <span style="display: flex">-->
+<!--                    <span style="padding-right: 5px;">系统通知</span>-->
+<!--                    <a-badge :count="$store.state.systemMessageCount" :overflow-count="99"/>-->
+<!--                  </span>-->
+<!--                </a-menu-item>-->
+
+
               </a-menu>
             </a-dropdown>
           </a-badge>
@@ -127,9 +113,6 @@
               <a-divider style="margin: 3px 0 3px 0"/>
               <a-menu-item key="setUp">
                 <i class="iconfont icon-setUp"></i>{{ ' ' + $t("common.setUp") }}
-              </a-menu-item>
-              <a-menu-item key="about">
-                <i class="iconfont icon-about"></i>{{ ' ' + $t("common.about") }}
               </a-menu-item>
               <a-divider style="margin: 3px 0 3px 0"/>
               <a-menu-item key="LOG_OUT">
@@ -202,6 +185,14 @@
              @cancel="handleCancelLike">
       <LikeMessageList/>
     </a-modal>
+    <a-modal title="新增粉丝"
+             :destroyOnClose="true"
+             :visible="showFollow"
+             :footer="null"
+             :width="800"
+             @cancel="handleCancelFollow">
+      <FollowMessageList/>
+    </a-modal>
   </a-layout-header>
 </template>
 
@@ -209,7 +200,6 @@
 import {mapMutations, mapState} from "vuex";
 import loginService from "@/service/loginService";
 import Login from "@/components/login/Login";
-import MessageBox from "@/components/index/messages/MessageBox";
 import store from "@/store";
 import Register from "@/components/login/Register";
 import MobileResetPassword from "@/components/login/MobileResetPassword";
@@ -217,10 +207,12 @@ import EmailResetPassword from "@/components/login/EmailResetPassword";
 import userService from "@/service/userService";
 import ReplyMessageList from "@/components/index/messages/ReplyMessageList";
 import LikeMessageList from "@/components/index/messages/LikeMessageList";
+import FollowMessageList from "@/components/index/messages/FollowMessageList";
+
 
 export default {
-  components: {MessageBox, Login, Register, MobileResetPassword, EmailResetPassword,ReplyMessageList
-  ,LikeMessageList},
+  components: {Login, Register, MobileResetPassword, EmailResetPassword,ReplyMessageList
+  ,LikeMessageList,FollowMessageList},
 
   props: {
     searchContent: {type: String, default: ""},
@@ -244,6 +236,7 @@ export default {
     return {
       showReply: false,
       showLike: false,
+      showFollow: false,
       visible: false,
       params: {currentPage: 1, pageSize: global.defaultPageSize},
       // 如果不用watch监听searchContent值的变化,只会在该组件被创建时赋值一次
@@ -302,7 +295,8 @@ export default {
       if (key === 'like') {
         this.showLike = true;
       }
-      if (key === 'fan') {
+      if (key === 'follow') {
+        this.showFollow = true;
       }
       if (key === 'system') {
       }
@@ -313,7 +307,9 @@ export default {
     handleCancelLike(){
       this.showLike = false;
     },
-
+    handleCancelFollow(){
+      this.showFollow = false;
+    },
     // 显示登录框
     showLoginModal() {
       this.$store.state.loginVisible = true;

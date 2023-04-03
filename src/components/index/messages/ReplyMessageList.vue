@@ -107,7 +107,7 @@ export default {
   methods: {
     readOne(item,index){
         //当前的状态
-      let params = {noticeId:item.noticeId, readFlag: item.readFlag,userId:this.$store.state.userId};
+      let params = {noticeId:item.noticeId, readFlag: item.readFlag,userId:this.$store.state.userId,messageType:this.messageType,noticeType: this.noticeType};
       this.data[index].readFlag = !params.readFlag;
       messageService.markRead(params)
           .then((res) => {

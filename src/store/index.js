@@ -55,7 +55,7 @@ export default new Vuex.Store({
         allMessageCount: 0,
         replyMessageCount:0,
         likeMessageCount:0,
-        fanMessageCount:0,
+        followMessageCount:0,
         systemMessageCount:0,
         // 南生运营域名
         manageDomain: 'http://manage-test.nanshengbbs.top',
@@ -164,7 +164,7 @@ export default new Vuex.Store({
                 allMessageCount: 0,
                 replyMessageCount:0,
                 likeMessageCount:0,
-                fanMessageCount:0,
+                followMessageCount:0,
                 systemMessageCount:0,
                 // 南生运营域名
                 manageDomain: 'http://manage-test.nanshengbbs.top',

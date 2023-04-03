@@ -4,13 +4,6 @@
       <template v-for="{ type, text } in actions" slot="actions">
         <span :key="type">
           <span v-if="type === 'reply'">
-            <a style="margin-right: 8px" class="operate comment-comment" @click.stop="routerPostDetail(item.objectId, item.commentId)">
-              <i class="iconfont icon-comment" style="color: #8a919f;">
-                <small> 去看看</small>
-              </i>
-            </a>
-          </span>
-          <span v-if="type === 'reply'">
             <span>
               <a-button v-if="!item.readFlag" type="link" shape="round" @click="readOne(item,index)">
               标记为已读
@@ -33,19 +26,13 @@
                 {{ item.senderUsername }}
             </a>
             <span class="left">
-                <span style="padding-right: 2px;"> 点赞了你的{{item.objectType === 1 ? '贴子' : '评论:'}} </span>
+                <span style="padding-right: 2px;"> 关注了你 </span>
             </span>
           </span>
         <span slot="title">
             <span v-if="item.objectType === 2" style="color: #8a919f;">{{item.content}}</span>
           <a-badge :dot="!item.readFlag"></a-badge>
         </span>
-
-        <div slot="title">
-          <a @click.stop="routerPostDetail(item.objectId)">
-            <span v-if="item.objectType === 1">{{item.postDetailVO.title ? item.postDetailVO.title : item.postDetailVO.content}}</span>
-          </a>
-        </div>
       </a-list-item-meta>
       <div>
         <small style="color: #b5b9b9; padding-left: 10px;padding-right: 10px" v-text="item.updateTime"></small>
@@ -69,17 +56,17 @@ export default {
         { type: 'reply', text: '156' },
       ],
       data: [],
-      messageType: 2,
+      messageType: 3,
       noticeType: 1,
       currentPage: 1,
       pageSize: global.defaultPageSize,
-      params: {currentPage: 1, pageSize: global.defaultPageSize,noticeType:1,messageType:2},
+      params: {currentPage: 1, pageSize: global.defaultPageSize,noticeType:1,messageType:3},
       totalCount: 0,
       pagination: {
         onChange: (page,pageSize) => {
           this.pagination.current = page;
           this.pagination.pageSize = pageSize;
-          let params = {currentPage: page, pageSize: pageSize,noticeType:1,messageType:2};
+          let params = {currentPage: page, pageSize: pageSize,noticeType:1,messageType:3};
           messageService.getMessageList(params)
               .then((res) =>{
                 this.data = res.data.list;

@@ -170,12 +170,16 @@ export default {
     homePage: "个人主页",
     selfIntro: "个人介绍",
     //新增
+    nickname: "昵称",
+    sex: "性别",
     graduationYear: "毕业年份",
     educationalBackground:"学历",
     graduatedFrom:"毕业院校",
     specializedSubject:"专业",
     //
     saveChanges: "保存修改",
+    fillInYourNickname: "请输入你的昵称",
+    fillInYourSex: "请选择你的性别",
     fillInYourUsername: "填写你的用户名",
     fillInYourPosition: "填写你的职位",
     fillInYourCompany: "填写你的公司",

@@ -33,20 +33,6 @@
         </div>
       </div>
       <div class="right">
-        <div class="link">
-          <a-tooltip placement="left">
-            <template slot="title">
-              GitHub
-            </template>
-            <i class="iconfont icon-GitHub" style="color: #00000038;"></i>
-          </a-tooltip>
-          <a-tooltip placement="right">
-            <template slot="title">
-              个人主页
-            </template>
-            <i class="iconfont icon-personal-center" :style="data.homePage ? '' : 'color: #00000038'" @click="hrefFn(data.homePage)"></i>
-          </a-tooltip>
-        </div>
         <div class="follow-box">
           <div class="personalEdit" v-if="$store.state.userId === data.userId">
             <a-button class="follow-btn"
@@ -171,7 +157,7 @@
         if (points >= 1000 && points < 1500) {
           return 5;
         }
-        if (points >= 150) {
+        if (points >= 1500) {
           return 6;
         }
       },

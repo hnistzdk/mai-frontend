@@ -9,9 +9,9 @@ if (process.env.NODE_ENV === "production") {
 export default (() => {
     //校验过期时间
     let expireTimeStamp = window.localStorage.getItem("expireTimeStamp");
-    if (expireTimeStamp){
+    if (expireTimeStamp) {
         let now = dayjs().valueOf();
-        if (now >= expireTimeStamp){
+        if (now >= expireTimeStamp) {
             //证明已过期
             //清除localstorage
             window.localStorage.removeItem("access_token")
@@ -28,13 +28,13 @@ export default (() => {
         let token = window.localStorage.getItem('access_token');
         let userId = window.localStorage.getItem("userId")
         let username = window.localStorage.getItem("username")
-        if (token){
+        if (token) {
             config.headers.authorization = token;
         }
-        if (userId){
+        if (userId) {
             config.headers.userId = userId;
         }
-        if (username){
+        if (username) {
             config.headers.username = encodeURIComponent(username);
         }
         return config
@@ -49,11 +49,20 @@ export default (() => {
                 store.state.avatar = response.headers["x-user-avatar"];
             }
             // 后台会在响应头带上用户任务提醒和消息通知的数量，存在store里面，
-            if (response.headers["x-system-notify-count"]) {
-                store.state.systemNotifyCount = response.headers["x-system-notify-count"];
+            if (response.headers["x-message-reply-count"]) {
+                store.state.replyMessageCount = response.headers["x-message-reply-count"];
             }
-            if (response.headers["x-task-notify-count"]) {
-                store.state.taskNotifyCount = response.headers["x-task-notify-count"];
+            if (response.headers["x-message-like-count"]) {
+                store.state.likeMessageCount = response.headers["x-message-like-count"];
+            }
+            if (response.headers["x-message-follow-count"]) {
+                store.state.followMessageCount = response.headers["x-message-follow-count"];
+            }
+            if (response.headers["x-message-system-count"]) {
+                store.state.systemMessageCount = response.headers["x-message-system-count"];
+            }
+            if (response.headers["x-message-all-count"]) {
+                store.state.allMessageCount = response.headers["x-message-all-count"];
             }
             // console.log('axios响应',response)
             if (response.status === 200) {
@@ -69,7 +78,7 @@ export default (() => {
                         return Promise.reject(response.data);
                     }
                     //token过期或验证失败  清除token信息
-                    else if (response.data.code === 40001 || response.data.code === 401){
+                    else if (response.data.code === 40001 || response.data.code === 401) {
                         //清除localstorage
                         window.localStorage.removeItem("access_token")
                         window.localStorage.removeItem("expire")
@@ -80,21 +89,20 @@ export default (() => {
                         store.state.loginVisible = true;
                         // this.$router.go(0);
                         throw response.data;
-                    }else {
+                    } else {
                         throw response.data;
                     }
                 } else {
                     throw response;
                 }
-            }
-            else {
+            } else {
                 // 响应码不是200则返回一个失败的Promise
                 return Promise.reject(response);
             }
         }, error => {
-            console.log('error',error)
+            console.log('error', error)
             let resp = error.response;
-            if (resp.status === 401){
+            if (resp.status === 401) {
                 //清除localstorage
                 window.localStorage.removeItem("access_token")
                 window.localStorage.removeItem("expire")
@@ -106,7 +114,7 @@ export default (() => {
                 // console.log('isLogin',store.state.isLogin)
                 store.state.loginVisible = true;
                 // this.$router.push('/');
-            }else {
+            } else {
                 return Promise.reject(error);
             }
         }

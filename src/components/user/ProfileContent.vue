@@ -5,26 +5,29 @@
         <a-form-model ref="ruleForm" :model="ruleForm" :rules="rules" v-bind="layout" labelAlign="left">
           <p>{{ $t('common.personalInformation') }}</p>
           <a-divider/>
-          <!-- 用户名 -->
-<!--          <a-form-model-item has-feedback prop="username" :label="$t('common.username2')">-->
-<!--            <a-input v-model="ruleForm.username"-->
-<!--                     :maxLength="$store.state.userMaxLength"-->
-<!--                     :suffix="ruleForm.userNameNum + '/' + $store.state.userMaxLength"-->
-<!--                     @change="usernameChange"-->
-<!--                     autocomplete="off"-->
-<!--                     disabled="true"-->
-<!--                     :placeholder="$t('common.fillInYourUsername')"/>-->
-<!--          </a-form-model-item>-->
 
-          <!-- 个人主页 -->
-<!--          <a-form-model-item has-feedback prop="homePage" :label="$t('common.homePage')">-->
-<!--            <a-input v-model="ruleForm.homePage"-->
-<!--                     :suffix="ruleForm.homePageNum + '/100'"-->
-<!--                     @change="commonChange"-->
-<!--                     :maxLength="100"-->
-<!--                     :placeholder="$t('common.fillInYourHomePage')"-->
-<!--                     class="homePage"/>-->
-<!--          </a-form-model-item>-->
+          <!-- 昵称 -->
+          <a-form-item has-feedback :label="$t('common.nickname')" prop="nickname">
+            <a-input v-model="ruleForm.nickname"
+                     @change="commonChange"
+                     :maxLength="10"
+                     :suffix="ruleForm.nickNameNum + '/10'"
+                     autocomplete="off"
+                     class="nickname"
+                     :placeholder="$t('common.fillInYourNickName')"/>
+          </a-form-item>
+
+          <!-- 性别 -->
+          <a-form-item has-feedback :label="$t('common.sex')" prop="sex">
+            <a-select v-model="ruleForm.sex"
+                      @change="commonChange"
+                      :placeholder="$t('common.fillInYourSex')"
+                      :options="sexOptions"
+                      class="sex">
+            </a-select>
+          </a-form-item>
+
+
           <!-- 个人介绍 -->
           <a-form-model-item has-feedback prop="selfIntroduction" :label="$t('common.selfIntro')">
             <a-textarea v-model="ruleForm.selfIntroduction"
@@ -48,7 +51,7 @@
 <!--                      :placeholder="$t('common.fillInYourPosition')"-->
 <!--                      :options="positionOptions"-->
 <!--                      class="graduationYear">-->
-            </a-select>
+<!--            </a-select>-->
           </a-form-model-item>
           <!-- 公司 -->
           <a-form-model-item has-feedback prop="company" :label="$t('common.company')">
@@ -60,7 +63,7 @@
           </a-form-model-item>
 
           <!-- 毕业年份 -->
-          <a-form-item :label="$t('common.graduationYear')">
+          <a-form-item has-feedback prop="graduationYear" :label="$t('common.graduationYear')">
             <a-select v-model="ruleForm.graduationYear"
                       @change="commonChange"
                       :placeholder="$t('common.fillInYourGraduationYear')"
@@ -70,7 +73,7 @@
           </a-form-item>
 
           <!-- 学历 -->
-          <a-form-item :label="$t('common.educationalBackground')">
+          <a-form-item has-feedback prop="educationalBackground" :label="$t('common.educationalBackground')">
             <a-select v-model="ruleForm.educationalBackground"
                       @change="commonChange"
                       :placeholder="$t('common.fillInYourEducationalBackground')"
@@ -80,7 +83,7 @@
           </a-form-item>
 
           <!-- 毕业院校 -->
-          <a-form-item :label="$t('common.graduatedFrom')">
+          <a-form-item has-feedback prop="graduatedFrom" :label="$t('common.graduatedFrom')">
             <a-input v-model="ruleForm.graduatedFrom"
                      @change="commonChange"
                      autocomplete="off"
@@ -90,7 +93,7 @@
 
 
           <!-- 专业 -->
-          <a-form-item :label="$t('common.specializedSubject')">
+          <a-form-item has-feedback prop="specializedSubject" :label="$t('common.specializedSubject')">
             <a-input v-model="ruleForm.specializedSubject"
                       @change="commonChange"
                       :placeholder="$t('common.fillInYourSpecializedSubject')"
@@ -118,14 +121,8 @@
           <div class="avatar">
             <div @click="openUploadModal" class="avatar-container">
               <a-avatar
-                  v-if="true"
                   style="cursor: pointer" :size="120" icon="user"
                   :src="$store.state.avatar ? $store.state.avatar : require('@/assets/img/default_avatar.png')"/>
-              <img
-                  v-else
-                  src="@/assets/img/default_avatar.png"
-                  width="120"
-                  style="border-radius: 50%"/>
               <div class="avatar-wrapper">
                 <a-icon style="font-size: 38px" type="plus-circle"/>
                 <span style="line-height: 40px">{{
@@ -174,11 +171,14 @@
         }
       };
 
-      // 验证个人主页地址
-      let validateHomePage = (rule, value, callback) => {
-        if (value !== '' && !this.urlReg.test(value)) {
-          callback(new Error(this.$t('common.homePageUrl')));
-        } else {
+      // 验证昵称
+      let validateNickName = (rule, value, callback) => {
+        console.log('验证昵称')
+        if (value === '') {
+          callback(new Error("昵称不能为空"));
+        } else if (value.length > 10) {
+          callback(new Error("昵称长度在10个字符以内"));
+        }else {
           callback();
         }
       };
@@ -188,6 +188,10 @@
         // 加载中...
         spinning: true,
         visible: false,
+        sexOptions:[
+          {value:"0",label:"男"},
+          {value:"1",label:"女"}
+        ],
         educationalBackgroundOptions:[
           {value:"博士后",label:"博士后"},
           {value:"博士",label:"博士"},
@@ -228,6 +232,11 @@
           // 公司
           company: '',
           companyNum: 0,
+          //昵称
+          nickname: '',
+          nickNameNum: 0,
+          //性别
+          sex: 0,
           // 个人主页
           homePage: '',
           homePageNum: 0,
@@ -250,7 +259,7 @@
         },
         rules: {
           username: [{validator: validateUsername, trigger: 'change'}],
-          homePage: [{validator: validateHomePage, trigger: 'change'}],
+          nickname: [{validator: validateNickName, trigger: 'change'}],
         },
         layout: {
           labelCol: {span: this.$store.state.collapsed ? 24 : 3},
@@ -272,18 +281,20 @@
       getUserInfo() {
         userService.getUserInfo({userId: this.ruleForm.userId})
             .then(res => {
+              console.log('userInfo',res.data)
               this.spinning = false;
               this.ruleForm.username = res.data.username;
               this.ruleForm.userNameNum = res.data.username.length;
+
+              this.ruleForm.nickname = res.data.nickname ? res.data.nickname : '';
+              this.ruleForm.nickNameNum = res.data.nickname ? res.data.nickname.length : 0;
+              this.ruleForm.sex = res.data.sex ? res.data.sex : 0;
 
               this.ruleForm.position = res.data.position ? res.data.position : '';
               this.ruleForm.positionNum = res.data.position ? res.data.position.length : 0;
 
               this.ruleForm.company = res.data.company ? res.data.company : '';
               this.ruleForm.companyNum = res.data.company ? res.data.company.length : 0;
-              //
-              // this.ruleForm.homePage = res.data.homePage ? res.data.homePage : '';
-              // this.ruleForm.homePageNum = res.data.homePage ? res.data.homePage.length : 0;
 
               //学历信息
               this.ruleForm.selfIntroduction = res.data.selfIntroduction;
@@ -292,8 +303,6 @@
               this.ruleForm.specializedSubject = res.data.specializedSubject;
 
               this.ruleForm.introNum = res.data.selfIntroduction ? res.data.selfIntroduction.length : 0;
-
-              // this.ruleForm.orgId = res.data.orgId;
             })
             .catch(err => {
               this.$message.error(err.msg);
@@ -318,17 +327,16 @@
             const data = {
               userId: this.ruleForm.userId,
               // username: this.ruleForm.username,
+              nickname: this.ruleForm.nickname,
+              sex: this.ruleForm.sex,
               position: this.ruleForm.position,
               company: this.ruleForm.company,
-              // homePage: this.ruleForm.homePage,
               selfIntroduction: this.ruleForm.selfIntroduction,
               graduationYear: this.ruleForm.graduationYear,
               educationalBackground: this.ruleForm.educationalBackground,
               graduatedFrom: this.ruleForm.graduatedFrom,
               specializedSubject: this.ruleForm.specializedSubject,
-              // orgId: this.ruleForm.orgId,
             };
-            console.log('更新用户基本信息数据',data);
             this.updateUserBasicInfo(data);
           } else {
             return false;
@@ -342,8 +350,8 @@
       commonChange() {
         this.ruleForm.positionNum = this.ruleForm.position.length;
         this.ruleForm.companyNum = this.ruleForm.company.length;
-        this.ruleForm.homePageNum = this.ruleForm.homePage.length;
         this.ruleForm.introNum = this.ruleForm.selfIntroduction.length;
+        this.ruleForm.nickNameNum = this.ruleForm.nickname.length;
       },
 
       // 用户判重

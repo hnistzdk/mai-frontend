@@ -17,12 +17,6 @@
       </div>
       <span>{{ $t("common.postRead") + ' ' + data.readCount }}</span>
     </div>
-    <div class="rise" @click="routerBook">
-      <div :style="{ background: $store.state.themeColor}">
-        <i class="iconfont icon-rise" style="color: #fff; font-size: 12px;"></i>
-      </div>
-      <span>{{ $t("common.nanshengValue") + ' ' + data.points }}</span>
-    </div>
   </div>
 </template>
 

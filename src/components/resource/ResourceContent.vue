@@ -20,7 +20,7 @@
         </div>
       </a-popover>
       <a-button class="add-item" type="primary" style="height: 30px;" v-text="$t('common.add')"
-                @click="resourceAddCheck" v-if="$store.state.isManage"></a-button>
+                @click="resourceAddCheck"></a-button>
     </div>
     <div>
       <div class="tag">
@@ -31,7 +31,7 @@
             <a-avatar class="avatar" :size="35" :src="item.logo"/>
             <div class="title">{{ item.resourceName }}</div>
           </div>
-          <div class="meta-post">{{ item.desc }}</div>
+          <div class="meta-post">{{ item.description }}</div>
           <a-popover v-model="resourceEditVisible[item.id]" :title="$t('common.resourceEdit')" trigger="click"
                      placement="bottom">
             <div slot="content" style="width: 500px;">
@@ -41,7 +41,7 @@
                   :resourceId="item.id"
                   :resourceName="item.resourceName"
                   :category="item.category"
-                  :desc="item.desc"
+                  :description="item.description"
                   :link="item.link"
                   @refresh="refresh"/>
             </div>
@@ -91,8 +91,8 @@ export default {
 
   methods: {
     // 获取资源导航所有类别
-    getCategorys() {
-      resourceService.getCategorys()
+    getCategories() {
+      resourceService.getCategories()
           .then(res => {
             this.categoryList.push('all');
             res.data.forEach(value => {
@@ -100,7 +100,7 @@ export default {
             });
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -137,7 +137,7 @@ export default {
                   this.refresh();
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           },
         });
@@ -181,7 +181,7 @@ export default {
   },
 
   mounted() {
-    this.getCategorys();
+    this.getCategories();
     this.updateResourceEditVisible();
   },
 

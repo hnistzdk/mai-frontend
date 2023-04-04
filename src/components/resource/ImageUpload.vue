@@ -61,13 +61,14 @@ export default {
 
       resourceService.uploadResourceLogo(data)
           .then(res => {
+            console.log('res',res);
             this.fileList[0].status = 'done';
-            this.fileList[0].url = res.data;
-            this.$emit("resourceLogoFn", res.data);
+            this.fileList[0].url = res.msg;
+            this.$emit("resourceLogoFn", res.msg);
           })
           .catch(err => {
             this.fileList[0].status = 'error';
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 

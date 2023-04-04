@@ -75,6 +75,7 @@ export default {
       userService.getUserInfo({userId: this.userId})
           .then(res => {
             this.data = res.data;
+            console.log('用户信息',res.data)
           })
           .catch(err => {
             this.$message.error(err.msg);

@@ -17,17 +17,23 @@
               <i class="iconfont icon-office"></i>
               <span>{{ data.position }}</span>
             </span>
-            <span v-else-if="$store.state.userId === data.id" @click="routerSetUp">
+            <span v-else-if="$store.state.userId === data.userId" @click="routerSetUp">
               <a><a-icon type="plus"/>{{ $t("common.notJob") }}</a>
             </span>
           </div>
+<!--          <div class="intro">-->
+<!--            <span v-if="data.selfIntroduction">-->
+<!--              <i class="iconfont icon-intro"></i>-->
+<!--              <span>{{ data.selfIntroduction }}</span>-->
+<!--            </span>-->
+<!--            <span v-else-if="$store.state.userId === data.userId" @click="routerSetUp">-->
+<!--              <a><a-icon type="plus"/>{{ $t("common.notHobbies") }}</a>-->
+<!--            </span>-->
+<!--          </div>-->
           <div class="intro">
-            <span v-if="data.selfIntroduction">
+            <span>
               <i class="iconfont icon-intro"></i>
-              <span>{{ data.selfIntroduction }}</span>
-            </span>
-            <span v-else-if="$store.state.userId === data.id" @click="routerSetUp">
-              <a><a-icon type="plus"/>{{ $t("common.notHobbies") }}</a>
+              <span>{{ data.company ? data.company : '' }}</span>
             </span>
           </div>
         </div>

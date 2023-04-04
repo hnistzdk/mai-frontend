@@ -13,13 +13,13 @@
           </div>
           <a-col :span="$store.state.collapsed ? 24 : 18"
                  :style="$store.state.collapsed ? '' : 'border-right: 20px solid #f0f2f5'">
-            <!-- 文章详情 -->
+            <!-- 贴子详情 -->
             <PostDetail
                 @initLabelIds="initLabelIds"
                 @initPostInfo="initPostInfo"
                 style="background: #fff;"/>
             <br/>
-            <!-- 文章评论 -->
+            <!-- 贴子评论 -->
             <PostComment
                 @refresh="refresh"
                 :postUserId="userId"
@@ -39,16 +39,16 @@
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 相关文章 -->
-            <RelatPost
-                v-if="finishPostDetail"
-                :labelIds="labelIds"
-                style="background: #fff;"/>
+            <!-- 相关贴子 -->
+<!--            <RelatPost-->
+<!--                v-if="finishPostDetail"-->
+<!--                :labelIds="labelIds"-->
+<!--                style="background: #fff;"/>-->
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
             <!-- 作者榜 -->
-            <AuthorsList style="background: #fff;"/>
+<!--            <AuthorsList style="background: #fff;"/>-->
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
@@ -100,9 +100,9 @@
         postHtml: '',
         finishPostDetail: false,
         labelIds: [],
-        // 当前文章的作者
+        // 当前贴子的作者
         userId: 0,
-        // 文章总的评论数
+        // 贴子总的评论数
         postCommentCount: 0,
         postInfo: {},
       };
@@ -119,11 +119,13 @@
       //把贴子信息传回来
       initPostInfo(postInfo){
         this.postInfo = postInfo;
+        this.userId = postInfo.authorId;
         this.postHtml = this.$utils.toToc(postInfo.html);
+        this.finishPostDetail =  true
       },
 
       refresh() {
-        // 获取文章一些统计数据
+        // 获取贴子一些统计数据
         this.$refs.child.getStatisticalData()
       },
 

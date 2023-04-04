@@ -4,15 +4,15 @@ export default {
   // 获取资源导航
   getResourceList(params) {
     return new Promise((resolve, reject) => {
-      axios.get("/resource/getList", {params})
+      axios.get("/resource/list", {params})
           .then((res) => resolve(res))
           .catch((err) => reject(err));
     });
   },
-  // 获取资源导航
-  getCategorys(params) {
+  // 获取资源导航所有类别
+  getCategories(params) {
     return new Promise((resolve, reject) => {
-      axios.get("/resource/getCategorys", {params})
+      axios.get("/resource/categories", params)
           .then((res) => resolve(res))
           .catch((err) => reject(err));
     });

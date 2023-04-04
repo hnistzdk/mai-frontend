@@ -10,7 +10,7 @@
                :placeholder="$t('common.pleaseCategory')"/>
     </a-form-item>
     <a-form-item :label="$t('common.resourceDesc')">
-      <a-input v-decorator="['desc', validatorRules.resourceDesc]"
+      <a-input v-decorator="['description', validatorRules.resourceDesc]"
                :placeholder="$t('common.pleaseDesc')"/>
     </a-form-item>
     <a-form-item :label="$t('common.resourceLink')">
@@ -46,7 +46,7 @@ export default {
     // 资源导航名称
     category: {type: String, default: ''},
     // 资源导航名称
-    desc: {type: String, default: ''},
+    description: {type: String, default: ''},
     // 资源导航名称
     link: {type: String, default: ''},
     // 资源导航logo
@@ -102,7 +102,7 @@ export default {
             "logo": this.resourceLogo,
             "resourceName": values.resourceName,
             "category": values.category,
-            "desc": values.desc,
+            "description": values.description,
             "link": values.link,
           };
           if (this.resourceLogo) {
@@ -134,7 +134,7 @@ export default {
             this.refresh();
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -146,12 +146,14 @@ export default {
             this.refresh();
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     resourceLogoFn(logo) {
+      console.log('执行logo赋值')
       this.resourceLogo = logo;
+      console.log('this.resourceLogo',this.resourceLogo)
     },
 
     refresh() {
@@ -164,7 +166,7 @@ export default {
     this.form.setFieldsValue({
       resourceName: this.resourceName,
       category: this.category,
-      desc: this.desc,
+      description: this.description,
       link: this.link,
     })
   }

@@ -29,27 +29,17 @@
                   <a-icon :type="type" style="margin-right: 6px;"/>
                   <span v-text="item.commentCount"></span>
               </span>
-              <span v-if="(($store.state.isManage && isAdminAudit) || $store.state.userId === item.authorId) && type==='ellipsis'"
+              <span v-if="(($store.state.isManage) || $store.state.userId === item.authorId) && type==='ellipsis'"
                     @click.stop>
                 <a-dropdown :placement="'bottomCenter'" :trigger="['click']">
                   <a-menu slot="overlay">
-                    <!-- 审核通过 -->
-                    <a-menu-item key="postPass" v-if="($store.state.isManage && isAdminAudit) && (item.state === -1 || item.state !== 1)"
-                                 @click="updateState(item.postId, item.state, 1)">
-                      {{ ' ' + $t("common.pass") }}
-                    </a-menu-item>
-                    <!-- 审核拒绝 -->
-                    <a-menu-item key="postReject" v-if="($store.state.isManage && isAdminAudit) && (item.state === -1 || item.state !== 0)"
-                                 @click="updateState(item.postId, item.state, 0)">
-                      <span style="color: red">{{ ' ' + $t("common.reject") }}</span>
-                    </a-menu-item>
                     <!-- 贴子置顶 -->
-                    <a-menu-item key="postNotTop" v-if="$store.state.isManage && isAdminAudit && !item.top"
+                    <a-menu-item key="postNotTop" v-if="$store.state.isManage && !item.top"
                                  @click="postTop(item.postId)">
                       <span style="color: #1869ff">{{ ' ' + $t("common.isTop") }}</span>
                     </a-menu-item>
                     <!-- 贴子取消置顶 -->
-                    <a-menu-item key="postTop" v-if="$store.state.isManage && isAdminAudit && item.top"
+                    <a-menu-item key="postTop" v-if="$store.state.isManage && item.top"
                                  @click="postNotTop(item.postId)">
                       <span style="color: #eb2f96">{{ ' ' + $t("common.isNotTop") }}</span>
                     </a-menu-item>
@@ -194,75 +184,13 @@ import IndexCreate from "@/components/post/IndexCreate";
         }
       },
 
-      // 修改贴子审批状态
-      updateState(postId, state, toState) {
-        this.$confirm({
-          centered: true,
-          title: this.$t("common.confirmReject"),
-          onOk: () => {
-            postService.updateState({id: postId, state: toState})
-                .then(() => {
-                  this.tempData = this.tempData.filter(post => post.postId !== postId);
-                  // 待审核
-                  if (state === -1) {
-                    this.$emit("updatePendingReviewData", this.tempData);
-                    // 通过
-                    if (toState === 1) {
-                      this.$emit("updatePendingReviewTotal", -1)
-                      this.$emit("updateTotal", 1)
-                      this.$emit("updateReviewRejectedTotal", -1)
-                    }
-                    // 拒绝
-                    if (toState === 0) {
-                      this.$emit("updatePendingReviewTotal", -1)
-                      this.$emit("updateTotal", -1)
-                      this.$emit("updateReviewRejectedTotal", 1)
-                    }
-                  }
-                  // 审核拒绝
-                  if (state === 0) {
-                    this.$emit("updateReviewRejectedData", this.tempData);
-                    // 通过
-                    if (toState === 1) {
-                      this.$emit("updateTotal", 1)
-                      this.$emit("updateReviewRejectedTotal", -1)
-                    }
-                    // 拒绝
-                    if (toState === 0) {
-                      this.$emit("updateTotal", -1)
-                      this.$emit("updateReviewRejectedTotal", 1)
-                    }
-                  }
-                  // 审核通过
-                  if (state === 1) {
-                    this.$emit("updateData", this.tempData);
-                    // 通过
-                    if (toState === 1) {
-                      this.$emit("updateTotal", 1)
-                      this.$emit("updateReviewRejectedTotal", -1)
-                    }
-                    // 拒绝
-                    if (toState === 0) {
-                      this.$emit("updateTotal", -1)
-                      this.$emit("updateReviewRejectedTotal", 1)
-                    }
-                  }
-                  this.$message.success(this.$t("common.approvalSuccessed"));
-                })
-                .catch(err => {
-                  this.$message.error(err.msg);
-                });
-          },
-        });
-      },
-
       // 贴子置顶
       postTop(postId) {
         this.$confirm({
           centered: true,
           title: this.$t("common.confirmTop"),
           onOk: () => {
-            postService.postTop({id: postId, top: true})
+            postService.postTop({postId: postId, top: true})
                 .then(() => {
                   this.$message.success(this.$t("common.topSuccessed"));
                 })
@@ -279,7 +207,7 @@ import IndexCreate from "@/components/post/IndexCreate";
           centered: true,
           title: this.$t("common.confirmNotTop"),
           onOk: () => {
-            postService.postTop({id: postId, top: false})
+            postService.postTop({postId: postId, top: false})
                 .then(() => {
                   this.$message.success(this.$t("common.notTopSuccessed"));
                 })

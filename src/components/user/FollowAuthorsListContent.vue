@@ -20,12 +20,14 @@
               <span> {{ item.userInfo.readCount + ' ' + $t("common.read") }}</span>
             </div>
           </div>
-          <a-button class="follow-btn" v-if="!item.userInfo.isFollow && $store.state.userId !== item.fromUser"
+          <a-button class="follow-btn" v-if="!item.userInfo.isFollow && $store.state.userId !== item.fromUser
+                                                "
                     @click="updateFollowState(getFollow ? item.toUser : item.fromUser, index)"
                     :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
             {{ $t("common.follow") }}
           </a-button>
-          <a-button class="follow-btn-close" v-if="item.userInfo.isFollow && $store.state.userId !== item.toUser"
+          <a-button class="follow-btn-close" v-if="item.userInfo.isFollow && $store.state.userId !== item.toUser
+                                                   && item.userInfo.userId !== $store.state.userId             "
                     @click="updateFollowState(getFollow ? item.toUser : item.fromUser, index)">
             {{ $t("common.haveFollowed") }}
           </a-button>
@@ -58,7 +60,8 @@
         }
         userService.updateFollowState({toUser: toUser,toUsername:this.data[index].toUsername})
             .then(() => {
-              this.$emit("refresh");
+              this.$router.go(0);
+              // this.$emit("refresh");
             })
             .catch(err => {
               this.$message.error(err.msg);

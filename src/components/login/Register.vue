@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal v-model="$store.state.registerVisible" @ok="handleOk" :footer="null" :width="'320px'">
+    <a-modal v-model="$store.state.registerVisible" @ok="handleOk" :footer="null" :width="'450px'">
       <a-form-model ref="ruleForm" :model="ruleForm" :rules="rules" v-bind="layout" id="register-form-content">
         <h1 class="title">{{ $t("common.userRegister") }}</h1>
         <a-form-model-item has-feedback prop="username">
@@ -120,9 +120,10 @@ export default {
     setLoginState() {
       this.$store.state.isLogin = true;
     },
-    setUserInfo(userId,username) {
+    setUserInfo(userId,username,admin) {
       this.$store.state.userId = userId;
       this.$store.state.username = username;
+      this.$store.state.isManage = admin;
     },
 
     submitForm(formName) {
@@ -133,17 +134,20 @@ export default {
                 window.localStorage.setItem("access_token",res.data.accessToken)
                 window.localStorage.setItem("userId",res.data.userId)
                 window.localStorage.setItem("username",res.data.username)
+                window.localStorage.setItem("admin",res.data.admin)
                 //过期分钟数
                 let expiresIn = res.data.expiresIn;
                 let expireTimeStamp = dayjs().add(expiresIn,'minute').valueOf();
                 window.localStorage.setItem("expireTimeStamp",expireTimeStamp);
                 this.handleOk();
-                this.setUserInfo(res.data.userId,res.data.username)
-                this.login();
+                this.setUserInfo(res.data.userId,res.data.username,res.data.admin)
                 //将state存入localStorage供刷新页面后恢复状态
                 window.localStorage.setItem("state",JSON.stringify(store.state));
-                // 刷新当前页面
-                this.$router.go(0);
+
+                // 作弹窗通知
+                this.$utils.successModal(() => this.login(),'提示',this.$t('common.registerSuccess'));
+
+
               })
               .catch(err => {
                 this.$message.error(err.msg);
@@ -154,10 +158,11 @@ export default {
       });
     },
 
-    // 直接登录
+    // 弹出登录框
     login() {
+      this.$message.success('请登录',5);
       this.$store.state.registerVisible = false;
-      this.$store.state.isLogin = true;
+      this.$store.state.loginVisible = true;
     },
 
     // 用户判重

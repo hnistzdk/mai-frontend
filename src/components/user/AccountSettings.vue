@@ -3,26 +3,26 @@
     <p>{{ $t('common.accountSettings') }}</p>
     <a-divider/>
     <div class="settings-content">
-      <section>
-        <div class="title">
-          {{ $t("common.phone") }}
-        </div>
-        <div v-if="user.phone" class="phone-fields">
-          <div>{{ user.phone }}</div>
-        </div>
-        <div>
-          <a-popconfirm v-if="user.phone" :title="$t('common.unBindPhoneTitle')" @confirm="toggleBindPhone()"
-                        class="operation">
-            <a-button type="danger" size="small">
-              {{ $t("common.unBind") }}
-            </a-button>
-          </a-popconfirm>
-          <a v-else @click="toggleBindPhone">
-            <a-icon type="plus"/>{{ $t("common.bindPhone") }}
-          </a>
-        </div>
-      </section>
-      <a-divider/>
+<!--      <section>-->
+<!--        <div class="title">-->
+<!--          {{ $t("common.phone") }}-->
+<!--        </div>-->
+<!--        <div v-if="user.phone" class="phone-fields">-->
+<!--          <div>{{ user.phone }}</div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <a-popconfirm v-if="user.phone" :title="$t('common.unBindPhoneTitle')" @confirm="toggleBindPhone()"-->
+<!--                        class="operation">-->
+<!--            <a-button type="danger" size="small">-->
+<!--              {{ $t("common.unBind") }}-->
+<!--            </a-button>-->
+<!--          </a-popconfirm>-->
+<!--          <a v-else @click="toggleBindPhone">-->
+<!--            <a-icon type="plus"/>{{ $t("common.bindPhone") }}-->
+<!--          </a>-->
+<!--        </div>-->
+<!--      </section>-->
+<!--      <a-divider/>-->
       <section>
         <div class="title">
           {{ $t("common.email") }}

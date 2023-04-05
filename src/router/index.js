@@ -31,6 +31,10 @@ const routes = [
     {
         path: "/write",
         component: () => import("@/components/index/WritePostIndex"),
+        meta: {
+            //该字段表示跳转需要验证
+            requireAuth: true
+        },
     },
     {
         path: "/edit/:id",
@@ -66,6 +70,10 @@ const routes = [
     {
         path: "/settings",
         component: () => import("@/components/index/SetUpIndex"),
+        meta: {
+            //该字段表示跳转需要验证
+            requireAuth: true
+        },
         children: [
             {
                 path: "",
@@ -74,12 +82,20 @@ const routes = [
             {
                 path: "profile",
                 name: "profile",
-                component: () => import("@/components/user/ProfileContent")
+                component: () => import("@/components/user/ProfileContent"),
+                meta: {
+                    //该字段表示跳转需要验证
+                    requireAuth: true
+                }
             },
             {
                 path: "account",
                 name: "account",
-                component: () => import("@/components/user/AccountSettings")
+                component: () => import("@/components/user/AccountSettings"),
+                meta: {
+                    //该字段表示跳转需要验证
+                    requireAuth: true
+                }
             },
         ]
     },
@@ -92,6 +108,33 @@ const routes = [
         path: "/book",
         name: "book",
         component: () => import("@/components/index/Book"),
+    },
+    {
+        path: "/admin",
+        name: "admin",
+        component: () => import("@/components/admin/user/AdminUser"),
+        meta: {
+            //该字段表示跳转需要验证
+            requireAuth: true
+        }
+    },
+    {
+        path: "/admin/user",
+        name: "user",
+        component: () => import("@/components/admin/user/AdminUser"),
+        meta: {
+            //该字段表示跳转需要验证
+            requireAuth: true
+        }
+    },
+    {
+        path: "/admin/role",
+        name: "role",
+        component: () => import("@/components/admin/role/AdminRole"),
+        meta: {
+            //该字段表示跳转需要验证
+            requireAuth: true
+        }
     },
     {
         path: "/about",

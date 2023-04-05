@@ -28,9 +28,9 @@
           <a-button type="primary" html-type="submit" class="login-form-button" size="large" @click="submitForm('ruleForm')">
             {{ $t("common.saveChanges") }}
           </a-button>
-          <a @click="mobileResetPassword">
-            {{ $t("common.mobileResetPassword") }}
-          </a>
+<!--          <a @click="mobileResetPassword">-->
+<!--            {{ $t("common.mobileResetPassword") }}-->
+<!--          </a>-->
           <a @click="login" style="float: right;">
             {{ $t("common.loginNow") }}
           </a>

@@ -5,10 +5,10 @@
         <span :key="type">
           <span v-if="type === 'reply'">
             <span>
-              <a-button v-if="!item.readFlag" type="link" shape="round" @click="readOne(item,index)">
+              <a-button size="small" v-if="!item.readFlag" type="link" shape="round" @click="readOne(item,index)">
               标记为已读
               </a-button>
-              <a-button v-if="item.readFlag" type="danger" shape="round" @click="readOne(item,index)">
+              <a-button size="small" v-if="item.readFlag" type="danger" shape="round" @click="readOne(item,index)">
               标记为未读
               </a-button>
             </span>

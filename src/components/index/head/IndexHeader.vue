@@ -115,6 +115,10 @@
                 <i class="iconfont icon-setUp"></i>{{ ' ' + $t("common.setUp") }}
               </a-menu-item>
               <a-divider style="margin: 3px 0 3px 0"/>
+              <a-menu-item v-if="$store.state.isManage" key="management">
+                <i class="iconfont icon-setUp"></i>{{ ' ' + $t("common.management") }}
+              </a-menu-item>
+              <a-divider style="margin: 3px 0 3px 0"/>
               <a-menu-item key="LOG_OUT">
                 <i class="iconfont icon-quit"></i>{{ ' ' + $t("common.logOut") }}
               </a-menu-item>
@@ -332,7 +336,7 @@ export default {
             //设置登录状态为false
             this.setLogout();
             // 刷新当前页面
-            this.$router.go(0);
+            this.$router.push("/");
           })
           .catch(err => {
             this.$message.error(err.msg);
@@ -399,7 +403,7 @@ export default {
 
     // 路由到管理端
     routerManage() {
-      window.open(this.$store.state.manageDomain, '_blank');
+      this.$router.push("/admin");
     },
 
   },

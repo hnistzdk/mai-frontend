@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal v-model="$store.state.loginVisible" @ok="handleOk" :footer="null" :width="'320px'">
+    <a-modal v-model="$store.state.loginVisible" @ok="handleOk" :footer="null" :width="'450px'">
       <a-form id="login-form-content"
               :form="form"
               class="login-form"
@@ -67,9 +67,10 @@
       setLoginState() {
         this.$store.state.isLogin = true;
       },
-      setUserInfo(userId,username) {
+      setUserInfo(userId,username,admin) {
         this.$store.state.userId = userId;
         this.$store.state.username = username;
+        this.$store.state.isManage = admin;
       },
       //获取token过期的时间以便比较
       getExpireDate(expiresIn){
@@ -88,6 +89,7 @@
                   window.localStorage.setItem("access_token",res.data.accessToken)
                   window.localStorage.setItem("userId",res.data.userId)
                   window.localStorage.setItem("username",res.data.username)
+                  window.localStorage.setItem("admin",res.data.admin)
                   //过期分钟数
                   let expiresIn = res.data.expiresIn;
                   let expireTimeStamp = dayjs().add(expiresIn,'minute').valueOf();
@@ -95,7 +97,7 @@
                   //设置登录状态
                   this.setLoginState();
                   this.handleOk();
-                  this.setUserInfo(res.data.userId,res.data.username)
+                  this.setUserInfo(res.data.userId,res.data.username,res.data.admin)
                   //将state存入localStorage供刷新页面后恢复状态
                   window.localStorage.setItem("state",JSON.stringify(store.state));
                   // 刷新当前页面
@@ -115,7 +117,7 @@
 
       mobileResetPassword() {
         this.$store.state.loginVisible = false;
-        this.$store.state.mobileResetPasswordVisible = true;
+        this.$store.state.emailResetPasswordVisible = true;
       },
 
     },

@@ -129,7 +129,7 @@ export default {
     // 贴子置顶/取消置顶
     postTop(params) {
         return new Promise((resolve, reject) => {
-            axios.get("/post/postTop", {params})
+            axios.post("/post/top", params)
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

@@ -10,70 +10,12 @@
                  :style="$store.state.collapsed ? '' : 'border-right: 20px solid #f0f2f5'">
             <CustomEmpty v-if="spinning"/>
             <div v-else>
-              <!-- 轮播图 -->
-<!--              <SlideShow v-if="!$store.state.collapsed && $store.state.isCarousel"/>-->
-
 
               <a-row v-if="!$store.state.collapsed && $store.state.isCarousel">
                 <a-col :span="24" style="height: 2px;"/>
               </a-row>
-              <!-- 管理员才需要 -->
-              <a-tabs default-active-key="approved" @change="changeTab" style="background: #fff;" v-if="$store.state.isManage">
-                <a-tab-pane key="approved">
-                  <span slot="tab">
-                    {{ $t("common.approved") + "(" + totalCount + ")" }}
-                  </span>
-                  <!-- 贴子列表 -->
-                  <FrontPagePost v-if="!spinning && isApprovedTab"
-                                    :finish="finish"
-                                    :hasNext="hasNext"
-                                    :data="listData"
-                                    :service="postService"
-                                    :isAdminAudit="true"
-                                    @updateData="updateData"
-                                    @updateTotal="updateTotal"
-                                    @updateReviewRejectedTotal="updateReviewRejectedTotal"
-                                    @refresh="refresh"
-                                    style="background: #fff;"/>
-                </a-tab-pane>
-                <a-tab-pane key="pendingReview">
-                  <span slot="tab">
-                    {{ $t("common.pendingReview") + "(" + pendingReviewTotal + ")"}}
-                  </span>
-                  <!-- 贴子列表 -->
-                  <FrontPagePost v-if="!spinning && isPendingReviewTab"
-                                    :finish="finish"
-                                    :hasNext="hasNext"
-                                    :data="pendingReviewData"
-                                    :service="postService"
-                                    :isAdminAudit="true"
-                                    @updatePendingReviewData="updatePendingReviewData"
-                                    @updatePendingReviewTotal="updatePendingReviewTotal"
-                                    @updateTotal="updateTotal"
-                                    @updateReviewRejectedTotal="updateReviewRejectedTotal"
-                                    @refresh="refresh"
-                                    style="background: #fff;"/>
-                </a-tab-pane>
-                <a-tab-pane key="reviewRejected">
-                  <span slot="tab">
-                    {{ $t("common.reviewRejected") + "(" + reviewRejectedTotal + ")"}}
-                  </span>
-                  <!-- 贴子列表 -->
-                  <FrontPagePost v-if="!spinning && isReviewRejectedTab"
-                                    :finish="finish"
-                                    :hasNext="hasNext"
-                                    :data="reviewRejectedData"
-                                    :service="postService"
-                                    :isAdminAudit="true"
-                                    @updateReviewRejectedData="updateReviewRejectedData"
-                                    @updateTotal="updateTotal"
-                                    @updateReviewRejectedTotal="updateReviewRejectedTotal"
-                                    @refresh="refresh"
-                                    style="background: #fff;"/>
-                </a-tab-pane>
-              </a-tabs>
               <!-- 贴子列表 -->
-              <FrontPagePost v-if="!$store.state.isManage && !spinning"
+              <FrontPagePost v-if="!spinning"
                                 :finish="finish"
                                 :hasNext="hasNext"
                                 :data="listData"
@@ -83,8 +25,6 @@
             </div>
           </a-col>
           <a-col v-if="!$store.state.collapsed" :span="6">
-            <!-- 系统简介 -->
-<!--            <ProjectIntro style="background: #fff;"/>-->
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
@@ -98,13 +38,6 @@
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-<!--            &lt;!&ndash; 友情捐赠 &ndash;&gt;-->
-<!--            <FriendDonate style="background: #fff;"/>-->
-<!--            <a-row>-->
-<!--              <a-col :span="24" style="height: 10px;"/>-->
-<!--            </a-row>-->
-<!--            &lt;!&ndash; 备案信息 &ndash;&gt;-->
-<!--            <FilingInfo/>-->
           </a-col>
         </main>
       </a-layout-content>
@@ -154,10 +87,6 @@
     },
     data() {
       return {
-        // 是否在审批通过tab下
-        isApprovedTab: true,
-        isPendingReviewTab: false,
-        isReviewRejectedTab: false,
         // 加载中...
         spinning: true,
         postService: postService,
@@ -179,15 +108,7 @@
       // 加载更多（滚动加载）
       loadMore() {
         this.params.currentPage++;
-        if (this.isApprovedTab) {
-          this.getPostList(this.params, true);
-        }
-        if (this.isPendingReviewTab) {
-          this.getPendingReviewPosts(this.params, true);
-        }
-        if (this.isReviewRejectedTab) {
-          this.getDisabledPosts(this.params, true);
-        }
+        this.getPostList(this.params, true);
       },
 
       // 获取贴子列表信息
@@ -216,112 +137,11 @@
             });
       },
 
-      // 获取待审核的贴子
-      getPendingReviewPosts(params, isLoadMore) {
-        if (!isLoadMore) {
-          this.params.currentPage = 1;
-        }
-        this.finish = false;
-        postService.getPendingReviewPosts(params)
-            .then(res => {
-              if (isLoadMore) {
-                this.pendingReviewData = this.pendingReviewData.concat(res.data.list);
-                this.hasNext = res.data.list.length !== 0;
-              } else {
-                this.pendingReviewData = res.data.list;
-              }
-              this.pendingReviewTotal = res.data.total;
-              this.spinning = false;
-              this.finish = true;
-            })
-            .catch(err => {
-              this.finish = true;
-              this.$message.error(err.msg);
-            });
-      },
-
-      // 获取禁用的贴子
-      getDisabledPosts(params, isLoadMore) {
-        if (!isLoadMore) {
-          this.params.currentPage = 1;
-        }
-        this.finish = false;
-        postService.getDisabledPosts(params)
-            .then(res => {
-              if (isLoadMore) {
-                this.reviewRejectedData = this.reviewRejectedData.concat(res.data.list);
-                this.hasNext = res.data.list.length !== 0;
-              } else {
-                this.reviewRejectedData = res.data.list;
-              }
-              this.reviewRejectedTotal = res.data.total;
-              this.spinning = false;
-              this.finish = true;
-            })
-            .catch(err => {
-              this.finish = true;
-              this.$message.error(err.msg);
-            });
-      },
 
       // 刷新列表
       refresh() {
         this.params = {currentPage: 1, pageSize: global.defaultPageSize,type: 1};
         this.getPostList(this.params);
-      },
-
-      // tab切换回调
-      changeTab(activeKey) {
-        if (activeKey === 'approved') {
-          this.isApprovedTab = true;
-          this.isPendingReviewTab = false;
-          this.isReviewRejectedTab = false;
-          this.hasNext = true;
-          this.getPostList(this.params);
-          // 监听滚动，做滚动加载
-          this.$utils.scroll.call(this, document.querySelector('#app'));
-        }
-        if (activeKey === 'pendingReview') {
-          this.isApprovedTab = false;
-          this.isPendingReviewTab = true;
-          this.isReviewRejectedTab = false;
-          this.hasNext = true;
-          this.getPendingReviewPosts(this.params);
-          // 监听滚动，做滚动加载
-          this.$utils.scroll.call(this, document.querySelector('#app'));
-        }
-        if (activeKey === 'reviewRejected') {
-          this.isApprovedTab = false;
-          this.isPendingReviewTab = false;
-          this.isReviewRejectedTab = true;
-          this.hasNext = true;
-          this.getDisabledPosts(this.params);
-          // 监听滚动，做滚动加载
-          this.$utils.scroll.call(this, document.querySelector('#app'));
-        }
-      },
-
-      // 通过
-      updateTotal(count) {
-        this.totalCount += count;
-      },
-      // 同步data变化
-      updateData(tempData) {
-        this.listData = tempData;
-      },
-      // 拒绝
-      updateReviewRejectedTotal(count) {
-        this.reviewRejectedTotal += count;
-      },
-      updateReviewRejectedData(tempData) {
-        this.reviewRejectedData = tempData;
-      },
-      // 待审核
-      updatePendingReviewTotal(count) {
-        this.pendingReviewTotal += count;
-      },
-      updatePendingReviewData(tempData) {
-        this.pendingReviewData = tempData;
       },
     },
 
@@ -330,10 +150,6 @@
       this.searchContent = query;
       this.params.title = query;
       this.getPostList(this.params);
-      if (this.$store.state.isManage) {
-        this.getPendingReviewPosts(this.params);
-        this.getDisabledPosts(this.params);
-      }
       // 监听滚动，做滚动加载
       this.$utils.scroll.call(this, document.querySelector('#app'));
     },

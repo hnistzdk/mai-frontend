@@ -33,7 +33,7 @@ const routes = [
         component: () => import("@/components/index/WritePostIndex"),
         meta: {
             //该字段表示跳转需要验证
-            requireAuth: true
+            requireLogin: true
         },
     },
     {
@@ -71,8 +71,8 @@ const routes = [
         path: "/settings",
         component: () => import("@/components/index/SetUpIndex"),
         meta: {
-            //该字段表示跳转需要验证
-            requireAuth: true
+            //该字段表示需要登录
+            requireLogin: true
         },
         children: [
             {
@@ -85,7 +85,7 @@ const routes = [
                 component: () => import("@/components/user/ProfileContent"),
                 meta: {
                     //该字段表示跳转需要验证
-                    requireAuth: true
+                    requireLogin: true
                 }
             },
             {
@@ -94,7 +94,7 @@ const routes = [
                 component: () => import("@/components/user/AccountSettings"),
                 meta: {
                     //该字段表示跳转需要验证
-                    requireAuth: true
+                    requireLogin: true
                 }
             },
         ]
@@ -115,6 +115,8 @@ const routes = [
         component: () => import("@/components/admin/user/AdminUser"),
         meta: {
             //该字段表示跳转需要验证
+            requireLogin: true,
+            //该字段表示跳转需要验证是否管理员
             requireAuth: true
         }
     },
@@ -124,6 +126,8 @@ const routes = [
         component: () => import("@/components/admin/user/AdminUser"),
         meta: {
             //该字段表示跳转需要验证
+            requireLogin: true,
+            //该字段表示跳转需要验证是否管理员
             requireAuth: true
         }
     },
@@ -132,8 +136,28 @@ const routes = [
         name: "role",
         component: () => import("@/components/admin/role/AdminRole"),
         meta: {
-            //该字段表示跳转需要验证
+            //该字段表示跳转需要验证是否登录
+            requireLogin: true,
+            //该字段表示跳转需要验证是否管理员
             requireAuth: true
+        }
+    },
+    {
+        path: "/admin/post",
+        name: "post",
+        component: () => import("@/components/admin/post/AdminPost"),
+        meta: {
+            //该字段表示跳转需要验证是否登录
+            requireLogin: true,
+        }
+    },
+    {
+        path: "/admin/gossip",
+        name: "gossip",
+        component: () => import("@/components/admin/gossip/AdminGossip"),
+        meta: {
+            //该字段表示跳转需要验证是否登录
+            requireLogin: true,
         }
     },
     {

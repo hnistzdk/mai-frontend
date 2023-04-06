@@ -45,17 +45,31 @@ router.beforeEach((to, from, next) => {
     //设置延时器让created先执行再进行路由跳转
     setTimeout((res) => {
         // 判断该路由是否需要登录权限
-        if (to.meta.requireAuth) {
-            // 通过vuex state获取当前的状态是否存在
-            if (store.state.isLogin && store.state.isManage) {
-                next();
-            } else {
-                next({
-                    path: '/',
-                    query: {
-                        redirect: to.fullPath
-                    } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-                })
+        if (to.meta.requireLogin) {
+            // 还需要管理权限
+            if (to.meta.requireAuth){
+                // 通过vuex state获取当前的状态是否存在
+                if (store.state.isLogin && store.state.isManage) {
+                    next();
+                } else {
+                    next({
+                        path: '/',
+                        query: {
+                            redirect: to.fullPath
+                        } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                    })
+                }
+            }else {
+                if (store.state.isLogin){
+                    next();
+                }else {
+                    next({
+                        path: '/',
+                        query: {
+                            redirect: to.fullPath
+                        } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                    })
+                }
             }
         } else {
             next();

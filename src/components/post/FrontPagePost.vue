@@ -1,6 +1,6 @@
 <template>
   <div id="main-post-content">
-    <IndexCreate v-if="isGossipTap"/>
+    <IndexCreate v-if="$store.state.isLogin && isGossipTap"/>
     <a-list item-layout="vertical" size="large" :data-source="tempData">
       <a-list-item slot="renderItem" key="item.title" slot-scope="item, index" style="cursor: pointer;"
                    @click="routerPostDetail(item.postId)">
@@ -81,7 +81,7 @@
                     @click.stop="routerUserCenter(item.authorId)"/>
           <a slot="title" class="username" @click.stop="routerUserCenter(item.authorId)">
             <div class="left">
-              <span slot="title" style="padding-right: 2px;"> {{ item.authorUsername }} </span>
+              <span slot="title" style="padding-right: 2px;font-weight: bold"> {{ item.authorUsername }} </span>
 <!--              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>-->
               <small style="color: #b5b9b9; padding-left: 10px" v-text="'更新于     '+$utils.showtime(item.updateTime)"></small>
               <!-- 用户中心 -->

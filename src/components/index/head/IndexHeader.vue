@@ -115,7 +115,7 @@
                 <i class="iconfont icon-setUp"></i>{{ ' ' + $t("common.setUp") }}
               </a-menu-item>
               <a-divider style="margin: 3px 0 3px 0"/>
-              <a-menu-item v-if="$store.state.isManage" key="management">
+              <a-menu-item key="management">
                 <i class="iconfont icon-setUp"></i>{{ ' ' + $t("common.management") }}
               </a-menu-item>
               <a-divider style="margin: 3px 0 3px 0"/>
@@ -222,20 +222,6 @@ export default {
     searchContent: {type: String, default: ""},
   },
 
-  beforeUpdate() {
-    /**
-     * 这里处理头部横栏头像vuex获取不到的问题
-     */
-    if (store.state.isLogin){
-      userService.getUserInfo({userId: store.state.userId})
-          .then(res => {
-            store.state.avatar = res.data.avatar;
-          })
-          .catch(err => {
-            // this.$message.error(err.msg);
-          });
-    }
-  },
   data() {
     return {
       showReply: false,
@@ -264,10 +250,12 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["changeColor"]),
+    ...mapMutations(["changeColor",'changeLoginVisible','changeIsLogin'
+      ,'changeIsManage','changeLocale','changeAvatar'
+    ,'changeToken','changeExpire','changeUserId','changeUsername']),
     // 设置语言
     changeLanguage({key}) {
-      this.$store.state.locale = key;
+      this.changeLocale(key);
       localStorage.language = key;
     },
 
@@ -316,11 +304,7 @@ export default {
     },
     // 显示登录框
     showLoginModal() {
-      this.$store.state.loginVisible = true;
-    },
-    //设置退出登录状态
-    setLogout(){
-      this.$store.state.isLogin = false;
+      this.changeLoginVisible(true);
     },
 
     // 退出登录
@@ -328,15 +312,15 @@ export default {
       loginService.logout()
           .then(res => {
             //清除localstorage
-            window.localStorage.removeItem("access_token")
-            window.localStorage.removeItem("expire")
-            window.localStorage.removeItem("userId")
-            window.localStorage.removeItem("username")
-            window.localStorage.removeItem("state")
+            this.changeToken('');
+            this.changeExpire(0);
+            this.changeUserId(0);
+            this.changeUsername('');
             //设置登录状态为false
-            this.setLogout();
-            // 刷新当前页面
-            this.$router.push("/");
+            this.changeIsLogin(false);
+            this.changeIsManage(false);
+
+            this.$message.success('退出成功')
           })
           .catch(err => {
             this.$message.error(err.msg);
@@ -381,11 +365,6 @@ export default {
       this.$router.push("/gossip");
     },
 
-    // 路由到标签页面
-    routerLabel() {
-      this.$router.push("/label");
-    },
-
     // 路由到资源导航页面
     routerResource() {
       this.$router.push("/resource");
@@ -403,7 +382,11 @@ export default {
 
     // 路由到管理端
     routerManage() {
-      this.$router.push("/admin");
+      if (this.$store.state.isManage){
+        this.$router.push("/admin");
+      }else {
+        this.$router.push("/admin/post");
+      }
     },
 
   },

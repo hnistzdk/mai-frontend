@@ -2,7 +2,7 @@
   <a-list item-layout="vertical" size="small" :pagination="pagination" :data-source="data" style="cursor: pointer;">
     <a-list-item slot="renderItem" slot-scope="item, index">
       <template v-for="{ type, text } in actions" slot="actions">
-        <span :key="type">
+        <a-space :key="type">
           <span v-if="type === 'reply'">
             <a style="margin-right: 8px" class="operate comment-comment" @click.stop="routerPostDetail(item.objectId, item.commentId)">
               <i class="iconfont icon-comment" style="color: #8a919f;">
@@ -12,15 +12,15 @@
           </span>
           <span v-if="type === 'reply'">
             <span>
-              <a-button size="small" v-if="!item.readFlag" type="link" shape="round" @click="readOne(item,index)">
+              <a-button v-if="!item.readFlag" size="small" type="link" shape="round" @click="readOne(item,index)">
               标记为已读
               </a-button>
-              <a-button size="small" v-if="item.readFlag" type="danger" shape="round" @click="readOne(item,index)">
+              <a-button v-if="item.readFlag" size="small" type="primary" shape="round" @click="readOne(item,index)">
               标记为未读
               </a-button>
             </span>
           </span>
-        </span>
+        </a-space>
       </template>
       <a-list-item-meta >
           <span slot="description">

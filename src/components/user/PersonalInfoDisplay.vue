@@ -21,19 +21,19 @@
               <a><a-icon type="plus"/>{{ $t("common.notJob") }}</a>
             </span>
           </div>
-<!--          <div class="intro">-->
-<!--            <span v-if="data.selfIntroduction">-->
-<!--              <i class="iconfont icon-intro"></i>-->
-<!--              <span>{{ data.selfIntroduction }}</span>-->
-<!--            </span>-->
-<!--            <span v-else-if="$store.state.userId === data.userId" @click="routerSetUp">-->
-<!--              <a><a-icon type="plus"/>{{ $t("common.notHobbies") }}</a>-->
-<!--            </span>-->
-<!--          </div>-->
           <div class="intro">
             <span>
               <i class="iconfont icon-intro"></i>
               <span>{{ data.company ? data.company : '' }}</span>
+            </span>
+          </div>
+          <div class="intro">
+            <span v-if="data.selfIntroduction">
+              <a-icon type="user" />
+              <span>{{ data.selfIntroduction }}</span>
+            </span>
+            <span v-else-if="$store.state.userId === data.userId" @click="routerSetUp">
+              <a><a-icon type="plus"/>{{ $t("common.notHobbies") }}</a>
             </span>
           </div>
         </div>

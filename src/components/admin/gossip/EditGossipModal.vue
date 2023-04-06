@@ -1,52 +1,66 @@
 <template>
-  <div id="index-create">
-    <div class="top">
-      <div style="width: 100%;" class="createPost">
-        <a-textarea id="textarea" allow-clear @keydown.enter.native="keyDown"
-                    v-model="content"
-                    :placeholder="$t('common.releaseTheIdeaOfThisMoment')"
-                    :auto-size="{ minRows: 5, maxRows: 5 }"
-                    style="padding-bottom: 10px"
-        />
-        <div>
-          <a-space size="large">
-            <a-button v-if="$store.state.isLogin" @click="showModal" title="表情">
-              <a-icon type="smile" theme="twoTone" />
+  <a-modal
+      :centered="true"
+      :title="null"
+      :footer="null"
+      :destroyOnClose="true"
+      :maskClosable="true"
+      @cancel="handleCancel"
+      @ok="handleOk"
+      :visible="visible"
+      width="50%"
+  >
+    <div id="index-create">
+      <div class="top">
+        <div style="width: 100%;" class="createPost">
+          <a-textarea id="textarea" allow-clear @keydown.enter.native="keyDown"
+                      v-model="content"
+                      :placeholder="$t('common.releaseTheIdeaOfThisMoment')"
+                      :auto-size="{ minRows: 5, maxRows: 5 }"
+                      style="padding-bottom: 10px"
+          />
+          <div>
+            <a-space size="large">
+              <a-button @click="showModal" title="表情">
+                <a-icon type="smile" theme="twoTone" />
+              </a-button>
+            </a-space>
+            <a-upload
+                list-type="picture"
+                :beforeUpload="uploadImg"
+                :file-list="fileList"
+                :data="uploadParam"
+                :remove="removeImg"
+                class="upload-list-inline">
+              <a-button v-if="$store.state.isLogin" title="图片">
+                <a-icon type="file-image" theme="twoTone" />
+              </a-button>
+            </a-upload>
+          </div>
+          <div>
+            <a-button @click="handleSubmit" class="button"  shape="round" type="primary" html-type="submit" style="float: right;">
+              {{ $t("common.release") }}
             </a-button>
-          </a-space>
-          <a-upload
-              list-type="picture"
-              :beforeUpload="uploadImg"
-              :file-list="fileList"
-              :data="uploadParam"
-              :remove="removeImg"
-              class="upload-list-inline">
-            <a-button v-if="$store.state.isLogin" title="图片">
-              <a-icon type="file-image" theme="twoTone" />
-            </a-button>
-          </a-upload>
-        </div>
-        <div>
-          <a-button @click="handleSubmit" class="button"  shape="round" type="primary" html-type="submit" style="float: right;">
-            {{ $t("common.release") }}
-          </a-button>
+          </div>
         </div>
       </div>
+      <a-modal title="表情符号" :visible="emojiModalVisible" :footer="null" :dialog-style="{ right: '12%',bottom: '10%' }"
+               @cancel="handleEmojiCancel">
+        <div class="face">
+          <Picker @select="showEmoji" :i18n="I18N" />
+        </div>
+      </a-modal>
     </div>
-    <a-modal title="表情符号" :visible="isModalVisible" :footer="null" :dialog-style="{ right: '12%',bottom: '10%' }"
-             @cancel="handleCancel">
-      <div class="face">
-        <Picker @select="showEmoji" :i18n="I18N" />
-      </div>
-    </a-modal>
-  </div>
+
+  </a-modal>
 </template>
 <script>
 
 import store from "@/store";
-import postService from "@/service/postService";
-import middleUtil from "@/utils/MiddleUtil";
+import IndexCreate from "@/components/post/IndexCreate";
 import { Picker } from "emoji-mart-vue";
+import postService from "@/service/postService";
+
 
 const I18N = {
   search: '搜索',
@@ -67,29 +81,32 @@ const I18N = {
   },
 }
 
-
 export default {
 
-  components: {Picker},
+  components:{IndexCreate,Picker},
 
-  name: "IndexCreate",
+  props:{
+    data: {},
+    visible: false,
+  },
+
 
   data() {
+
     return {
       uploadParam: {
         //存储的基础路径
         base: "/design/post/picture/"
       },
       fileList: [],
-      data: {},
       postId: 0,
       content: '',
       I18N: I18N,
       images: [],
-      isModalVisible: false,
-    };
-  },
+      emojiModalVisible: false,
 
+    }
+  },
   methods: {
     // 选择表情
     showEmoji(emoji) {
@@ -99,7 +116,7 @@ export default {
       this.$nextTick( () => {
         this.insert(oText,str,index)
       })
-      this.isModalVisible = false;
+      this.emojiModalVisible = false;
     },
     // 插入表情
     insert (oText,varStr,index) {
@@ -141,10 +158,10 @@ export default {
     },
 
     showModal(){
-      this.isModalVisible = true;
+      this.emojiModalVisible = true;
     },
-    handleCancel(){
-      this.isModalVisible = false;
+    handleEmojiCancel(){
+      this.emojiModalVisible = false;
     },
 
     //提交
@@ -235,43 +252,42 @@ export default {
       }
     },
 
-    //编辑时填充数据
-    fillEditData(data){
-      if (data){
-        this.postId = data.postId;
-        this.content = data.content;
-        this.images = data.images.split(",");
-        for (let i = 0; i < this.images.length; i++) {
-          if (this.images[0] === ''){
-            continue;
-          }
-          let filename = this.images[i].substring(this.images[i].lastIndexOf("/")+1,this.images[i].length).split(".")[0];
-          let imgInfo = {
-            uid: filename,
-            name: filename,
-            status: 'done',
-            url: this.images[i],
-            thumbUrl: this.images[i],
-          }
-          this.fileList.push(imgInfo);
-        }
-        // 重置为空 防止图片重复
-        this.images = [];
-        //回到顶部
-        document.querySelector("#app").scrollTop = 0;
-      }
+
+    handleOk(){
+
     },
 
+    handleCancel(){
+      this.$emit("closeEditModal");
+    },
 
   },
 
   mounted() {
-    let _this = this;
-    middleUtil.$on('fillEditData',(data)=> {
-      _this.fillEditData(data);
-    })
+    this.postId = this.data.postId;
+    this.content = this.data.content;
+    this.images = this.data.images ? this.data.images.split(",") : [];
+    if (this.images.length > 0){
+      for (let i = 0; i < this.images.length; i++) {
+        if (this.images[0] === ''){
+          continue;
+        }
+        let filename = this.images[i].substring(this.images[i].lastIndexOf("/")+1,this.images[i].length).split(".")[0];
+        let imgInfo = {
+          uid: filename,
+          name: filename,
+          status: 'done',
+          url: this.images[i],
+          thumbUrl: this.images[i],
+        }
+        this.fileList.push(imgInfo);
+      }
+      // 重置为空 防止图片重复
+      this.images = [];
+    }
   }
-}
+
+};
 </script>
 
 <style lang="less" scoped>

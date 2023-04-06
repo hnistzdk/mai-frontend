@@ -80,15 +80,6 @@ export default {
     IndexCreate,
     FriendDonate
   },
-  beforeUpdate() {
-    if (this.$store.state.isLogin){
-      userService.validateExpire()
-          .then(res=>{
-          }).catch(error=>{
-
-      });
-    }
-  },
   data() {
     return {
       // 加载中...

@@ -14,7 +14,7 @@
                      :suffix="ruleForm.nickNameNum + '/10'"
                      autocomplete="off"
                      class="nickname"
-                     :placeholder="$t('common.fillInYourNickName')"/>
+                     :placeholder="$t('common.fillInYourNickname')"/>
           </a-form-item>
 
           <!-- 性别 -->
@@ -23,6 +23,7 @@
                       @change="commonChange"
                       :placeholder="$t('common.fillInYourSex')"
                       :options="sexOptions"
+                      defaultValue="0"
                       class="sex">
             </a-select>
           </a-form-item>
@@ -148,7 +149,6 @@
 <script>
   import UploadModal from "@/components/user/UploadModal";
   import userService from "@/service/userService";
-  import loginService from "@/service/loginService";
 
   export default {
     name: "ProfileContent",

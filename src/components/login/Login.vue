@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal v-model="$store.state.loginVisible" @ok="handleOk" :footer="null" :width="'450px'">
+    <a-modal v-model="$store.state.loginVisible" :footer="null" :width="'450px'">
       <a-form id="login-form-content"
               :form="form"
               class="login-form"
@@ -51,34 +51,12 @@
     beforeCreate() {
       this.form = this.$form.createForm(this, {name: 'normal_login'});
 
-    }, beforeMount() {
-      let state = window.localStorage.getItem("state");
-      if (state){
-        this.$store.replaceState(JSON.parse(state));
-      }
     },
 
     methods: {
-      ...mapMutations([]),
-      // 隐藏登录框
-      handleOk() {
-        this.$store.state.loginVisible = false;
-      },
-      setLoginState() {
-        this.$store.state.isLogin = true;
-      },
-      setUserInfo(userId,username,admin) {
-        this.$store.state.userId = userId;
-        this.$store.state.username = username;
-        this.$store.state.isManage = admin;
-      },
-      //获取token过期的时间以便比较
-      getExpireDate(expiresIn){
-        let date=new Date();     //1. js获取当前时间
-        let min=date.getMinutes();  //2. 获取当前分钟
-        date.setMinutes(min+expiresIn);
-        return date;
-      },
+      ...mapMutations(['changeLoginVisible','changeIsLogin','changeUserId',
+        'changeUsername','changeIsManage','changeRegisterVisible',
+      'changeEmailResetPasswordVisible','changeToken','changeExpire']),
 
       handleSubmit(e) {
         e.preventDefault();
@@ -86,22 +64,24 @@
           if (!err) {
             loginService.login(values)
                 .then(res => {
-                  window.localStorage.setItem("access_token",res.data.accessToken)
-                  window.localStorage.setItem("userId",res.data.userId)
-                  window.localStorage.setItem("username",res.data.username)
-                  window.localStorage.setItem("admin",res.data.admin)
+                  //设置用户相关信息
+                  this.changeToken(res.data.accessToken);
+                  this.changeUserId(res.data.userId);
+                  this.changeUsername(res.data.username);
+
+                  let isManage = res.data.admin ? res.data.admin : false;
+
+                  this.changeIsManage(isManage);
                   //过期分钟数
                   let expiresIn = res.data.expiresIn;
                   let expireTimeStamp = dayjs().add(expiresIn,'minute').valueOf();
-                  window.localStorage.setItem("expireTimeStamp",expireTimeStamp);
+                  this.changeExpire(expireTimeStamp);
                   //设置登录状态
-                  this.setLoginState();
-                  this.handleOk();
-                  this.setUserInfo(res.data.userId,res.data.username,res.data.admin)
-                  //将state存入localStorage供刷新页面后恢复状态
-                  window.localStorage.setItem("state",JSON.stringify(store.state));
-                  // 刷新当前页面
-                  this.$router.go(0);
+                  this.changeIsLogin(true);
+                  //关闭登录弹框
+                  this.changeLoginVisible(false);
+
+                  this.$message.success(this.$t('common.loginSuccess'))
                 })
                 .catch(err => {
                   this.$message.error(err.msg);
@@ -111,13 +91,13 @@
       },
 
       register() {
-        this.$store.state.loginVisible = false;
-        this.$store.state.registerVisible = true;
+        this.changeLoginVisible(false);
+        this.changeRegisterVisible(true);
       },
 
       mobileResetPassword() {
-        this.$store.state.loginVisible = false;
-        this.$store.state.emailResetPasswordVisible = true;
+        this.changeLoginVisible(false);
+        this.changeEmailResetPasswordVisible(true);
       },
 
     },

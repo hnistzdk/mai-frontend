@@ -3405,6 +3405,11 @@
   "resolved" "https://registry.npm.taobao.org/deepmerge/download/deepmerge-1.5.2.tgz"
   "version" "1.5.2"
 
+"deepmerge@^4.2.2":
+  "integrity" "sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A=="
+  "resolved" "https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz"
+  "version" "4.3.1"
+
 "default-gateway@^4.2.0":
   "integrity" "sha1-FnEEx1AMIRX23WmwpTa7jtcgVSs="
   "resolved" "https://registry.nlark.com/default-gateway/download/default-gateway-4.2.0.tgz"
@@ -7704,6 +7709,11 @@
   "resolved" "https://registry.npm.taobao.org/shell-quote/download/shell-quote-1.7.2.tgz"
   "version" "1.7.2"
 
+"shvl@^2.0.3":
+  "integrity" "sha512-V7C6S9Hlol6SzOJPnQ7qzOVEWUQImt3BNmmzh40wObhla3XOYMe4gGiYzLrJd5TFa+cI2f9LKIRJTTKZSTbWgw=="
+  "resolved" "https://registry.npmjs.org/shvl/-/shvl-2.0.3.tgz"
+  "version" "2.0.3"
+
 "side-channel@^1.0.4":
   "integrity" "sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw=="
   "resolved" "https://registry.npmjs.org/side-channel/-/side-channel-1.0.4.tgz"
@@ -8763,7 +8773,15 @@
   "resolved" "https://registry.npm.taobao.org/vue/download/vue-2.6.12.tgz"
   "version" "2.6.12"
 
-"vuex@^3.4.0":
+"vuex-persistedstate@^4.1.0":
+  "integrity" "sha512-3SkEj4NqwM69ikJdFVw6gObeB0NHyspRYMYkR/EbhR0hbvAKyR5gksVhtAfY1UYuWUOCCA0QNGwv9pOwdj+XUQ=="
+  "resolved" "https://registry.npmjs.org/vuex-persistedstate/-/vuex-persistedstate-4.1.0.tgz"
+  "version" "4.1.0"
+  dependencies:
+    "deepmerge" "^4.2.2"
+    "shvl" "^2.0.3"
+
+"vuex@^3.0 || ^4.0.0-rc", "vuex@^3.4.0":
   "integrity" "sha1-8bjc6mSbwlJUz09DWAgdv12hiz0="
   "resolved" "https://registry.npm.taobao.org/vuex/download/vuex-3.5.1.tgz"
   "version" "3.5.1"

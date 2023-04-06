@@ -60,7 +60,7 @@ global.dynamicTypeFollow = 6;
  * 职言最大图片数量
  * @type {number}
  */
-global.gossipMaxImgCount = 1;
+global.gossipMaxImgCount = 3;
 
 /**
  * 最大上传图片尺寸不超过3m

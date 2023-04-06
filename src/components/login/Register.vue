@@ -47,14 +47,9 @@ import loginService from "@/service/loginService";
 import userService from "@/service/userService";
 import store from "@/store";
 import dayjs from "dayjs";
+import {mapMutations} from "vuex";
 
 export default {
-  beforeMount() {
-    let state = window.localStorage.getItem("state");
-    if (state){
-      this.$store.replaceState(JSON.parse(state));
-    }
-  },
   data() {
     // 验证用户名
     let validateUsername = (rule, value, callback) => {
@@ -109,21 +104,16 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['changeLoginVisible','changeIsLogin','changeUserId',
+      'changeUsername','changeIsManage','changeRegisterVisible',
+      'changeEmailResetPasswordVisible']),
     usernameChange(value) {
       this.userNameNum = value.target.value.length;
     },
 
     // 隐藏登录框
     handleOk() {
-      this.$store.state.registerVisible = false;
-    },
-    setLoginState() {
-      this.$store.state.isLogin = true;
-    },
-    setUserInfo(userId,username,admin) {
-      this.$store.state.userId = userId;
-      this.$store.state.username = username;
-      this.$store.state.isManage = admin;
+
     },
 
     submitForm(formName) {
@@ -131,23 +121,25 @@ export default {
         if (valid) {
           loginService.register({username: this.ruleForm.username, password: this.ruleForm.password})
               .then(res => {
-                window.localStorage.setItem("access_token",res.data.accessToken)
-                window.localStorage.setItem("userId",res.data.userId)
-                window.localStorage.setItem("username",res.data.username)
-                window.localStorage.setItem("admin",res.data.admin)
+                //设置用户相关信息
+                this.changeToken(res.data.accessToken);
+                this.changeUserId(res.data.userId);
+                this.changeUsername(res.data.username);
+                this.changeIsManage(res.data.admin);
                 //过期分钟数
                 let expiresIn = res.data.expiresIn;
                 let expireTimeStamp = dayjs().add(expiresIn,'minute').valueOf();
-                window.localStorage.setItem("expireTimeStamp",expireTimeStamp);
-                this.handleOk();
-                this.setUserInfo(res.data.userId,res.data.username,res.data.admin)
-                //将state存入localStorage供刷新页面后恢复状态
-                window.localStorage.setItem("state",JSON.stringify(store.state));
+                this.changeExpire(expireTimeStamp);
 
-                // 作弹窗通知
-                this.$utils.successModal(() => this.login(),'提示',this.$t('common.registerSuccess'));
+                //关闭注册弹框
+                this.changeRegisterVisible(false);
+                this.changeLoginVisible(false);
+                // 提示
+                this.$message.success(this.$t('common.registerSuccess'));
+                this.changeIsLogin(true);
 
-
+                //刷新
+                this.$router.go(0);
               })
               .catch(err => {
                 this.$message.error(err.msg);
@@ -161,8 +153,8 @@ export default {
     // 弹出登录框
     login() {
       this.$message.success('请登录',5);
-      this.$store.state.registerVisible = false;
-      this.$store.state.loginVisible = true;
+      this.changeRegisterVisible(false);
+      this.changeLoginVisible(true);
     },
 
     // 用户判重

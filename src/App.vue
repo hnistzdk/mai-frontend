@@ -22,7 +22,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["changeColor"]),
+    ...mapMutations(["changeColor","changeIsManage"]),
     // 初始化获取用户权限状态
     getAccess() {
       userService.getCurrentUserAccess()
@@ -36,7 +36,7 @@ export default {
               this.$store.state.isLogin = true;
               res.data.roles.forEach(data => {
                 if (data.code === 'bbs-admin') {
-                  this.$store.state.isManage = true;
+                  this.changeIsManage(true);
                 }
               })
             }

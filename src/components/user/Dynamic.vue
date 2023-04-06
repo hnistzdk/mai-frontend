@@ -12,12 +12,12 @@
             }}</span>
 
           <div class="template">
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 1">{{$t("common.dynamicWritten") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 2">{{$t("common.dynamicCommented") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 3">{{ $t("common.dynamicLiked") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 4">{{ $t("common.dynamicLiked") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 5">{{ $t("common.dynamicReply") }}</span>
-            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 6">{{$t("common.dynamicFollowed") }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 1">{{' '+$t("common.dynamicWritten") }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 2">{{' '+$t("common.dynamicCommented")+' 贴子/职言' }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 3">{{' '+$t("common.dynamicLiked")+' 贴子/职言' }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 4">{{' '+$t("common.dynamicLiked")+' 评论' }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 5">{{' '+$t("common.dynamicReply")+' 评论' }}</span>
+            <span style="padding: 0 10px; color: #8a9aa9" v-if="item.type === 6">{{' '+$t("common.dynamicFollowed")+'用户:' }}</span>
           </div>
 
           <div class="title">

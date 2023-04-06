@@ -7,27 +7,26 @@ if (process.env.NODE_ENV === "production") {
     axios.defaults.baseURL = "http://localhost:9527";
 }
 export default (() => {
+
     //校验过期时间
-    let expireTimeStamp = window.localStorage.getItem("expireTimeStamp");
+    let expireTimeStamp =  store.state.expire;
     if (expireTimeStamp) {
         let now = dayjs().valueOf();
         if (now >= expireTimeStamp) {
             //证明已过期
-            //清除localstorage
-            window.localStorage.removeItem("access_token")
-            window.localStorage.removeItem("expireTimeStamp")
-            window.localStorage.removeItem("userId")
-            window.localStorage.removeItem("username")
-            window.localStorage.removeItem("state")
-            store.state.isLogin = false;
+            store.state.token = '';
+            store.state.expire = 0;
+            store.state.userId = 0;
+            store.state.username = '';
+            store.state.isManage = false;
         }
     }
 
     // 每次请求前处理
     axios.interceptors.request.use(config => {
-        let token = window.localStorage.getItem('access_token');
-        let userId = window.localStorage.getItem("userId")
-        let username = window.localStorage.getItem("username")
+        let token = store.state.token;
+        let userId = store.state.userId;
+        let username = store.state.username;
         if (token) {
             config.headers.authorization = token;
         }
@@ -74,20 +73,19 @@ export default (() => {
                     } else if (response.data.code === 302 && response.config.url !== '/user/getCurrentUserRights') {
                         // window.location.href = response.data.data.target;
                         store.state.isLogin = false;
+                        store.state.isManage = false;
                         store.state.loginVisible = true;
                         return Promise.reject(response.data);
                     }
                     //token过期或验证失败  清除token信息
                     else if (response.data.code === 40001 || response.data.code === 401) {
-                        //清除localstorage
-                        window.localStorage.removeItem("access_token")
-                        window.localStorage.removeItem("expire")
-                        window.localStorage.removeItem("userId")
-                        window.localStorage.removeItem("username")
-                        window.localStorage.removeItem("state")
+                        store.state.token = '';
+                        store.state.expire = 0;
+                        store.state.userId = 0;
+                        store.state.username = '';
                         store.state.isLogin = false;
+                        store.state.isManage = false;
                         store.state.loginVisible = true;
-                        // this.$router.go(0);
                         throw response.data;
                     } else {
                         throw response.data;
@@ -103,17 +101,13 @@ export default (() => {
             console.log('error', error)
             let resp = error.response;
             if (resp.status === 401) {
-                //清除localstorage
-                window.localStorage.removeItem("access_token")
-                window.localStorage.removeItem("expire")
-                window.localStorage.removeItem("userId")
-                window.localStorage.removeItem("username")
-                window.localStorage.removeItem("state")
-                // console.log('isLogin',store.state.isLogin)
+                store.state.token = '';
+                store.state.expire = 0;
+                store.state.userId = 0;
+                store.state.username = '';
                 store.state.isLogin = false;
-                // console.log('isLogin',store.state.isLogin)
+                store.state.isManage = false;
                 store.state.loginVisible = true;
-                // this.$router.push('/');
             } else {
                 return Promise.reject(error);
             }

@@ -19,7 +19,7 @@
               @refresh="refresh"/>
         </div>
       </a-popover>
-      <a-button class="add-item" type="primary" style="height: 30px;" v-text="$t('common.add')"
+      <a-button v-if="$store.state.isLogin" class="add-item" type="primary" style="height: 30px;" v-text="$t('common.add')"
                 @click="resourceAddCheck"></a-button>
     </div>
     <div>
@@ -58,7 +58,7 @@
             </a-menu>
             <div class="options" @click.stop>
               <a-icon slot="count" type="ellipsis" style="cursor: pointer; color: #909090"
-                      v-if="$store.state.isManage"/>
+                      v-if="$store.state.isManage || $store.state.userId === item.createBy"/>
             </div>
           </a-dropdown>
         </a-badge>

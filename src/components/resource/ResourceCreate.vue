@@ -125,6 +125,7 @@ export default {
     resourceCreate(data) {
       resourceService.resourceCreate(data)
           .then(res => {
+            this.$message.success('添加成功');
             // 清空表单
             this.form.resetFields();
             // 清空logo
@@ -142,6 +143,7 @@ export default {
     resourceUpdate(data) {
       resourceService.resourceUpdate(data)
           .then(res => {
+            this.$message.success('更新成功');
             this.$emit("hideResourceVisibleFn", data.id);
             this.refresh();
           })

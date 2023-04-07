@@ -157,7 +157,7 @@ export default {
     changePasswordSuccessed: "密码更改成功",
     required: "不能为空！",
     inDevelopment: "开发ing...",
-    home: "发现",
+    home: "贴子",
     gossip: "职言",
     label: "标签",
     course: "课程",

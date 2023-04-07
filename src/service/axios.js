@@ -19,6 +19,7 @@ export default (() => {
             store.state.userId = 0;
             store.state.username = '';
             store.state.isManage = false;
+            store.state.isLogin = false;
         }
     }
 

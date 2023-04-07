@@ -1,4 +1,5 @@
 export default {
+    userTab: "user",
     commonCount: "Count",
     dynamic: "Dynamic",
     post: "Post",

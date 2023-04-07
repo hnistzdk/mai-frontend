@@ -54,8 +54,34 @@
         <a-skeleton v-if="showSkeleton"/>
       </a-tab-pane>
 
+      <!--  用户tab -->
+      <a-tab-pane key="user">
+        <span slot="tab">
+          <i class="iconfont icon-relat-post"></i>
+          {{ $t("common.userTab") }}
+        </span>
+        <!-- 用户 -->
+        <SearchPagePost
+            v-if="isGossipTab && !spinning"
+            :finish="finish"
+            :hasNext="hasNext"
+            :data="gossipData"
+            :userId="userId"
+            @refresh="gossipRefresh"
+            style="background: #fff;"/>
+        <SearchUserList
+            v-if="isUserTab && !spinning"
+            :finish="finish"
+            :hasNext="hasNext"
+            :data="userData"
+            :userId="userId"
+            @refresh="userRefresh"
+            style="background: #fff;"/>
+        <a-skeleton v-if="showSkeleton"/>
+      </a-tab-pane>
+
       <!-- 选择排序方式 -->
-      <span slot="tabBarExtraContent">
+      <span v-if="isPostTab || isGossipTab" slot="tabBarExtraContent">
           <a-radio-group :default-value="sortRule" size="small" @change="onChangeRadio">
             <a-radio-button value="hottest">
               {{ $t("common.hottest") }}
@@ -72,10 +98,11 @@
 <script>
 import SearchPagePost from "@/components/search/SearchPagePost";
 import searchService from "@/service/searchService";
+import SearchUserList from "@/components/search/SearchUserList";
 
 export default {
 
-  components: {SearchPagePost},
+  components: {SearchUserList, SearchPagePost},
 
   props: {
     userId: {type: Number, default: 0},
@@ -88,14 +115,20 @@ export default {
       isPostTab: false,
       // 是否在职言tab下
       isGossipTab: false,
-      // 我的贴子
+      // 是否在用户tab下
+      isUserTab: false,
+      // 贴子
       postData: [],
-      // 发表贴子总数
+      // 贴子总数
       postCount: 0,
       // 职言
       gossipData: [],
-      // 发表职言总数
+      // 职言总数
       gossipCount: 0,
+      // 用户
+      userData: [],
+      // 用户总数
+      userCount: 0,
       // hasNext和finish名称不能改(和滚动加载相关)
       hasNext: true,
       finish: false,
@@ -125,6 +158,9 @@ export default {
       if (this.isGossipTab) {
         this.gossipRefresh()
       }
+      if (this.isUserTab){
+        this.userRefresh();
+      }
     },
 
     /**
@@ -134,12 +170,13 @@ export default {
     buildPostSearchParams(){
         let params = this.params;
         if (this.isPostTab){
+          params.sortRule = this.sortRule;
           params.type = 1;
         }
         if (this.isGossipTab){
+          params.sortRule = this.sortRule;
           params.type = 2;
         }
-        params.sortRule = this.sortRule;
         params.query = this.query;
         params.userId = this.userId;
         return params;
@@ -160,6 +197,9 @@ export default {
       if (this.isGossipTab) {
         this.searchGossips(params);
       }
+      if (this.isUserTab) {
+        this.searchUser(params);
+      }
     },
 
 
@@ -174,6 +214,9 @@ export default {
       }
       if (this.isGossipTab) {
         this.searchGossips(params, true);
+      }
+      if (this.isUserTab){
+        this.searchUser(params,true);
       }
     },
 
@@ -254,6 +297,45 @@ export default {
           });
     },
 
+    /**
+     * 搜索用户
+     * @param params
+     * @param isLoadMore
+     */
+    searchUser(params, isLoadMore) {
+      if (!isLoadMore) {
+        this.params.currentPage = 1;
+      }
+      this.finish = false;
+      params = this.buildPostSearchParams();
+      if (params.query.length === 0){
+        this.finish = true;
+        this.hasNext = false;
+        return;
+      }
+      this.showSkeleton = true;
+      searchService.searchUser(params)
+          .then(res => {
+            console.log('userData',res)
+            if (isLoadMore) {
+              this.userData = this.userData.concat(res.data.list);
+              this.hasNext = res.data.list.length !== 0;
+            } else {
+              this.userData = res.data.list;
+            }
+            this.userCount = res.data.totalCount;
+            this.finish = true;
+            this.spinning = false;
+            this.showSkeleton = false;
+          })
+          .catch(err => {
+            this.finish = true;
+            this.hasNext = false;
+            this.showSkeleton = false;
+            this.$message.error(err.msg);
+          });
+    },
+
 
     // 刷新列表
     postRefresh() {
@@ -264,12 +346,17 @@ export default {
       let params = this.buildPostSearchParams();
       this.searchGossips(params);
     },
+    userRefresh() {
+      let params = this.buildPostSearchParams();
+      this.searchUser(params);
+    },
 
     // tab切换回调
     changeTab(activeKey, isFirst) {
       if (activeKey === 'post') {
         this.isPostTab = true;
         this.isGossipTab = false;
+        this.isUserTab = false;
         this.hasNext = true;
         let params = this.buildPostSearchParams();
         this.searchPost(params);
@@ -282,9 +369,23 @@ export default {
       if (activeKey === 'gossip') {
         this.isPostTab = false;
         this.isGossipTab = true;
+        this.isUserTab = false;
         this.hasNext = true;
         let params = this.buildPostSearchParams();
         this.searchGossips(params);
+        // 解決和mounted()滚动加载重复的问题
+        if (!isFirst) {
+          // 监听滚动，做滚动加载
+          this.$utils.scroll.call(this, document.querySelector('#app'));
+        }
+      }
+      if (activeKey === 'user') {
+        this.isPostTab = false;
+        this.isGossipTab = false;
+        this.isUserTab = true;
+        this.hasNext = true;
+        let params = this.buildPostSearchParams();
+        this.searchUser(params);
         // 解決和mounted()滚动加载重复的问题
         if (!isFirst) {
           // 监听滚动，做滚动加载

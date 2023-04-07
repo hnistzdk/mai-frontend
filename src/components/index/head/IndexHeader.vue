@@ -249,6 +249,21 @@ export default {
     }
   },
 
+  beforeUpdate() {
+    /**
+     * 这里处理头部横栏头像vuex获取不到的问题
+     */
+    if (store.state.isLogin){
+      userService.getUserInfo({userId: store.state.userId})
+          .then(res => {
+            store.state.avatar = res.data.avatar;
+          })
+          .catch(err => {
+            // this.$message.error(err.msg);
+          });
+    }
+  },
+
   methods: {
     ...mapMutations(["changeColor",'changeLoginVisible','changeIsLogin'
       ,'changeIsManage','changeLocale','changeAvatar'
@@ -313,6 +328,7 @@ export default {
           .then(res => {
             //清除localstorage
             this.changeToken('');
+            this.changeAvatar('');
             this.changeExpire(0);
             this.changeUserId(0);
             this.changeUsername('');

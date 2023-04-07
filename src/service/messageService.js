@@ -25,13 +25,4 @@ export default {
                 .catch(err => reject(err));
         });
     },
-
-    // 获取消息数量
-    getNotReadMessageCount() {
-        return new Promise((resolve, reject) => {
-            axios.get("/message/count")
-                .then(res => resolve(res))
-                .catch(err => reject(err));
-        });
-    }
 };

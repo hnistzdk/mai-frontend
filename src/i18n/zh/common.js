@@ -1,4 +1,5 @@
 export default {
+    userTab: "用户",
     commonCount: "计数",
     dynamic: "动态",
     post: "贴子",

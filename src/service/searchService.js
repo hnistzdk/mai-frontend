@@ -10,4 +10,12 @@ export default {
         });
     },
 
+    searchUser(params) {
+        return new Promise((resolve, reject) => {
+            axios.get("/search/list/user", {params})
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
+
 };

@@ -68,7 +68,6 @@
                   this.changeToken(res.data.accessToken);
                   this.changeUserId(res.data.userId);
                   this.changeUsername(res.data.username);
-
                   let isManage = res.data.admin ? res.data.admin : false;
 
                   this.changeIsManage(isManage);

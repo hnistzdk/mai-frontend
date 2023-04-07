@@ -2,7 +2,7 @@
   <div id="main-post-content">
     <a-list item-layout="vertical" size="large" :data-source="tempData">
       <a-list-item slot="renderItem" key="item.title" slot-scope="item, index" style="cursor: pointer;"
-                   @click="routerPostDetail(item.postId)">
+                   >
         <div slot="extra" class="label-titleMap">
           <div>
             <img style="padding-top: 10px" :width="$store.state.collapsed ? 80 : 150" alt="logo" v-if="item.images"
@@ -11,13 +11,12 @@
         </div>
         <!-- 用户/标题 -->
         <a-list-item-meta :description="item.title">
-          <a-avatar slot="avatar" :src="item.userInfoVO.avatar ? item.userInfoVO.avatar : require('@/assets/img/default_avatar.png')"
-                    @click.stop="routerUserCenter(item.authorId)"/>
-          <a slot="title" class="username" @click.stop="routerUserCenter(item.authorId)">
+          <a-avatar slot="avatar" :src="item.avatar ? item.avatar : require('@/assets/img/default_avatar.png')"
+                    @click.stop="routerUserCenter(item.userId)"/>
+          <a slot="title" class="username" @click.stop="routerUserCenter(item.userId)">
             <div class="left">
-              <span slot="title" style="padding-right: 2px;"> {{ item.authorUsername }} </span>
-              <!--              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>-->
-              <small style="color: #b5b9b9; padding-left: 10px" v-text="$utils.showtime(item.updateTime)"></small>
+              <span slot="title" v-if="item.nickname" style="padding-right: 2px;font-weight: bold"> {{ item.username+'('+item.nickname+')' }} </span>
+              <span slot="title" v-else style="padding-right: 2px;font-weight: bold"> {{ item.username }} </span>
             </div>
             <!-- 置顶图标 -->
             <a-tooltip placement="left">
@@ -29,11 +28,28 @@
               <i class="iconfont icon-right-triangle" :style="{color: $store.state.themeColor}" v-if="item.top"></i>
             </a-tooltip>
           </a>
-          <small slot="title" style="color: #b5b9b9;"> {{ item.userInfoVO.company }} </small>
-          <small slot="title" style="color: #b5b9b9;"> {{ item.userInfoVO.position }} </small>
+          <small slot="title" style="color: #b5b9b9;">
+            公司:
+            {{item.company ? item.company : '无' }}
+          </small>
+          <small slot="title" style="color: #b5b9b9;">
+            职位:
+            {{item.position ? item.position : '无' }}
+          </small>
+          <small slot="title" style="color: #b5b9b9;">
+            学校:
+            {{item.graduatedFrom ? item.graduatedFrom : '无' }}
+          </small>
+          <small slot="title" style="color: #b5b9b9;">
+            毕业年份:
+            {{item.graduationYear ? item.graduationYear : '无' }}
+          </small>
         </a-list-item-meta>
         <div class="post-content">
-          <p v-html="item.highlightContent"></p>
+          {{$t("common.selfIntro") + ': '}}
+          <span>
+            {{item.selfIntroduction ? item.selfIntroduction : '无' }}
+          </span>
         </div>
       </a-list-item>
     </a-list>
@@ -84,18 +100,6 @@ export default {
       }
     },
 
-
-    // 路由到贴子详情页面
-    routerPostDetail(postId) {
-      let routeData = this.$router.resolve("/detail/" + postId);
-      window.open(routeData.href, '_blank');
-    },
-
-    // 路由到贴子详情页面（评论处）
-    routerPostDetailToComment(postId) {
-      let routeData = this.$router.resolve("/detail/" + postId + '#post-comment-all');
-      window.open(routeData.href, '_blank');
-    },
 
     // 路由到用户中心页面
     routerUserCenter(userId) {

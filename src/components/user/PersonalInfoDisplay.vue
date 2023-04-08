@@ -9,7 +9,8 @@
         </div>
         <div class="info" v-if="data.level !== undefined">
           <div class="username">
-            <span>{{ data.username }} </span>
+            <span v-if="data.nickname">{{ data.username+'('+data.nickname+')' }} </span>
+            <span v-else>{{ data.username }} </span>
             <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt=""/>
           </div>
           <div class="office">

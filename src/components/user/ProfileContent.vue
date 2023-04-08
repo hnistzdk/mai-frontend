@@ -57,9 +57,9 @@
           <!-- 公司 -->
           <a-form-model-item has-feedback prop="company" :label="$t('common.company')">
             <a-input v-model="ruleForm.company"
-                     :suffix="ruleForm.companyNum + '/50'"
+                     :suffix="ruleForm.companyNum + '/20'"
                      @change="commonChange"
-                     :maxLength="50"
+                     :maxLength="20"
                      :placeholder="$t('common.fillInYourCompany')"/>
           </a-form-model-item>
 
@@ -89,6 +89,8 @@
                      @change="commonChange"
                      autocomplete="off"
                      class="graduatedFrom"
+                     :suffix="ruleForm.graduatedFromNum + '/20'"
+                     :maxLength="20"
                      :placeholder="$t('common.fillInYourGraduatedFrom')"/>
           </a-form-item>
 
@@ -98,7 +100,9 @@
             <a-input v-model="ruleForm.specializedSubject"
                       @change="commonChange"
                       :placeholder="$t('common.fillInYourSpecializedSubject')"
-                      class="specializedSubject">
+                     :suffix="ruleForm.specializedSubjectNum + '/20'"
+                     :maxLength="20"
+                     class="specializedSubject">
             </a-input>
           </a-form-item>
 
@@ -173,7 +177,6 @@
 
       // 验证昵称
       let validateNickName = (rule, value, callback) => {
-        console.log('验证昵称')
         if (value === '') {
           callback(new Error("昵称不能为空"));
         } else if (value.length > 10) {
@@ -253,8 +256,10 @@
           educationalBackground: '',
           //毕业院校
           graduatedFrom:'',
+          graduatedFromNum: 0,
           //专业
           specializedSubject:'',
+          specializedSubjectNum: 0,
 
         },
         rules: {
@@ -281,7 +286,6 @@
       getUserInfo() {
         userService.getUserInfo({userId: this.ruleForm.userId})
             .then(res => {
-              console.log('userInfo',res.data)
               this.spinning = false;
               this.ruleForm.username = res.data.username;
               this.ruleForm.userNameNum = res.data.username.length;
@@ -298,11 +302,16 @@
 
               //学历信息
               this.ruleForm.selfIntroduction = res.data.selfIntroduction;
-              this.ruleForm.educationalBackground = res.data.educationalBackground;
-              this.ruleForm.graduatedFrom = res.data.graduatedFrom;
-              this.ruleForm.specializedSubject = res.data.specializedSubject;
-
               this.ruleForm.introNum = res.data.selfIntroduction ? res.data.selfIntroduction.length : 0;
+
+              this.ruleForm.educationalBackground = res.data.educationalBackground;
+
+              this.ruleForm.graduatedFrom = res.data.graduatedFrom;
+              this.ruleForm.graduatedFromNum = res.data.graduatedFrom ? res.data.graduatedFrom.length : 0;
+
+              this.ruleForm.specializedSubject = res.data.specializedSubject;
+              this.ruleForm.specializedSubjectNum = res.data.specializedSubject ? res.data.specializedSubject.length : 0;
+
             })
             .catch(err => {
               this.$message.error(err.msg);
@@ -352,6 +361,8 @@
         this.ruleForm.companyNum = this.ruleForm.company.length;
         this.ruleForm.introNum = this.ruleForm.selfIntroduction.length;
         this.ruleForm.nickNameNum = this.ruleForm.nickname.length;
+        this.ruleForm.graduatedFromNum = this.ruleForm.graduatedFrom.length;
+        this.ruleForm.specializedSubjectNum = this.ruleForm.specializedSubject.length;
       },
 
       // 用户判重

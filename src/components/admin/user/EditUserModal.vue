@@ -40,6 +40,18 @@
                   @change="changeRoleSelect"
         />
       </a-form-item>
+      <a-form-item>
+        <a-switch v-if="data.status === '0'"
+                  :checked="true"
+                  checked-children="启用"
+                  un-checked-children="停用"
+                  @change="switchOnChange"/>
+        <a-switch v-if="data.status === '1'"
+                  :checked="false"
+                  checked-children="启用"
+                  un-checked-children="停用"
+                  @change="switchOnChange"/>
+      </a-form-item>
 
       <!-- 按钮 -->
       <a-form-model-item>
@@ -116,6 +128,7 @@ export default {
             educationalBackground: this.data.educationalBackground,
             graduatedFrom: this.data.graduatedFrom,
             specializedSubject: this.data.specializedSubject,
+            status: this.data.status,
           };
           adminService.updateUserInfo(data)
               .then(res => {
@@ -132,6 +145,10 @@ export default {
 
     changeRoleSelect(value){
       this.data.roleId = value;
+    },
+
+    switchOnChange(checked){
+      this.data.status = checked ? '0' : '1';
     }
 
   },

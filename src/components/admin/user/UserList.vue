@@ -20,7 +20,7 @@
      <span slot="action" slot-scope="text, record, index" style="display: flex">
        <a-space>
          <a-button @click="editAction(index)" type="primary" shape="circle" icon="edit" size="small" title="编辑" />
-       <a-button type="danger" shape="circle" icon="delete" size="small" title="删除" />
+<!--       <a-button type="danger" shape="circle" icon="delete" size="small" title="删除" />-->
         <EditUserModal
             :visible="editVisible[index]"
             :data="record"

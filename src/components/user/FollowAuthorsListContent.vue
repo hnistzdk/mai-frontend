@@ -20,13 +20,13 @@
               <span> {{ item.userInfo.readCount + ' ' + $t("common.read") }}</span>
             </div>
           </div>
-          <a-button class="follow-btn" v-if="!item.userInfo.isFollow && $store.state.userId !== item.fromUser
+          <a-button class="follow-btn" v-if="$store.state.isLogin && !item.userInfo.isFollow
                                                 "
                     @click="updateFollowState(getFollow ? item.toUser : item.fromUser, index)"
                     :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
             {{ $t("common.follow") }}
           </a-button>
-          <a-button class="follow-btn-close" v-if="item.userInfo.isFollow && $store.state.userId !== item.toUser
+          <a-button class="follow-btn-close" v-if="$store.state.isLogin && item.userInfo.isFollow
                                                    && item.userInfo.userId !== $store.state.userId             "
                     @click="updateFollowState(getFollow ? item.toUser : item.fromUser, index)">
             {{ $t("common.haveFollowed") }}
@@ -58,12 +58,19 @@
           store.state.loginVisible = true;
           return;
         }
+        let origin = this.data[index].userInfo.isFollow;
+        this.data[index].userInfo.isFollow = !origin;
         userService.updateFollowState({toUser: toUser,toUsername:this.data[index].toUsername})
             .then(() => {
-              this.$router.go(0);
-              // this.$emit("refresh");
+              if (origin){
+                this.$message.success("取消关注成功");
+              }else {
+                this.$message.success("关注成功");
+              }
+
             })
             .catch(err => {
+              this.data[index].userInfo.isFollow = origin;
               this.$message.error(err.msg);
             });
       },

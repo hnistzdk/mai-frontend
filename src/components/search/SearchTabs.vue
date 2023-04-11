@@ -316,7 +316,6 @@ export default {
       this.showSkeleton = true;
       searchService.searchUser(params)
           .then(res => {
-            console.log('userData',res)
             if (isLoadMore) {
               this.userData = this.userData.concat(res.data.list);
               this.hasNext = res.data.list.length !== 0;

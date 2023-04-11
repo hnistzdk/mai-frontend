@@ -79,8 +79,9 @@
                   this.changeIsLogin(true);
                   //关闭登录弹框
                   this.changeLoginVisible(false);
-
+                  // this.$utils.successTimeModal(()=> this.$router.go(0),"提示","刷新页面",3)
                   this.$message.success(this.$t('common.loginSuccess'))
+                  this.$emit("refresh");
                 })
                 .catch(err => {
                   this.$message.error(err.msg);

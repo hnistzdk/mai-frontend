@@ -1,7 +1,9 @@
 <template>
   <a-layout id="components-layout-demo-fixed-sider">
     <a-layout-sider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }">
-      <div class="logo" />
+      <div>
+        <img slot="avatar" src="@/assets/img/logo.png" alt="默认图片" style="height: 92px"/>
+      </div>
       <!--      菜单-->
       <AdminMenu :selected="'post'"/>
     </a-layout-sider>

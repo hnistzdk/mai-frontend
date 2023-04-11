@@ -164,9 +164,7 @@ export default {
       if (data.postId === 0){
         postService.postCreate(data)
             .then(res => {
-              // this.$router.push("/user/" + this.$store.state.userId + "/post");
-              this.$message.success(res.msg);
-              this.$router.go(0);
+              this.$utils.successTimeModal(()=>this.$router.go(0),"发布成功","刷新",3);
             })
             .catch(err => {
               this.$message.error(err.msg);
@@ -176,7 +174,7 @@ export default {
         postService.postUpdate(data)
             .then(res => {
               // 刷新
-              this.$utils.successModal(()=>this.$router.go(0),"提示","发布成功");
+              this.$utils.successTimeModal(()=>this.$router.go(0),"修改成功","刷新",3);
             })
             .catch(err => {
               this.$message.error(err.msg);

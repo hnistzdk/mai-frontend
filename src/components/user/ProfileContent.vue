@@ -11,7 +11,7 @@
             <a-input v-model="ruleForm.nickname"
                      @change="commonChange"
                      :maxLength="10"
-                     :suffix="ruleForm.nickNameNum + '/10'"
+                     :suffix="ruleForm.nicknameNum + '/10'"
                      autocomplete="off"
                      class="nickname"
                      :placeholder="$t('common.fillInYourNickname')"/>
@@ -228,7 +228,7 @@
         ruleForm: {
           userId: this.$store.state.userId,
           username: '',
-          userNameNum: 0,
+          usernameNum: 0,
           // 职业
           position: '',
           positionNum: 0,
@@ -237,7 +237,7 @@
           companyNum: 0,
           //昵称
           nickname: '',
-          nickNameNum: 0,
+          nicknameNum: 0,
           //性别
           sex: 0,
           // 个人主页
@@ -287,28 +287,38 @@
         userService.getUserInfo({userId: this.ruleForm.userId})
             .then(res => {
               this.spinning = false;
-              this.ruleForm.username = res.data.username;
-              this.ruleForm.userNameNum = res.data.username.length;
 
+              //用户名
+              this.ruleForm.username = res.data.username;
+              this.ruleForm.usernameNum = res.data.username.length;
+
+              //昵称
               this.ruleForm.nickname = res.data.nickname ? res.data.nickname : '';
-              this.ruleForm.nickNameNum = res.data.nickname ? res.data.nickname.length : 0;
+              this.ruleForm.nicknameNum = res.data.nickname ? res.data.nickname.length : 0;
+
+              //性别
               this.ruleForm.sex = res.data.sex ? res.data.sex : 0;
 
+              //职位
               this.ruleForm.position = res.data.position ? res.data.position : '';
               this.ruleForm.positionNum = res.data.position ? res.data.position.length : 0;
 
+              //公司
               this.ruleForm.company = res.data.company ? res.data.company : '';
               this.ruleForm.companyNum = res.data.company ? res.data.company.length : 0;
 
-              //学历信息
+              //简介
               this.ruleForm.selfIntroduction = res.data.selfIntroduction;
               this.ruleForm.introNum = res.data.selfIntroduction ? res.data.selfIntroduction.length : 0;
 
+              //学历
               this.ruleForm.educationalBackground = res.data.educationalBackground;
 
+              //毕业院校
               this.ruleForm.graduatedFrom = res.data.graduatedFrom;
               this.ruleForm.graduatedFromNum = res.data.graduatedFrom ? res.data.graduatedFrom.length : 0;
 
+              //专业
               this.ruleForm.specializedSubject = res.data.specializedSubject;
               this.ruleForm.specializedSubjectNum = res.data.specializedSubject ? res.data.specializedSubject.length : 0;
 
@@ -354,15 +364,15 @@
       },
 
       usernameChange(value) {
-        this.ruleForm.userNameNum = value.target.value.length;
+        this.ruleForm.usernameNum = value.target.value.length;
       },
       commonChange() {
-        this.ruleForm.positionNum = this.ruleForm.position.length;
-        this.ruleForm.companyNum = this.ruleForm.company.length;
-        this.ruleForm.introNum = this.ruleForm.selfIntroduction.length;
-        this.ruleForm.nickNameNum = this.ruleForm.nickname.length;
-        this.ruleForm.graduatedFromNum = this.ruleForm.graduatedFrom.length;
-        this.ruleForm.specializedSubjectNum = this.ruleForm.specializedSubject.length;
+        this.ruleForm.positionNum = this.ruleForm.position ? this.ruleForm.position.length : 0;
+        this.ruleForm.companyNum = this.ruleForm.company ? this.ruleForm.company.length : 0;
+        this.ruleForm.introNum = this.ruleForm.selfIntroduction ? this.ruleForm.selfIntroduction.length : 0;
+        this.ruleForm.nicknameNum = this.ruleForm.nickname ? this.ruleForm.nickname.length : 0;
+        this.ruleForm.graduatedFromNum = this.ruleForm.graduatedFrom ? this.ruleForm.graduatedFrom.length : 0;
+        this.ruleForm.specializedSubjectNum = this.ruleForm.specializedSubject ? this.ruleForm.specializedSubject.length : 0;
       },
 
       // 用户判重

@@ -85,6 +85,7 @@ export default {
       }
       userService.getFollowUsers(params)
           .then(res => {
+            console.log('res',res.data.list)
             if (isLoadMore) {
               if (this.getFollow) {
                 this.followData = this.followData.concat(res.data.list);

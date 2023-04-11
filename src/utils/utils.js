@@ -155,11 +155,17 @@ export default {
    * @param secondsToGo
    */
   successTimeModal(callback, title, content, secondsToGo) {
+    let flag = false;
     secondsToGo = secondsToGo ? secondsToGo : 5;
     const modal = Modal.success({
       title: title ? title : '提示',
       content: content ? `${secondsToGo}秒后即将` + content : `${secondsToGo}秒后即将跳转`,
-      onOk() {callback()}
+      onOk() {
+        if (!flag){
+          flag = true;
+          callback()
+        }
+      }
     });
     const interval = setInterval(() => {
       secondsToGo -= 1;
@@ -170,7 +176,10 @@ export default {
     setTimeout(() => {
       clearInterval(interval);
       modal.destroy();
-      callback();
+      if (!flag){
+        flag = true;
+        callback();
+      }
     }, secondsToGo * 1000);
   },
 

@@ -23,9 +23,12 @@
             </span>
           </div>
           <div class="intro">
-            <span>
+            <span v-if="data.company">
               <i class="iconfont icon-intro"></i>
-              <span>{{ data.company ? data.company : '' }}</span>
+              <span>{{ data.company }}</span>
+            </span>
+            <span v-else-if="$store.state.userId === data.userId" @click="routerSetUp">
+              <a><a-icon type="plus"/>{{ $t("common.notCompany") }}</a>
             </span>
           </div>
           <div class="intro">
@@ -34,7 +37,7 @@
               <span>{{ data.selfIntroduction }}</span>
             </span>
             <span v-else-if="$store.state.userId === data.userId" @click="routerSetUp">
-              <a><a-icon type="plus"/>{{ $t("common.notHobbies") }}</a>
+              <a><a-icon type="plus"/>{{ $t("common.notIntro") }}</a>
             </span>
           </div>
         </div>
@@ -131,11 +134,19 @@
           store.state.loginVisible = true;
           return;
         }
+        let origin = this.data.isFollow;
+        this.data.isFollow = !origin;
         userService.updateFollowState({toUser: this.data.userId,toUsername: this.data.username})
             .then(() => {
-              this.$emit("refresh");
+              // this.$emit("refresh");
+              if (origin){
+                this.$message.success("取消关注成功");
+              }else {
+                this.$message.success("关注成功");
+              }
             })
             .catch(err => {
+              this.data.isFollow = origin;
               this.$message.error(err.msg);
             });
       },

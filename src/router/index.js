@@ -144,7 +144,7 @@ const routes = [
     },
     {
         path: "/admin/post",
-        name: "post",
+        name: "adminPost",
         component: () => import("@/components/admin/post/AdminPost"),
         meta: {
             //该字段表示跳转需要验证是否登录
@@ -153,7 +153,7 @@ const routes = [
     },
     {
         path: "/admin/gossip",
-        name: "gossip",
+        name: "adminGossip",
         component: () => import("@/components/admin/gossip/AdminGossip"),
         meta: {
             //该字段表示跳转需要验证是否登录

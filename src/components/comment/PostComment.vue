@@ -4,6 +4,7 @@
     <p class="title">{{ $t('common.comment') }}</p>
     <CreateComment
         :post-info="postInfo"
+        :id="'postTextarea'"
         @refresh="refresh"/>
 
     <div class="commentText">

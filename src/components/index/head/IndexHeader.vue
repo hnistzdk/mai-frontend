@@ -4,7 +4,7 @@
       <div class="header-left-content">
         <!-- logo -->
         <div @click="refresh" class="header-item-logo">
-          <img slot="avatar" src="@/assets/img/logo-lanse.png" alt="默认图片" style="height: 100%"/>
+          <img slot="avatar" src="@/assets/img/logo.png" alt="默认图片" style="height: 100%"/>
         </div>
 
         <!-- 首页 -->
@@ -337,6 +337,7 @@ export default {
             this.changeIsManage(false);
 
             this.$message.success('退出成功')
+            this.$router.go(0);
           })
           .catch(err => {
             this.$message.error(err.msg);

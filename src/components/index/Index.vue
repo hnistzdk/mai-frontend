@@ -131,6 +131,7 @@
 
       // 刷新列表
       refresh() {
+        console.log('执行刷新')
         this.params = {currentPage: 1, pageSize: global.defaultPageSize,type: 1};
         this.getPostList(this.params);
       },

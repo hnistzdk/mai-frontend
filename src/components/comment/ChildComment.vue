@@ -2,9 +2,10 @@
   <div id="child-comment">
     <a-comment :id="'reply-' + data.commentId">
       <a class="username" slot="author" @click="routerUserCenter(data.createBy)">
-        {{ data.createUsername }}
+        <span style="font-weight: bold">
+          {{ data.createUsername }}
+        </span>
 <!--        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>-->
-<!--        <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>-->
         <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>
       </a>
       <a-avatar slot="avatar" :src="data.avatar ? data.avatar : require('@/assets/img/default_avatar.png')"
@@ -29,7 +30,7 @@
             <small> {{ data.repliesCount === 0 ? '' : data.repliesCount}}</small>
           </i>
         </a>
-        <!-- 自己的评论 or 自己的文章  都可以删除对应评论信息 -->
+        <!-- 自己的评论 or 自己的贴子  都可以删除对应评论信息 -->
         <b v-if="data.createBy === $store.state.userId || postInfo.authorId === $store.state.userId">
           <a-dropdown :placement="'bottomCenter'" :trigger="['click']">
             <a-menu slot="overlay">
@@ -47,6 +48,7 @@
                      :parentId="parentId"
                      :post-info="postInfo"
                      :comment-info="commentInfo"
+                     :id="'childTextarea'"
                      @refresh="getCommentByPostId"/>
       <!-- 根据rootId循环 -->
       <ChildCommentList v-if="data.depth < 2"
@@ -75,7 +77,7 @@ export default {
 
   props: {
     data: {type: Object, default: () => ({})},
-    // 当前文章的作者
+    // 当前贴子的作者
     postUserId: {type: Number, default: 0},
     //贴子信息
     postInfo: {},
@@ -97,11 +99,18 @@ export default {
         this.$message.error("请先登录");
         store.state.loginVisible = true;
       }else {
+        this.data.like = !state;
         commentService.updateLikeCommentState({commentId: commentId,state:state})
             .then(() => {
+              if (state){
+                this.$message.success("取消成功");
+              }else {
+                this.$message.success("点赞成功");
+              }
               this.$emit("getCommentByPostId");
             })
             .catch(err => {
+              this.data.like = state;
               this.$message.error(err.msg);
             });
       }

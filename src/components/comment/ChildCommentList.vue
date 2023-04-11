@@ -2,7 +2,12 @@
   <div class="child-comment-list">
     <a-comment :id="'reply-' + data.commentId">
       <a class="username" slot="author" @click="routerUserCenter(data.createBy)">
-        {{ data.createUsername +'     回复'}}
+        <span v-if="data.createBy !== data.parentUserId">
+          {{ data.createUsername +'     回复'}}
+        </span>
+        <span v-else>
+          {{ data.createUsername}}
+        </span>
         <!--        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>-->
         <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>
       </a>
@@ -50,6 +55,7 @@
                      :parentId="parentId"
                      :post-info="postInfo"
                      :comment-info="commentInfo"
+                     :id="'childListTextarea'"
                      @refresh="getCommentByPostId"/>
     </a-comment>
   </div>
@@ -90,11 +96,18 @@ export default {
         this.$message.error("请先登录");
         store.state.loginVisible = true;
       }else {
+        this.data.like = !state;
         commentService.updateLikeCommentState({commentId: commentId,state:state})
             .then(() => {
+              if (state){
+                this.$message.success("取消成功");
+              }else {
+                this.$message.success("点赞成功");
+              }
               this.$emit("getCommentByPostId");
             })
             .catch(err => {
+              this.data.like = state;
               this.$message.error(err.msg);
             });
       }

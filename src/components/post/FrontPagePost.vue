@@ -172,7 +172,11 @@ import IndexCreate from "@/components/post/IndexCreate";
           this.tempData[index].like = !like;
           postService.updateLikeState({postId: postId,state: like})
               .then(() => {
-
+                if (like){
+                  this.$message.success('取消成功');
+                }else {
+                  this.$message.success('点赞成功');
+                }
               })
               .catch(err => {
                 this.$message.error(err.msg);

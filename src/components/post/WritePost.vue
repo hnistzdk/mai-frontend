@@ -207,7 +207,7 @@ export default {
       postService.postUpdate(data)
           .then(res => {
             // 返回上一页
-            this.$utils.successTimeModal(()=>this.$router.go(-1),"更新成功","即将跳转到个人中心");
+            this.$utils.successTimeModal(()=>this.$router.go(-1),"更新成功","回到上一页");
           })
           .catch(err => {
             this.$message.error(err.msg);
@@ -228,11 +228,6 @@ export default {
             this.postTitle = res.data.title;
             // 内容
             this.markdownCode = res.data.markdown;
-            // 标签
-            // res.data.labelDTOS.forEach((item) => {
-            //   this.postLabel.push(item.id);
-            // })
-            // 题图
             this.postTitleMap = res.data.titleMap;
           })
           .catch(err => {

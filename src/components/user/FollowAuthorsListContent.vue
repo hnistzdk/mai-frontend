@@ -16,12 +16,11 @@
             <div class="describe">
               <span>{{ $t("common.get") }}</span>
               <span> {{ item.userInfo.likeCount + ' ' + $t("common.praise") }}</span>
-              <span>·</span>
               <span> {{ item.userInfo.readCount + ' ' + $t("common.read") }}</span>
             </div>
           </div>
           <a-button class="follow-btn" v-if="$store.state.isLogin && !item.userInfo.isFollow
-                                                "
+                                            && item.userInfo.userId != $store.state.userId"
                     @click="updateFollowState(getFollow ? item.toUser : item.fromUser, index)"
                     :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
             {{ $t("common.follow") }}

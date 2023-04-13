@@ -24,7 +24,7 @@ export default {
     userRegister: "用户注册",
     mobileResetPassword: "手机重置密码",
     emailResetPassword: "邮箱重置密码",
-    username: "用户名/手机号/邮箱",
+    username: "用户名",
     password: "请输入密码",
     rememberMe: "记住账号",
     forgotPassword: "忘记密码",

@@ -137,7 +137,7 @@ export default {
       finish: false,
       // 加载中...
       dynamicSpinning: true,
-      params: {currentPage: 1, pageSize: global.defaultPageSize, userId: this.userId},
+      params: {currentPage: 1, pageSize: global.defaultPageSize, userId: this.userId,isTab: true},
     };
   },
 

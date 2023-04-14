@@ -66,11 +66,27 @@ export default {
         this.$message.error("请先登录");
         store.state.loginVisible = true;
       }else {
-        postService.updateLikeState({postId: this.$route.params.id,state: this.data.like })
+        let like = this.data.like;
+        if(like){
+          this.data.likeCount = this.data.likeCount - 1;
+        }else{
+          this.data.likeCount = this.data.likeCount + 1;
+        }
+        this.data.like = !like;
+        postService.updateLikeState({postId: this.$route.params.id,state: like })
             .then(() => {
+              if (like){
+                console.log('取消');
+                this.$message.success('取消成功');
+              }else {
+                console.log('点赞');
+                this.$message.success('点赞成功');
+              }
               this.getStatisticalData();
+              
             })
             .catch(err => {
+              this.data.like = like;
               this.$message.error(err.msg);
             });
       }

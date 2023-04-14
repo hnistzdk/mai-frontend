@@ -19,19 +19,20 @@
         />
       </a-form-item>
       <a-form-item label="性别" has-feedback prop="sex">
-        <a-select :value="data.sex">
-          <a-select-option value="0">
-            男
-          </a-select-option>
-          <a-select-option value="1">
-            女
-          </a-select-option>
-        </a-select>
+        <a-select :value="data.sex"
+                  @change="sexChange"
+                  :options="sexOptions"/>
       </a-form-item>
       <a-form-item label="手机" has-feedback prop="phone">
         <a-input allow-clear
                  placeholder="手机"
                  :value="data.phone"
+        />
+      </a-form-item>
+      <a-form-item label="密码" has-feedback prop="password">
+        <a-input-password allow-clear
+                 placeholder="重置密码"
+                 v-model="password"
         />
       </a-form-item>
       <a-form-item label="角色" has-feedback prop="roleId">
@@ -87,7 +88,6 @@ export default {
   data() {
     // 验证昵称
     let validateNickname = (rule, value, callback) => {
-      console.log('验证昵称')
       if (value === '') {
         callback(new Error("昵称不能为空"));
       } else if (value.length > 10) {
@@ -102,6 +102,8 @@ export default {
         nickname: [{validator: validateNickname, trigger: 'change'}],
       },
       roleOptions:[],
+      sexOptions:[{label:"男",value:"0"},{label:"女",value:"1"}],
+      password: '',
     }
   },
   methods: {
@@ -120,7 +122,7 @@ export default {
             userId: this.data.userId,
             roleId: this.data.roleId,
             nickname: this.data.nickname,
-            sex: this.sex,
+            sex: this.data.sex,
             position: this.data.position,
             company: this.data.company,
             selfIntroduction: this.data.selfIntroduction,
@@ -129,7 +131,13 @@ export default {
             graduatedFrom: this.data.graduatedFrom,
             specializedSubject: this.data.specializedSubject,
             status: this.data.status,
+            password: this.password,
           };
+          let password = data.password;
+          if (password && password.length < 6){
+            this.$message.error("密码长度不能小于6个字符");
+            return;
+          }
           adminService.updateUserInfo(data)
               .then(res => {
                 this.$utils.successModal(()=>this.$router.go(0),"提示","修改成功");
@@ -145,6 +153,9 @@ export default {
 
     changeRoleSelect(value){
       this.data.roleId = value;
+    },
+    sexChange(value){
+      this.data.sex = value;
     },
 
     switchOnChange(checked){

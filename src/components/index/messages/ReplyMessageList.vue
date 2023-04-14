@@ -1,5 +1,5 @@
 <template>
-  <a-list item-layout="vertical" size="small" :pagination="pagination" :data-source="data" style="cursor: pointer;">
+  <a-list :loading="loading" item-layout="vertical" size="small" :pagination="pagination" :data-source="data" style="cursor: pointer;">
     <a-list-item slot="renderItem" slot-scope="item, index">
       <template v-for="{ type, text } in actions" slot="actions">
         <a-space :key="type">
@@ -64,6 +64,7 @@ export default {
   directives: { infiniteScroll },
   data() {
     return {
+      loading: false,
       actions: [
         { type: 'reply', text: '156' },
       ],
@@ -79,11 +80,14 @@ export default {
           this.pagination.current = page;
           this.pagination.pageSize = pageSize;
           let params = {currentPage: page, pageSize: pageSize,noticeType:1,messageType:1};
+          this.loading = true;
           messageService.getMessageList(params)
               .then((res) =>{
+                this.loading = false;
                 this.data = res.data.list;
                 this.pagination.total = res.data.totalCount;
               }).catch((err) => {
+                this.loading = false;
                 this.$message.error(err.msg);
           });
         },
@@ -96,11 +100,14 @@ export default {
   },
   beforeMount() {
     this.params.currentPage = 1;
+    this.loading = true;
     messageService.getMessageList(this.params)
         .then((res) =>{
+          this.loading = false;
           this.data = res.data.list;
           this.pagination.total = res.data.totalCount;
         }).catch((err) => {
+          this.loading = false;
           this.$message.error(err.msg);
     });
   },
@@ -121,7 +128,6 @@ export default {
     },
     readAll(){
       let params = {userId:this.$store.state.userId,messageType:this.messageType,noticeType: this.noticeType};
-      console.log('params',params);
       for (let i = 0; i < this.data.length; i++) {
         this.data[i].readFlag = true;
       }

@@ -403,8 +403,8 @@ export default {
 
   mounted() {
     this.getDynamicList(this.params);
-    this.getPersonalPosts({currentPage: 1, pageSize: global.defaultPageSize, type: 1, userId: this.userId});
-    this.getPersonalGossips({currentPage: 1, pageSize: global.defaultPageSize, type: 2, userId: this.userId});
+    this.getPersonalPosts({currentPage: 1, pageSize: global.defaultPageSize, type: 1, userId: this.userId,isTab: true});
+    this.getPersonalGossips({currentPage: 1, pageSize: global.defaultPageSize, type: 2, userId: this.userId,isTab: true});
     this.getLikesPost({currentPage: 1, pageSize: global.defaultPageSize});
     this.getFollowCount();
     // 监听滚动，做滚动加载

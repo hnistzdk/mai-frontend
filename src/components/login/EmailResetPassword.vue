@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal v-model="$store.state.emailResetPasswordVisible" @ok="handleOk" :footer="null" :width="'320px'">
+    <a-modal v-model="$store.state.emailResetPasswordVisible" @ok="handleOk" :footer="null" :width="'400px'">
       <a-form-model ref="ruleForm" :model="ruleForm" :rules="rules" v-bind="layout" id="emailResetPassword-form-content">
         <h1 class="title">{{ $t("common.emailResetPassword") }}</h1>
         <a-form-model-item has-feedback prop="email">

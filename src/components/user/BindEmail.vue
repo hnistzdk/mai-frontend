@@ -107,7 +107,7 @@
         // 校验成功后发送请求绑定邮箱
         userService.bindEmail({"email":email, "code":code})
             .then(() => {
-              this.$message.success(this.$t("common.bindEmailSuccessed"));
+              this.$message.success(this.$t("common.bindEmailSucceed"));
               this.$emit("refresh");
               this.handleCancel();
             })
@@ -130,7 +130,7 @@
           if (!err) {
             userService.sendEmailVerifyCode({email:values.email,type:'bind'})
                 .then(() => {
-                  this.$message.success(this.$t("common.verifyCodeSendSuccessed"));
+                  this.$message.success(this.$t("common.verifyCodeSendSucceed"));
                   this.sentVerifyCode = true;
                 })
                 .catch(err => {

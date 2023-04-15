@@ -125,7 +125,7 @@
       sendSmsVerifyCode(phone) {
         userService.sendSmsVerifyCode({ phone: phone })
             .then(() => {
-              this.$message.success(this.$t("common.verifyCodeSendSuccessed"));
+              this.$message.success(this.$t("common.verifyCodeSendSucceed"));
             })
             .catch(err => {
               this.$message.error(err.desc);

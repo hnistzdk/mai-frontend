@@ -102,7 +102,7 @@
         // 校验通过后发送请求绑定手机
         userService.bindPhone({phone, code})
             .then(() => {
-              this.$message.success(this.$t("common.bindPhoneSuccessed"));
+              this.$message.success(this.$t("common.bindPhoneSucceed"));
               this.$emit("refresh");
               this.handleCancel();
             })
@@ -125,7 +125,7 @@
           if (!err) {
             userService.sendSmsVerifyCode(values)
                 .then(() => {
-                  this.$message.success(this.$t("common.verifyCodeSendSuccessed"));
+                  this.$message.success(this.$t("common.verifyCodeSendSucceed"));
                   this.sentVerifyCode = true;
                 })
                 .catch(err => {

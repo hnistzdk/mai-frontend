@@ -117,7 +117,7 @@ export default {
             }
             userService.resetPassword({oldPassword: oldPassword, newPassword: newPassword})
                 .then(() => {
-                  this.$message.success(this.$t("common.changePasswordSuccessed"));
+                  this.$message.success(this.$t("common.changePasswordSucceed"));
                   this.$emit("refresh");
                   this.handleCancel();
                 })

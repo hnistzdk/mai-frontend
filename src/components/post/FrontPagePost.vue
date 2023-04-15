@@ -196,7 +196,7 @@ import IndexCreate from "@/components/post/IndexCreate";
           onOk: () => {
             postService.postTop({postId: postId, top: true})
                 .then(() => {
-                  this.$message.success(this.$t("common.topSuccessed"));
+                  this.$message.success(this.$t("common.topSucceed"));
                 })
                 .catch(err => {
                   this.$message.error(err.msg);
@@ -213,7 +213,7 @@ import IndexCreate from "@/components/post/IndexCreate";
           onOk: () => {
             postService.postTop({postId: postId, top: false})
                 .then(() => {
-                  this.$message.success(this.$t("common.notTopSuccessed"));
+                  this.$message.success(this.$t("common.notTopSucceed"));
                 })
                 .catch(err => {
                   this.$message.error(err.msg);

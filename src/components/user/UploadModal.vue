@@ -86,7 +86,7 @@
         this.loading = true;
         userService.uploadUserAvatar(file, this.onUploadProgress.bind(this))
             .then(() => {
-              this.$message.success(this.$t("common.uploadSuccessed"));
+              this.$message.success(this.$t("common.uploadSucceed"));
               this.handleCancel();
               this.$emit("refresh");
               this.loading = false;

@@ -123,7 +123,7 @@
         if (this.user.email) {
           userService.unbindEmail()
               .then(() => {
-                this.$message.success(this.$t("common.unBindEmailSuccessed"));
+                this.$message.success(this.$t("common.unBindEmailSucceed"));
                 this.refresh();
                 this.editMode = false;
               })
@@ -140,7 +140,7 @@
         if (this.user.phone) {
           userService.untiePhone()
               .then(() => {
-                this.$message.success(this.$t("common.unBindPhoneSuccessed"));
+                this.$message.success(this.$t("common.unBindPhoneSucceed"));
                 this.refresh();
                 this.editMode = false;
               })

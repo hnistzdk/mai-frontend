@@ -332,7 +332,7 @@
       updateUserBasicInfo(data) {
         userService.updateUserBasicInfo(data)
             .then(res => {
-              this.$message.success(this.$t('common.saveSuccessed'));
+              this.$message.success(this.$t('common.saveSucceed'));
               this.getUserInfo();
             })
             .catch(err => {

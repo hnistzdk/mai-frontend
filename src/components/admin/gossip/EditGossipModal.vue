@@ -178,28 +178,15 @@ export default {
         this.$message.warning("内容不能为空");
         return;
       }
-      if (data.postId === 0){
-        postService.postCreate(data)
-            .then(res => {
-              // this.$router.push("/user/" + this.$store.state.userId + "/post");
-              this.$message.success(res.msg);
-              this.$router.go(0);
-            })
-            .catch(err => {
-              this.$message.error(err.msg);
-            });
-      }else {
-        // 更新职言
-        postService.postUpdate(data)
-            .then(res => {
-              // 刷新
-              this.$utils.successModal(()=>this.$router.go(0),"提示","发布成功");
-            })
-            .catch(err => {
-              this.$message.error(err.msg);
-            });
-      }
-
+      // 更新职言
+      postService.postUpdate(data)
+          .then(res => {
+            // 刷新
+            this.$utils.successModal(()=>this.$router.go(0),"提示","发布成功");
+          })
+          .catch(err => {
+            this.$message.error(err.msg);
+          });
     },
 
     // 用户点击了ctrl+enter触发

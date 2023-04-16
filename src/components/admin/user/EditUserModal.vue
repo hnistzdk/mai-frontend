@@ -35,13 +35,13 @@
                  v-model="password"
         />
       </a-form-item>
-      <a-form-item label="角色" has-feedback prop="roleId">
+      <a-form-item label="角色" has-feedback prop="roleId" v-if="$store.state.userId !== data.userId">
         <a-select :value="data.roleId"
                   :options="roleOptions"
                   @change="changeRoleSelect"
         />
       </a-form-item>
-      <a-form-item>
+      <a-form-item v-if="$store.state.userId !== data.userId">
         <a-switch v-if="data.status === '0'"
                   :checked="true"
                   checked-children="启用"

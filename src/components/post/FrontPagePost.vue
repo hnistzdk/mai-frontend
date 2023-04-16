@@ -82,7 +82,6 @@
           <a slot="title" class="username" @click.stop="routerUserCenter(item.authorId)">
             <div class="left">
               <span slot="title" style="padding-right: 2px;font-weight: bold"> {{ item.authorUsername }} </span>
-<!--              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>-->
               <small style="color: #b5b9b9; padding-left: 10px" v-text="'更新于     '+$utils.showtime(item.updateTime)"></small>
               <!-- 用户中心 -->
               <div v-if="isUserCenter && ($store.state.userId === userId || $store.state.isManage)">
@@ -257,18 +256,6 @@ import IndexCreate from "@/components/post/IndexCreate";
       // 路由到用户中心页面
       routerUserCenter(userId) {
         let routeData = this.$router.resolve("/user/" + userId);
-        window.open(routeData.href, '_blank');
-      },
-
-      // 路由到标签贴子页面
-      routerLabelToPost(labelId) {
-        let routeData = this.$router.resolve("/label/" + labelId);
-        window.open(routeData.href, '_blank');
-      },
-
-      // 路由到Book说明页面
-      routerBook() {
-        let routeData = this.$router.resolve("/book");
         window.open(routeData.href, '_blank');
       },
 

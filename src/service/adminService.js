@@ -61,6 +61,14 @@ export default {
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });
-    }
+    },
+
+    deleteRole(data) {
+        return new Promise((resolve, reject) => {
+            axios.post("/admin/role/delete/" + data)
+                .then((res) => resolve(res))
+                .catch((err) => reject(err));
+        });
+    },
 
 };

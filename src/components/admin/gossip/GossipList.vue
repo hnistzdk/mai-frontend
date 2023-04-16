@@ -19,6 +19,7 @@
 
      <span slot="action" slot-scope="text, record, index" style="display: flex">
        <a-space>
+         <a-button @click="detail(record.postId)" type="link" shape="circle" icon="eye" size="small" title="详情" />
          <a-button @click="editAction(index)" type="primary" shape="circle" icon="edit" size="small" title="编辑" />
          <a-button @click="deleteAction(record.postId)" type="danger" shape="circle" icon="delete" size="small" title="删除" />
        </a-space>
@@ -47,6 +48,12 @@ const columns = [
     key: 'postId',
     dataIndex: 'postId',
     scopedSlots: { customRender: 'postId' },
+  },
+  {
+    title: '作者',
+    key: 'authorUsername',
+    dataIndex: 'authorUsername',
+    scopedSlots: { customRender: 'authorUsername' },
   },
   {
     title: '内容',
@@ -125,6 +132,11 @@ export default {
       let params = {currentPage: pagination.current, pageSize: pagination.pageSize,keywords:this.keywords,type:2};
       this.getList(params);
     },
+    detail(postId){
+      // 跳转到详情
+      let routeData = this.$router.resolve("/detail/" + postId);
+      window.open(routeData.href, '_blank');
+    },
 
     editAction(index){
       this.editVisible = [];
@@ -138,7 +150,7 @@ export default {
     deleteAction(postId) {
       this.$confirm({
         centered: true,
-        title: this.$t("common.deletePostTitle"),
+        title: this.$t("common.deleteGossip"),
         onOk: () => {
           postService.postDelete(postId)
               .then(() => {

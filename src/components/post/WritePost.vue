@@ -171,6 +171,10 @@ export default {
         this.$message.warning("标题不能为空");
         return;
       }
+      if (this.postTitle.length > 30) {
+        this.$message.warning("标题长度不能大于30个字符");
+        return;
+      }
 
       if (this.htmlCode.length === 0 || this.markdownCode.length === 0) {
         this.$message.warning("内容不能为空");
@@ -200,7 +204,7 @@ export default {
 
     // 更新贴子
     postUpdate(data) {
-      if (this.$store.state.userId !== this.postAuthor) {
+      if (!this.$store.state.isManage && this.$store.state.userId !== this.postAuthor) {
         this.$message.warning("你无权编辑他人撰写的贴子");
         return;
       }
@@ -219,8 +223,7 @@ export default {
       postService.getPostById({id: this.$route.params.id})
           .then(res => {
             this.postAuthor = res.data.authorId;
-            console.log('this.$store.state.userId',this.$store.state.userId)
-            if (this.$store.state.userId !== this.postAuthor) {
+            if (!this.$store.state.isManage && this.$store.state.userId !== this.postAuthor) {
               this.$message.warning("你无权编辑他人撰写的贴子");
               return;
             }

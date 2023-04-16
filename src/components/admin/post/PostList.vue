@@ -19,6 +19,7 @@
 
      <span slot="action" slot-scope="text, record, index" style="display: flex">
        <a-space>
+         <a-button @click="detail(record.postId)" type="link" shape="circle" icon="eye" size="small" title="详情" />
          <a-button @click="editAction(record.postId)" type="primary" shape="circle" icon="edit" size="small" title="编辑" />
          <a-button @click="deleteAction(record.postId)" type="danger" shape="circle" icon="delete" size="small" title="删除" />
        </a-space>
@@ -41,6 +42,12 @@ const columns = [
     key: 'postId',
     dataIndex: 'postId',
     scopedSlots: { customRender: 'postId' },
+  },
+  {
+    title: '作者',
+    key: 'authorUsername',
+    dataIndex: 'authorUsername',
+    scopedSlots: { customRender: 'authorUsername' },
   },
   {
     title: '标题',
@@ -97,6 +104,9 @@ export default {
 
   data() {
     return {
+      injectAttr:{
+
+      },
       data: [],
       loading: false,
       editVisible: [],
@@ -125,7 +135,11 @@ export default {
       let params = {currentPage: pagination.current, pageSize: pagination.pageSize,keywords:this.keywords,type:1};
       this.getList(params);
     },
-
+    detail(postId){
+      // 跳转到详情
+      let routeData = this.$router.resolve("/detail/" + postId);
+      window.open(routeData.href, '_blank');
+    },
     editAction(postId){
       this.$router.push("/edit/" + postId);
     },
@@ -169,6 +183,11 @@ export default {
 
     refresh(){
       this.getList(this.params);
+    },
+    // 路由到用户中心页面
+    getUserCenterHref(userId) {
+      let routeData = this.$router.resolve("/user/" + userId);
+      return routeData.href;
     },
 
   },

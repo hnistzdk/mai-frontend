@@ -22,7 +22,7 @@
      <span slot="action" slot-scope="text, record, index">
        <a-button @click="editAction(index)" type="primary" shape="circle" icon="edit" size="small" title="编辑" />
        <a-divider type="vertical" />
-       <a-button type="danger" shape="circle" icon="delete" size="small" title="删除" />
+       <a-button type="danger" @click="deleteRole(record.roleId)" shape="circle" icon="delete" size="small" title="删除" />
         <EditRoleModal
             :visible="editVisible[index]"
             :data="record"
@@ -34,12 +34,16 @@
 
     <AddRoleModal
         :data="{}"
-        :visible="addVisible"/>
+        :visible="addVisible"
+        @closeAddModal="closeAddModal"
+    />
 
   </div>
 
 </template>
 <script>
+
+import postService from "@/service/postService";
 
 const columns = [
   {
@@ -143,25 +147,43 @@ export default {
 
     closeAddModal(){
       this.addVisible = false;
-    }
+    },
+    deleteRole(roleId){
+      this.$confirm({
+        centered: true,
+        title: "你确定要删除此角色吗?",
+        onOk: () => {
+          adminService.deleteRole(roleId)
+              .then((res) => {
+                this.$message.success("删除成功");
+                this.refresh();
+              }).catch((err) => {
+            this.$message.error(err.msg);
+          })
+        },
+      });
+    },
 
+    refresh(){
+      this.params.currentPage = 1;
+      this.loading = true;
+      adminService.getRoleList(this.params)
+          .then((res) =>{
+            this.data = res.data.list;
+            this.pagination.total = res.data.totalCount;
+            this.loading = false;
+          }).catch((err) => {
+        this.loading = false;
+        this.$message.error(err.msg);
+      });
+    }
 
 
   },
 
 
   beforeMount() {
-    this.params.currentPage = 1;
-    this.loading = true;
-    adminService.getRoleList(this.params)
-        .then((res) =>{
-          this.data = res.data.list;
-          this.pagination.total = res.data.totalCount;
-          this.loading = false;
-        }).catch((err) => {
-      this.loading = false;
-      this.$message.error(err.msg);
-    });
+    this.refresh();
   },
 
 

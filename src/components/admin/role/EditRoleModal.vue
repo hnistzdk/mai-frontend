@@ -1,7 +1,7 @@
 <template>
   <a-modal
       :centered="true"
-      :title="null"
+      :title="'编辑角色'"
       :footer="null"
       :destroyOnClose="true"
       :maskClosable="true"

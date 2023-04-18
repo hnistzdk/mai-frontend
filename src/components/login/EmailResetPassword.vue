@@ -25,7 +25,7 @@
           </a-input>
         </a-form-model-item>
         <a-form-model-item style="padding-top: 5px;">
-          <a-button type="primary" html-type="submit" class="login-form-button" size="large" @click="submitForm('ruleForm')">
+          <a-button :loading="loading" type="primary" html-type="submit" class="login-form-button" size="large" @click="submitForm('ruleForm')">
             {{ $t("common.saveChanges") }}
           </a-button>
 <!--          <a @click="mobileResetPassword">-->
@@ -78,6 +78,7 @@
       };
 
       return {
+        loading: false,
         emailReg: /^([a-z0-9A-Z]+[-|\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-zA-Z]{2,}$/,
         ruleForm: {
           email: '',
@@ -140,13 +141,16 @@
       submitForm(formName) {
         this.$refs[formName].validate(valid => {
           if (valid) {
+            this.loading = true;
             userService.emailResetPassword({email:this.ruleForm.email, code: this.ruleForm.code, newPassword: this.ruleForm.newPassword})
                 .then(res => {
+                  this.loading = false;
                   // 密码重置成功，请重新登录
                   this.$message.success(this.$t("common.pleaseLoginAgain"));
                   this.login();
                 })
                 .catch(err => {
+                  this.loading = false;
                   this.$message.error(err.msg);
                 });
           } else {

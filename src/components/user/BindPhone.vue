@@ -107,7 +107,7 @@
               this.handleCancel();
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -129,7 +129,7 @@
                   this.sentVerifyCode = true;
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           }
         });
@@ -151,8 +151,8 @@
               callback();
             })
             .catch(reason => {
-              if (reason.desc) {
-                callback(reason.desc);
+              if (reason.msg) {
+                callback(reason.msg);
               }
               callback();
             });

@@ -2,9 +2,10 @@ import axios from "axios";
 import store from '../store/index'
 import dayjs from "dayjs";
 // 设置xhr请求超时时间和baseURL（毫秒）
-axios.defaults.timeout = 15000;
+axios.defaults.timeout = 30000;
 if (process.env.NODE_ENV === "production") {
-    axios.defaults.baseURL = "http://localhost:9527";
+    // axios.defaults.baseURL = "http://localhost:9527";
+    axios.defaults.baseURL = "http://mai-api.com/api";
 }
 export default (() => {
 
@@ -69,14 +70,6 @@ export default (() => {
                 if (response.data) {
                     if (response.data.code === 0) {
                         return Promise.resolve(response.data);
-
-                        // 如果code是302，代表需要跳转到切页面
-                    } else if (response.data.code === 302 && response.config.url !== '/user/getCurrentUserRights') {
-                        // window.location.href = response.data.data.target;
-                        store.state.isLogin = false;
-                        store.state.isManage = false;
-                        store.state.loginVisible = true;
-                        return Promise.reject(response.data);
                     }
                     //token过期或验证失败  清除token信息
                     else if (response.data.code === 40001 || response.data.code === 401) {

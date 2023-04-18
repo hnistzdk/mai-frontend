@@ -54,7 +54,7 @@
             })
             .catch(err => {
               this.finish = true;
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 

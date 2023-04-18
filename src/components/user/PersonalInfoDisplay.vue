@@ -78,37 +78,37 @@
           <template slot="title">
             初入职场
           </template>
-          <img src="@/assets/img/level/badge-Lv1.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
+          <img src="@/assets/img/level/badge-Lv1.svg" alt="" style="margin-left: 8px;cursor: pointer" />
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 100">
           <template slot="title">
             兢兢业业
           </template>
-          <img src="@/assets/img/level/badge-Lv2.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
+          <img src="@/assets/img/level/badge-Lv2.svg" alt="" style="margin-left: 8px;cursor: pointer" />
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 300">
           <template slot="title">
             反骨仔
           </template>
-          <img src="@/assets/img/level/badge-Lv3.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
+          <img src="@/assets/img/level/badge-Lv3.svg" alt="" style="margin-left: 8px;cursor: pointer" />
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 600">
           <template slot="title">
             职场老鸟
           </template>
-          <img src="@/assets/img/level/badge-Lv4.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
+          <img src="@/assets/img/level/badge-Lv4.svg" alt="" style="margin-left: 8px;cursor: pointer" />
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 1000">
           <template slot="title">
             老白兔
           </template>
-          <img src="@/assets/img/level/badge-Lv5.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
+          <img src="@/assets/img/level/badge-Lv5.svg" alt="" style="margin-left: 8px;cursor: pointer" />
         </a-tooltip>
         <a-tooltip placement="top" v-if="data.points >= 1500">
           <template slot="title">
             被裁者
           </template>
-          <img src="@/assets/img/level/badge-Lv6.svg" alt="" style="margin-left: 8px;cursor: pointer" @click="routerBook"/>
+          <img src="@/assets/img/level/badge-Lv6.svg" alt="" style="margin-left: 8px;cursor: pointer"/>
         </a-tooltip>
       </div>
     </div>
@@ -151,14 +151,6 @@
             });
       },
 
-      hrefFn(url) {
-        if (url){
-          window.open(url, '_blank');
-        } else {
-          this.routerSetUp();
-        }
-      },
-
       getBadgeCount(points) {
         if (points >= 0 && points < 100) {
           return 1;
@@ -184,12 +176,6 @@
       routerSetUp() {
         this.$router.push("/settings/profile");
       },
-
-      // 路由到Book说明页面
-      routerBook() {
-        let routeData = this.$router.resolve("/book");
-        window.open(routeData.href, '_blank');
-      }
     },
 
   }

@@ -8,7 +8,6 @@
         <span v-else>
           {{ data.createUsername}}
         </span>
-        <!--        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>-->
         <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.updateTime)"></small>
       </a>
       <a class="username" slot="author" v-if="data.createBy !== data.parentUserId" @click="routerUserCenter(data.parentUsername)">
@@ -154,12 +153,6 @@ export default {
     // 路由到用户中心页面
     routerUserCenter(userId) {
       let routeData = this.$router.resolve("/user/" + userId);
-      window.open(routeData.href, '_blank');
-    },
-
-    // 路由到Book说明页面
-    routerBook() {
-      let routeData = this.$router.resolve("/book");
       window.open(routeData.href, '_blank');
     },
 

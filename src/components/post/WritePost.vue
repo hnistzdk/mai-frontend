@@ -35,12 +35,11 @@
 
 <script>
 import postService from "@/service/postService";
-import PostBasicInfo from "@/components/post/PostBasicInfo";
 import Login from "@/components/login/Login";
 import Register from "@/components/login/Register";
 
 export default {
-  components: {PostBasicInfo, Login, Register},
+  components: {Login, Register},
 
   data() {
     return {

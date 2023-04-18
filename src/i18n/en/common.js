@@ -90,7 +90,7 @@ export default {
     pleaseLabel: "Please enter a label name",
     pleaseResource: "Please enter a resource name",
     pleaseCategory: "Please enter a resource category",
-    pleaseDesc: "Please enter a resource desc",
+    pleaseDesc: "Please enter a resource description",
     pleaseLink: "Please enter a resource link",
     deleteLabelTitle: "Are you sure you want to delete this tag？",
     deleteResourceTitle: "Are you sure you want to delete this resource？",

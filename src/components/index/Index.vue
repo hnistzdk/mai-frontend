@@ -48,33 +48,24 @@
 
 <script>
   import IndexHeader from "@/components/index/head/IndexHeader";
-  import SlideShow from "@/components/concern/SlideShow";
   import FrontPagePost from "@/components/post/FrontPagePost";
-  import ProjectIntro from "@/components/right/ProjectIntro";
   import postService from "@/service/postService";
   import AuthorsList from "@/components/right/AuthorsList";
-  import FilingInfo from "@/components/right/FilingInfo";
   import FooterButtons from "@/components/utils/FooterButtons";
   import CustomEmpty from "@/components/utils/CustomEmpty";
   import HotList from "@/components/right/HotList";
-  import FriendDonate from "@/components/right/FriendDonate";
   import IndexCreate from "@/components/post/IndexCreate";
-  import userService from "@/service/userService";
 
   export default {
 
     components: {
       IndexHeader,
       FooterButtons,
-      SlideShow,
       FrontPagePost,
-      ProjectIntro,
       AuthorsList,
-      FilingInfo,
       CustomEmpty,
       HotList,
       IndexCreate,
-      FriendDonate
     },
     data() {
       return {

@@ -8,7 +8,7 @@
           <div class="info-box" style="flex: 1 1 auto; min-width: 0;">
             <a target="_blank" rel="" class="username" @click="routerUserCenter(item.id)">
               <span class="name" style="padding-right: 2px;" v-text="item.username"></span>
-              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>
+              <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" />
             </a>
             <div class="detail" v-text="item.intro"></div>
             <div class="describe">
@@ -56,7 +56,7 @@
               this.data[index].isFollow = !this.data[index].isFollow;
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -64,13 +64,9 @@
       routerUserCenter(userId) {
         let routeData = this.$router.resolve("/user/" + userId);
         window.open(routeData.href, '_blank');
+
       },
 
-      // 路由到Book说明页面
-      routerBook() {
-        let routeData = this.$router.resolve("/book");
-        window.open(routeData.href, '_blank');
-      },
     },
 
     mounted() {

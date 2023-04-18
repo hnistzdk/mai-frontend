@@ -31,13 +31,9 @@
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 友情捐赠 -->
-<!--            <FriendDonate style="background: #fff;"/>-->
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 备案信息 -->
-<!--            <FilingInfo/>-->
           </a-col>
         </main>
       </a-layout-content>
@@ -48,10 +44,8 @@
 
 <script>
 import IndexHeader from "@/components/index/head/IndexHeader";
-import FilingInfo from "@/components/right/FilingInfo";
 import PersonalAchievement from "@/components/right/PersonalAchievement";
 import FollowCount from "@/components/right/FollowCount";
-import FriendDonate from "@/components/right/FriendDonate";
 import PersonalInfoDisplay from "@/components/user/PersonalInfoDisplay";
 import UserTabs from "@/components/user/UserTabs";
 import FooterButtons from "@/components/utils/FooterButtons";
@@ -59,7 +53,7 @@ import userService from "@/service/userService";
 
 export default {
   name: "",
-  components: {IndexHeader, PersonalAchievement, FilingInfo, FollowCount, PersonalInfoDisplay, UserTabs, FooterButtons, FriendDonate},
+  components: {IndexHeader, PersonalAchievement, FollowCount, PersonalInfoDisplay, UserTabs, FooterButtons},
 
   data() {
     return {

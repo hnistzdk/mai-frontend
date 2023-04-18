@@ -105,6 +105,7 @@ export default {
     routerUserCenter(userId) {
       let routeData = this.$router.resolve("/user/" + userId);
       window.open(routeData.href, '_blank');
+
     },
   },
 

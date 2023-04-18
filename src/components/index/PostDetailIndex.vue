@@ -39,16 +39,11 @@
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 相关贴子 -->
-<!--            <RelatPost-->
-<!--                v-if="finishPostDetail"-->
-<!--                :labelIds="labelIds"-->
-<!--                style="background: #fff;"/>-->
+
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 作者榜 -->
-<!--            <AuthorsList style="background: #fff;"/>-->
+
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
@@ -59,8 +54,6 @@
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 备案信息 -->
-<!--            <FilingInfo/>-->
           </a-col>
         </main>
       </a-layout-content>
@@ -72,13 +65,11 @@
 <script>
   import IndexHeader from "@/components/index/head/IndexHeader";
   import AuthorsList from "@/components/right/AuthorsList";
-  import FilingInfo from "@/components/right/FilingInfo";
   import PostDetail from "@/components/post/PostDetail";
   import FooterButtons from "@/components/utils/FooterButtons";
   import LeftButtons from "@/components/post/LeftButtons";
   import PostComment from "@/components/comment/PostComment";
   import AuthorBlock from "@/components/right/AuthorBlock";
-  import RelatPost from "@/components/right/RelatPost";
   import Toc from "@/components/right/MarkdownToc";
 
   export default {
@@ -87,11 +78,9 @@
       PostDetail,
       AuthorBlock,
       AuthorsList,
-      FilingInfo,
       FooterButtons,
       LeftButtons,
       PostComment,
-      RelatPost,
       Toc
     },
 

@@ -38,8 +38,6 @@
             <a-row>
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
-            <!-- 备案信息 -->
-            <!--            <FilingInfo/>-->
           </a-col>
         </main>
       </a-layout-content>
@@ -50,10 +48,8 @@
 
 <script>
 import IndexHeader from "@/components/index/head/IndexHeader";
-import FilingInfo from "@/components/right/FilingInfo";
 import PersonalAchievement from "@/components/right/PersonalAchievement";
 import FollowCount from "@/components/right/FollowCount";
-import FriendDonate from "@/components/right/FriendDonate";
 import PersonalInfoDisplay from "@/components/user/PersonalInfoDisplay";
 import FooterButtons from "@/components/utils/FooterButtons";
 import SearchTabs from "@/components/search/SearchTabs";
@@ -62,8 +58,8 @@ import HotList from "@/components/right/HotList";
 export default {
   name: "",
   components: {
-    IndexHeader, PersonalAchievement, FilingInfo, FollowCount
-    , PersonalInfoDisplay, SearchTabs, FooterButtons, FriendDonate
+    IndexHeader, PersonalAchievement, FollowCount
+    , PersonalInfoDisplay, SearchTabs, FooterButtons
   ,HotList},
 
   data() {

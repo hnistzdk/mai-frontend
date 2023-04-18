@@ -17,8 +17,6 @@
             <div class="author-name">
               <a target="_blank" class="username" @click="routerUserCenter(data.authorId)">
                 <span class="name" style="font-size: 17px;">{{ data.authorUsername }} </span>
-<!--                <img :src="require('@/assets/img/level/' + data.postCountDTO.level + '.svg')" alt=""-->
-<!--                     @click.stop="routerBook"/>-->
               </a>
             </div>
             <div class="meta-box" style="color: #8a919f">
@@ -248,12 +246,6 @@
       // 路由到用户中心页面
       routerUserCenter(userId) {
         let routeData = this.$router.resolve("/user/" + userId);
-        window.open(routeData.href, '_blank');
-      },
-
-      // 路由到Book说明页面
-      routerBook() {
-        let routeData = this.$router.resolve("/book");
         window.open(routeData.href, '_blank');
       },
 

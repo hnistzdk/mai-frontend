@@ -7,7 +7,7 @@
       </div>
       <div class="selfIntroduction">
         <span class="name" style="font-size: 17px;">{{ data.name }} </span>
-        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>
+        <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt=""/>
         <div v-if="data.selfIntroduction">{{ data.selfIntroduction }}</div>
       </div>
     </div>
@@ -62,12 +62,6 @@
       // 路由到用户中心页面
       routerUserCenter(userId) {
         let routeData = this.$router.resolve("/user/" + userId);
-        window.open(routeData.href, '_blank');
-      },
-
-      // 路由到Book说明页面
-      routerBook() {
-        let routeData = this.$router.resolve("/book");
         window.open(routeData.href, '_blank');
       },
     },

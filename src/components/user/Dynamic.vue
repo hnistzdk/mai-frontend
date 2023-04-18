@@ -83,13 +83,14 @@ export default {
       window.open(routeData.href, '_blank');
     },
 
-    // 路由到文章详情页面
+    // 路由到贴子详情页面
     routerPostDetail(postId, commentId) {
       let url = "/detail/" + postId;
       if (commentId) {
         url = url + '#reply-' + commentId;
       }
       window.open(this.$router.resolve(url).href, '_blank');
+
     },
   }
 }

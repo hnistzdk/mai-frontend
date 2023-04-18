@@ -28,7 +28,7 @@
           <A class="login-form-forgot" @click="mobileResetPassword">
             {{ $t("common.forgotPassword") }}
           </A>
-          <a-button type="primary" html-type="submit" class="login-form-button" size="large">
+          <a-button :loading="loading" type="primary" html-type="submit" class="login-form-button" size="large">
             {{ $t("common.login") }}
           </a-button>
           Or
@@ -53,6 +53,12 @@
 
     },
 
+    data(){
+      return{
+          loading: false,
+      };
+    },
+
     methods: {
       ...mapMutations(['changeLoginVisible','changeIsLogin','changeUserId',
         'changeUsername','changeIsManage','changeRegisterVisible',
@@ -62,8 +68,10 @@
         e.preventDefault();
         this.form.validateFields((err, values) => {
           if (!err) {
+            this.loading = true;
             loginService.login(values)
                 .then(res => {
+                  this.loading = false;
                   //设置用户相关信息
                   this.changeToken(res.data.accessToken);
                   this.changeUserId(res.data.userId);
@@ -84,6 +92,7 @@
                   this.$emit("refresh");
                 })
                 .catch(err => {
+                  this.loading = false;
                   this.$message.error(err.msg);
                 });
           }

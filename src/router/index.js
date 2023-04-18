@@ -59,15 +59,6 @@ const routes = [
         ]
     },
     {
-        path: "/label",
-        name: "label",
-        component: () => import("@/components/index/LabelIndex"),
-    },
-    {
-        path: "/label/:id",
-        component: () => import("@/components/index/LabelToPostIndex"),
-    },
-    {
         path: "/settings",
         component: () => import("@/components/index/SetUpIndex"),
         meta: {
@@ -103,11 +94,6 @@ const routes = [
         path: "/resource",
         name: "resource",
         component: () => import("@/components/index/ResourceIndex"),
-    },
-    {
-        path: "/book",
-        name: "book",
-        component: () => import("@/components/index/Book"),
     },
     {
         path: "/admin",

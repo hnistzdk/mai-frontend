@@ -7,7 +7,7 @@
         <a-list-item-meta :description="item.intro">
           <span class="username" slot="title">
             <span style="padding-right: 2px;">{{ item.name }}</span>
-            <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>
+            <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" />
           </span>
           <a-avatar slot="avatar"
                     :src="item.picture ? item.picture : require('@/assets/img/default_avatar.png')"/>
@@ -45,7 +45,7 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -60,11 +60,7 @@ export default {
       window.open(routeData.href, '_blank');
     },
 
-    // 路由到Book说明页面
-    routerBook() {
-      let routeData = this.$router.resolve("/book");
-      window.open(routeData.href, '_blank');
-    },
+
   },
 
   mounted() {

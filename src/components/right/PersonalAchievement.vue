@@ -30,11 +30,7 @@ export default {
   },
 
   methods: {
-    // 路由到Book说明页面
-    routerBook() {
-      let routeData = this.$router.resolve("/book");
-      window.open(routeData.href, '_blank');
-    }
+
   }
 
 }

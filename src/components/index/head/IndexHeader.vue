@@ -259,7 +259,7 @@ export default {
             store.state.avatar = res.data.avatar;
           })
           .catch(err => {
-            // this.$message.error(err.msg);
+            this.$message.error(err.msg);
           });
     }
   },
@@ -368,7 +368,6 @@ export default {
     routerUserCenter(userId) {
       let routeData = this.$router.resolve("/user/" + userId);
       window.open(routeData.href, '_self');
-      // this.$router.push("/user/" + userId);
     },
 
     // 路由到写文章页面

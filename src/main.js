@@ -19,7 +19,6 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import axios from "axios";
 import constants from './constants/constants'
-import Message from "ant-design-vue/lib/message";
 
 // true为开启开发模式
 Vue.config.productionTip = true;

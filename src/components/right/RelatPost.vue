@@ -45,11 +45,11 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
-    // 路由到文章详情页面
+    // 路由到贴子详情页面
     routerPostDetail(postId) {
       let routeData = this.$router.resolve("/detail/" + postId);
       window.open(routeData.href, '_blank');

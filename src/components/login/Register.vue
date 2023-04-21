@@ -7,7 +7,7 @@
           <a-input v-model="ruleForm.username"
                    autocomplete="off"
                    :maxLength="$store.state.userMaxLength"
-                   :suffix="userNameNum + '/' + $store.state.userMaxLength"
+                   :suffix="usernameNum + '/' + $store.state.userMaxLength"
                    @change="usernameChange"
                    :placeholder="$t('common.pleaseInputYourUsername')"
                    size="large">
@@ -85,7 +85,7 @@ export default {
     };
 
     return {
-      userNameNum: 0,
+      usernameNum: 0,
       ruleForm: {
         username: '',
         password: '',
@@ -105,10 +105,10 @@ export default {
 
   methods: {
     ...mapMutations(['changeLoginVisible','changeIsLogin','changeUserId',
-      'changeUsername','changeIsManage','changeRegisterVisible',
+      'changeUsername','changeToken','changeRegisterVisible','changeExpire',
       'changeEmailResetPasswordVisible']),
     usernameChange(value) {
-      this.userNameNum = value.target.value.length;
+      this.usernameNum = value.target.value.length;
     },
 
     // 隐藏登录框
@@ -125,7 +125,6 @@ export default {
                 this.changeToken(res.data.accessToken);
                 this.changeUserId(res.data.userId);
                 this.changeUsername(res.data.username);
-                this.changeIsManage(res.data.admin);
                 //过期分钟数
                 let expiresIn = res.data.expiresIn;
                 let expireTimeStamp = dayjs().add(expiresIn,'minute').valueOf();
@@ -135,11 +134,9 @@ export default {
                 this.changeRegisterVisible(false);
                 this.changeLoginVisible(false);
                 // 提示
-                this.$message.success(this.$t('common.registerSuccess'));
                 this.changeIsLogin(true);
-
-                //刷新
-                this.$router.go(0);
+                this.$message.success(this.$t('common.registerSuccess'));
+                this.$emit("refresh");
               })
               .catch(err => {
                 this.$message.error(err.msg);

@@ -35,7 +35,9 @@ export default {
        * @property finish 上个请求是否完成，完成后才可以进行下个请求
        * @function loadMore 加载下一页的方法
        */
-      if (this.hasNext && this.finish && scrollHeight - scrollTop <= clientHeight) {
+
+      // 这里将要判断的高度-1 防止出现精度过高导致判断条件无法成立
+      if (this.hasNext && this.finish && (scrollHeight-1) - scrollTop <= clientHeight) {
         this.loadMore();
       }
     };
